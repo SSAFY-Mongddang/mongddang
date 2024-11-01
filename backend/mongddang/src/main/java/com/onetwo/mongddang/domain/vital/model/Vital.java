@@ -24,7 +24,7 @@ public class Vital {
 
     @Column(nullable = false, name = "blood_sugar_level")
     @NotNull
-    private Integer bloodSugarLevel;
+    private int bloodSugarLevel;
 
     @Column(nullable = false, name = "measurement_time")
     @NotNull

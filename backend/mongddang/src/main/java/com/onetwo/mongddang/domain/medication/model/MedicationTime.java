@@ -27,10 +27,10 @@ public class MedicationTime {
     private Boolean isFast;
 
     @Column(name="min_glucose")
-    private Long minGlucose;
+    private int minGlucose;
 
     @Column(name="max_glucose")
-    private Long maxGlucose;
+    private int maxGlucose;
 
     @NotNull
     private Long volume;
