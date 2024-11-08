@@ -9,11 +9,11 @@ import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
 
 import { base, modalCss, xiconCss } from './styles';
-import { UpdateCharacter } from '../update-character';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { ICharacterData } from '@/pages/Encyclopedia/model/types';
 import { getMainInfo } from '@/pages/Encyclopedia/api/api';
+import { UpdateCharacter } from '../update-character';
 
 interface OwnModalProps {
   setstate: (value: boolean) => void; // setstate는 boolean 값을 받는 함수
