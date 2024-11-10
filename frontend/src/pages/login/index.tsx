@@ -1,61 +1,41 @@
 /** @jsxImportSource @emotion/react */
-import { GoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Browser } from '@capacitor/browser';
 import { base, contentCss, googleCss } from './ui/styles';
 import { Icon } from '@/shared/ui/Icon';
 import { Typography } from '@/shared/ui/Typography';
 
-interface IcredentialResponse {
-  credential?: string;
-  clientId?: string;
-  select_by?: string;
-}
-
 const Login = () => {
-  const nav = useNavigate();
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-  const handleLoginSuccess = (credentialResponse: IcredentialResponse) => {
-    const idToken = credentialResponse.credential;
-    console.log('ID Token:', idToken);
+  const handleGoogleLogin = async () => {
+    try {
+      // Google OAuth URL 생성
+      const googleAuthUrl = 
+        'https://accounts.google.com/o/oauth2/v2/auth?' +
+        'client_id=' + clientId +
+        '&redirect_uri=' + encodeURIComponent(window.location.origin) +
+        '&response_type=code' +
+        '&access_type=offline' +
+        '&scope=' + encodeURIComponent('email profile openid') +
+        '&prompt=consent';
 
-    // ID Token을 백엔드로 전송
-    axios
-      .post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
-        { idToken },
-        {
-          headers: {
-            "Content-Type": 'application/json',
-            "Authorization": `Bearer ${idToken}`,
-          },
-        }
-      )
-      .then((response) => {
-        const accessToken = response.data.body.accessToken;
-        console.log('토큰 저장 성공:', accessToken);
+      console.log('Auth URL:', googleAuthUrl); // URL 확인용
 
-        // accessToken을 로컬 스토리지에 저장
-        localStorage.setItem('accessToken', accessToken);
-
-        // accessToken을 axios 전역 헤더에 설정
-        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-
-        // 회원 여부에 따른 페이지 이동
-        if (response.data.body.isRegistered) {
-          nav('/');
-        } else {
-          nav('/signup', { state: { idToken } });
-        }
-      })
-      .catch((error) => {
-        console.error('토큰 저장 실패:', error);
-        console.log(idToken);
+      // Browser 플러그인으로 OAuth 창 열기
+      await Browser.open({
+        url: googleAuthUrl,
+        presentationStyle: 'fullscreen',
       });
-  };
 
-  const handleLoginError = () => {
-    console.log('로그인 실패');
+      // 브라우저 닫힘 이벤트 처리
+      Browser.addListener('browserFinished', () => {
+        console.log('Browser closed');
+        Browser.close();
+      });
+
+    } catch (error) {
+      console.error('로그인 실패:', error);
+    }
   };
 
   return (
@@ -77,7 +57,26 @@ const Login = () => {
           </Typography>
         </div>
         <div css={googleCss}>
-          <GoogleLogin onSuccess={handleLoginSuccess} onError={handleLoginError} />
+          <button 
+            onClick={handleGoogleLogin}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#fff',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              cursor: 'pointer'
+            }}
+          >
+            <img 
+              src="/img/google-logo.svg" 
+              alt="Google logo" 
+              style={{ width: '20px', height: '20px' }}
+            />
+            Google로 로그인
+          </button>
         </div>
       </div>
     </div>
