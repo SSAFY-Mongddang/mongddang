@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
+import { App } from '@capacitor/app';
 import { BottomBar } from '@/shared/ui/BottomBar';
 import {
   bottomContainer,
@@ -28,7 +29,9 @@ import {
   EndRoutineAlert,
   StartRoutineAlert,
 } from './ui/Alerts/Alerts';
-import { getRoutine, setRoutine } from './hooks/useRoutineStatus';
+import { setRoutine, setStopwatch } from './hooks/useRoutineStatus';
+import { getInitialRoutine } from './api/routineApi';
+import { useStopwatchStore } from './model/useStopwatchStore';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
@@ -42,11 +45,41 @@ const KidsMainPage = () => {
   // 초기 루틴 상태 조회
   useEffect(() => {
     const fetchRoutine = async () => {
-      const routineValue = await getRoutine();
-      setCurrentRoutine(routineValue);
-      console.log('루틴 조회', routineValue);
+      const routineValue = await getInitialRoutine();
+      if (routineValue.data === undefined) {
+        setCurrentRoutine('');
+      } else {
+        const { category } = routineValue.data;
+        if (category === 'meal') {
+          setCurrentRoutine('먹는 중');
+        } else if (category === 'exercise') {
+          setCurrentRoutine('운동 중');
+        } else if (category === 'sleeping') {
+          setCurrentRoutine('자는 중');
+        } else {
+          setCurrentRoutine('');
+        }
+      }
+
+      console.log('초기 루틴 조회', routineValue);
     };
+
+    const handleAppStateChange = () => {
+      const latestTime = useStopwatchStore.getState().time;
+      setStopwatch(latestTime);
+    };
+
+    App.addListener('appStateChange', ({ isActive }) => {
+      if (!isActive) {
+        handleAppStateChange();
+      }
+    });
+
     fetchRoutine();
+
+    return () => {
+      App.removeAllListeners();
+    };
   }, []);
 
   const handleDietModal = () => {

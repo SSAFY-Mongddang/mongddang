@@ -85,7 +85,7 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
 
   const handleUpdateCharacterClose = () => {
     setIsModal(false);
-    setIsParentModalOpen(true); // 메인 모달을 다시 열어줍니다
+    setIsParentModalOpen(true);
   };
 
   const clickEvent = () => {

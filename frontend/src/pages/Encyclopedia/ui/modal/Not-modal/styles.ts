@@ -18,6 +18,7 @@ export const modalCss = css`
   word-break: keep-all;
   overflow-wrap: break-word;
   white-space: normal;
+  box-sizing: content-box;
 `;
 
 export const xiconCss = css`
@@ -26,7 +27,6 @@ export const xiconCss = css`
   right: 1rem;
 `;
 
-// Typography 컴포넌트를 위한 새로운 스타일
 export const storyTypographyCss = css`
   word-break: keep-all;
   overflow-wrap: break-word;

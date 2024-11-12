@@ -16,8 +16,8 @@ import { ICharacterData } from '@/pages/Encyclopedia/model/types';
 import { getMainInfo } from '@/pages/Encyclopedia/api/api';
 
 interface OwnModalProps {
-  setstate: (value: boolean) => void; // setstate는 boolean 값을 받는 함수
-  data: ICharacterData | null; // 캐릭터 데이터 prop 추가
+  setstate: (value: boolean) => void; 
+  data: ICharacterData | null; 
 }
 
 interface CharacterResponse {
@@ -52,7 +52,7 @@ export const MainModal = ({ setstate, data }: OwnModalProps) => {
 
   const handleUpdateCharacterClose = () => {
     setIsModal(false);
-    setIsParentModalOpen(true); // 메인 모달을 다시 열어줍니다
+    setIsParentModalOpen(true); 
   };
   const queryClient = useQueryClient();
   const accessToken = localStorage.getItem('accessToken');

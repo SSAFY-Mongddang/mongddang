@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 
 export const base = css`
+  box-sizing: content-box;
   display: flex;
   height: 57px;
   padding: 14px 9px 15px 7px;

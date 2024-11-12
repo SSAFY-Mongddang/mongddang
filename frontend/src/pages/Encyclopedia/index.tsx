@@ -44,7 +44,6 @@ export const Encyclopedia = () => {
       return getNewInfo(accessToken, characterId);
     },
     onSuccess: async (_, characterId) => {
-      // 캐시 업데이트
       queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
         if (!oldData) return oldData;
 
@@ -64,7 +63,6 @@ export const Encyclopedia = () => {
       // 캐릭터 데이터 무효화하여 새로운 데이터 가져오기
       await queryClient.invalidateQueries({ queryKey: ['character'] });
 
-      // 모달 열기
       setIsMainModal(true);
     },
     onError: (error) => {
@@ -80,7 +78,7 @@ export const Encyclopedia = () => {
     if (modalType === 'own') {
       setIsOwnModal(true);
     } else if (modalType === 'main') {
-      // 모달 열기를 mutation의 onSuccess로 이동
+
       mutation.mutate(character.id);
     } else if (modalType === 'not') {
       setIsNotModal(true);

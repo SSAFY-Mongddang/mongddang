@@ -14,6 +14,10 @@ import { SignUp } from './pages/Signup';
 import ProtectorMain from './pages/protectormain/ProtectorMain';
 import { useLoadState } from './app/hooks/use-load-state';
 import { InviteCode } from './pages/Signup/invite-code';
+import { GmiDetail } from './pages/report/ui/detail/gmi';
+import { Variability } from './pages/report/ui/detail/variability';
+import { Mean } from './pages/report/ui/detail/mean';
+import { Tir } from './pages/report/ui/detail/tir/indesx';
 
 
 function App() {
@@ -33,6 +37,10 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/nickname/edit" element={<NicknameEdit />} />
           <Route path="/report" element={<Report />} />
+          <Route path="/report/detail/gmi" element={<GmiDetail />} />
+          <Route path="/report/detail/gv" element={<Variability />} />
+          <Route path="/report/detail/mean" element={<Mean />} />
+          <Route path="/report/detail/tir" element={<Tir />} />
           <Route path="/record" element={<RecordPage />} />
           <Route path="/record/:date" element={<TodayRecordPage />} />
           <Route path="/protector-main" element={<ProtectorMain />} />

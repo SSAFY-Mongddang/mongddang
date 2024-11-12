@@ -27,7 +27,7 @@ export const Slider = ({
         style={{
           position: 'absolute',
           left: '0%',
-          bottom: '-20px',
+          bottom: '-25px',
         }}
       >
         <Typography color="primary" scale="400" size="1" weight={600}>
@@ -38,7 +38,7 @@ export const Slider = ({
         style={{
           position: 'absolute',
           right: '0%',
-          bottom: '-20px',
+          bottom: '-25px',
         }}
       >
         <Typography color="danger" scale="400" size="1" weight={600}>

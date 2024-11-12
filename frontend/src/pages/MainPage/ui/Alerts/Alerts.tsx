@@ -10,6 +10,7 @@ import { endEating } from '../../api/dietApi';
 import { Typography } from '@/shared/ui/Typography';
 import { endExercise, startExercise } from '../../api/exerciseApi';
 import { endSleep, startSleep } from '../../api/sleepApi';
+import { useStopwatchStore } from '../../model/useStopwatchStore';
 
 type AskRoutineAlertProps = {
   accessToken: string | null;
@@ -40,6 +41,7 @@ export const AskStartRoutineAlert = (props: AskRoutineAlertProps) => {
       }
     }
   };
+  const { startStopwatch } = useStopwatchStore();
   return (
     <Notification
       ment={
@@ -60,14 +62,15 @@ export const AskStartRoutineAlert = (props: AskRoutineAlertProps) => {
             : []
       }
       bluehandler={() => {
+        startStopwatch();
         props.handleAlert('startRoutine');
         handleStartRoutine();
         {
-          props.currentRoutine === '운동 준비'
-            ? props.changeRoutine('운동 중')
-            : props.currentRoutine === '자는 준비'
-              ? props.changeRoutine('자는 중')
-              : null;
+          if (props.currentRoutine === '운동 준비') {
+            props.changeRoutine('운동 중');
+          } else if (props.currentRoutine === '자는 준비') {
+            props.changeRoutine('자는 중');
+          }
         }
       }}
       redHandler={() => {
@@ -116,7 +119,7 @@ export const StartRoutineAlert = (props: BloodSugarProps) => {
 // 루틴 종료 여부 질문 알림
 export const AskEndRoutineAlert = (props: AskRoutineAlertProps) => {
   const handleEndRoutine = async () => {
-    if (props.currentRoutine === '식사 중') {
+    if (props.currentRoutine === '먹는 중') {
       const response = await endEating(props.accessToken);
       if (response.code === 200) {
         props.handleBloodSugar(response.data.bloodSugarLevel);
@@ -133,6 +136,8 @@ export const AskEndRoutineAlert = (props: AskRoutineAlertProps) => {
       }
     }
   };
+
+  const { endStopwatch } = useStopwatchStore();
 
   return (
     <Notification
@@ -158,15 +163,16 @@ export const AskEndRoutineAlert = (props: AskRoutineAlertProps) => {
               : []
       }
       bluehandler={() => {
+        endStopwatch();
         handleEndRoutine();
         {
-          props.currentRoutine === '먹는 중'
-            ? props.changeRoutine('먹기 끝')
-            : props.currentRoutine === '운동 중'
-              ? props.changeRoutine('운동 끝')
-              : props.currentRoutine === '자는 중'
-                ? props.changeRoutine('자기 끝')
-                : null;
+          if (props.currentRoutine === '먹는 중') {
+            props.changeRoutine('먹기 끝');
+          } else if (props.currentRoutine === '운동 중') {
+            props.changeRoutine('운동 끝');
+          } else if (props.currentRoutine === '자는 중') {
+            props.changeRoutine('자기 끝');
+          }
         }
         props.handleAlert('endRoutine');
       }}

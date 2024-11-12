@@ -1,7 +1,9 @@
 /** @jsxImportSource @emotion/react */
-
+import { HiOutlineChevronRight } from 'react-icons/hi';
 import { Typography } from '@/shared/ui/Typography';
 import { base } from './stylest';
+import { Icon } from '@/shared/ui/Icon';
+import { useNavigate } from 'react-router-dom';
 
 interface ItemProps {
   title: string;
@@ -10,11 +12,34 @@ interface ItemProps {
 }
 
 export const Item = ({ title, ment, unit }: ItemProps) => {
+  const nav = useNavigate();
   return (
     <div css={base}>
-      <Typography color="dark" size="1" weight={500}>
-        {title}
-      </Typography>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+        onClick={() => nav('/report/detail/gmi')}
+      >
+        <Typography color="dark" size="1" weight={500}>
+          {title}
+        </Typography>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <Typography color="dark" size="1" weight={500}>
+            더보기
+          </Typography>
+          <Icon size={1.5}>
+            <HiOutlineChevronRight />
+          </Icon>
+        </div>
+      </div>
       <div style={{ display: 'flex', alignItems: 'flex-end' }}>
         <Typography color="dark" size="1.25" weight={600}>
           {ment}

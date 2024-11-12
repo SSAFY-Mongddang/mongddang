@@ -32,7 +32,6 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
       return await postRecruitment(accessToken, data?.id);
     },
     onSuccess: () => {
-      // 캐릭터 모집 성공 시 findModal 열기
       setFindModal(true);
     },
     onError: (error) => {
@@ -53,12 +52,12 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
 
   const handleBuyModalBlue = () => {
     setBuyModal(false);
-    characterMutation.mutate(); // mutate 호출
+    characterMutation.mutate(); 
   };
 
   const handleFindModalClose = () => {
     setFindModal(false);
-    setstate(false); // 맨 처음 모달 닫기
+    setstate(false); 
   };
 
   console.log(CoinQuery.data?.data.data.coin);

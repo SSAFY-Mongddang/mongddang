@@ -2,9 +2,8 @@ package com.onetwo.mongddang.domain.record.service;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.common.utils.DateTimeUtils;
+import com.onetwo.mongddang.domain.record.application.RecordUtils;
 import com.onetwo.mongddang.domain.record.dto.record.OngoingResponseDto;
-import com.onetwo.mongddang.domain.record.dto.record.RecordDetailsDto;
-import com.onetwo.mongddang.domain.record.dto.record.RecordWithChildIdDto;
 import com.onetwo.mongddang.domain.record.dto.record.ResponseRecordDto;
 import com.onetwo.mongddang.domain.record.model.Record;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
@@ -17,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.onetwo.mongddang.domain.record.model.Record.RecordCategoryType.*;
@@ -31,17 +32,62 @@ public class RecordService {
     private final UserRepository userRepository;
     private final CtoPUtils ctoPUtils;
     private final DateTimeUtils dateTimeUtils;
+    private final RecordUtils recordUtils;
 
+    public ResponseDto getRecordForPackage(Long userId, String nickname, String startDate, String endDate) {
+        log.info("getRecordForPackage userId: {}", userId);
 
-    /**
-     * 환아의 활동 기록 조회
-     *
-     * @param userId    조회를 시도하는 사용자 아이디
-     * @param nickname  조회 대상의 닉네임
-     * @param startDate 조회 시작 월 (YYYY-MM)
-     * @param endDate   조회 종료일 월 (YYYY-MM)
-     * @return ResponseDto
-     */
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        User child = userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+
+        // 데이터 쓰기 권한이 있는지 확인
+        ctoPUtils.validateProtectorAccessChildData(user, child);
+
+        // 시작일과 종료일을 LocalDateTime 으로 변환
+        LocalDateTime[] dateTimes = dateTimeUtils.convertToDateTimes(startDate, endDate);
+        LocalDateTime startDateTime = dateTimes[0];
+        LocalDateTime endDateTime = dateTimes[1];
+
+        List<ResponseRecordDto> dateRecords = recordUtils.getRecordDateListBStartTimeBetween(child, startDateTime, endDateTime);
+
+        // 데이터 패키지를 생성하는 메서드
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("packageName", "mongddang.com");
+        responseData.put("dates", dateRecords);
+
+        return ResponseDto.builder()
+                .code(200)
+                .message("기록 목록 조회에 성공했습니다.")
+                .data(responseData)
+                .build();
+    }
+
+    public ResponseDto getRecordDay(Long userId, String nickname, String date) {
+        log.info("getRecordForPackage userId: {}", userId);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        User child = userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+
+        // 데이터에 쓰기 권한이 있는지 확인
+        ctoPUtils.validateProtectorAccessChildData(user, child);
+
+        // 해당 일을 LocalDateTime 으로 변환
+        LocalDateTime startDateTime = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay();
+        LocalDateTime endDateTime = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd")).atTime(23, 59, 59);
+
+        List<ResponseRecordDto> dateRecords = recordUtils.getRecordDateListBStartTimeBetween(child, startDateTime, endDateTime);
+
+        return ResponseDto.builder()
+                .code(200)
+                .message("기록 목록 조회에 성공했습니다.")
+                .data(dateRecords)
+                .build();
+    }
+
     public ResponseDto getRecord(Long userId, String nickname, String startDate, String endDate) {
         log.info("getRecord userId: {}", userId);
 
@@ -64,46 +110,7 @@ public class RecordService {
         LocalDateTime endDateTime = dateTimes[1];
         log.info("startDateTime: {}, endDateTime: {}", startDateTime, endDateTime);
 
-        // 활동 기록을 조회할 때, 시작일과 종료일을 받아 해당 기간의 활동 기록을 조회
-        List<Record> recordList = recordRepository.findByChildAndStartTimeBetween(child, startDateTime, endDateTime);
-        // 날짜별로 기록을 그룹화
-        Map<String, RecordDetailsDto> recordsByDate = new HashMap<>();
-
-        for (Record record : recordList) {
-            String recordDate = record.getStartTime().toLocalDate().toString(); // 날짜 추출
-
-            recordsByDate.putIfAbsent(recordDate, new RecordDetailsDto(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
-
-            RecordDetailsDto details = recordsByDate.get(recordDate);
-
-            RecordWithChildIdDto recordWithChildIdDto = RecordWithChildIdDto.builder()
-                    .id(record.getId())
-                    .childId(child.getId())
-                    .category(record.getCategory())
-                    .startTime(record.getStartTime())
-                    .endTime(record.getEndTime())
-                    .content(record.getContent())
-                    .imageUrl(record.getImageUrl())
-                    .isDone(record.getIsDone())
-                    .mealTime(record.getMealTime())
-                    .build();
-
-            // 각 기록의 종류에 따라 분류
-            if (record.getCategory().equals(meal)) {
-                details.getMeal().add(recordWithChildIdDto);
-            } else if (record.getCategory().equals(exercise)) {
-                details.getExercise().add(recordWithChildIdDto);
-            } else if (record.getCategory().equals(sleeping)) {
-                details.getSleep().add(recordWithChildIdDto);
-            } else if (record.getCategory().equals(medication)) {
-                details.getMedication().add(recordWithChildIdDto);
-            }
-        }
-
-        // 최종 결과를 DTO로 변환
-        List<ResponseRecordDto> dateRecords = recordsByDate.entrySet().stream()
-                .map(entry -> new ResponseRecordDto(entry.getKey(), entry.getValue()))
-                .toList();
+        List<ResponseRecordDto> dateRecords = recordUtils.getRecordDateListBStartTimeBetween(child, startDateTime, endDateTime);
 
         return ResponseDto.builder()
                 .code(200)

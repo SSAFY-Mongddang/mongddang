@@ -3,8 +3,10 @@ package com.onetwo.mongddang.domain.fcm.service;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.fcm.model.FcmToken;
 import com.onetwo.mongddang.domain.fcm.repository.FcmTokenRepository;
+import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,7 @@ public class DeviceTokenService {
         Optional<FcmToken> existingToken = fcmTokenRepository.findByUserId(userId);
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         if (existingToken.isPresent()) {
             log.info("fcm token 있음");

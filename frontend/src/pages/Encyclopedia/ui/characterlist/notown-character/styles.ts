@@ -1,16 +1,17 @@
 import { css } from '@emotion/react';
 
 export const containerCss = css`
+  box-sizing: content-box;
   display: flex;
-  width: 80px;
-  height: 120px;
-  padding: 10px 11px;
+  width: 5rem;
+  height: 7.5rem;
+  padding: 0.625rem;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 0.625rem;
   flex-shrink: 0;
   border-radius: 10px;
-  background: #D9D9D9;
-  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  background: #d9d9d9;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(0, 0, 0, 0.25);
 `;

@@ -18,6 +18,7 @@ export const modalCss = css`
   word-break: keep-all;
   overflow-wrap: break-word;
   white-space: normal;
+  box-sizing: content-box;
 `;
 
 export const xiconCss = css`

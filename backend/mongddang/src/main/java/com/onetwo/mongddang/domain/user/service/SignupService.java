@@ -1,6 +1,8 @@
 package com.onetwo.mongddang.domain.user.service;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.domain.fcm.model.PushLog;
+import com.onetwo.mongddang.domain.fcm.repository.PushLogRepository;
 import com.onetwo.mongddang.domain.game.coinLog.application.CoinLogUtils;
 import com.onetwo.mongddang.domain.game.coinLog.model.CoinLog;
 import com.onetwo.mongddang.domain.game.coinLog.repository.CoinLogRepository;
@@ -46,6 +48,7 @@ public class SignupService {
     private final TitleRepository titleRepository;
     private final MyMongddangRepository myMongddangRepository;
     private final MyTitleRepository myTitleRepository;
+    private final PushLogRepository pushLogRepository;
 
     @Transactional
     public ResponseDto signup(SignupRequestDto signupRequestDto) {
@@ -72,6 +75,8 @@ public class SignupService {
             myFirstMongddang(newUser);
             //초기 칭호
             myFirstTitle(newUser);
+            // 첫 알림
+            addInitialNoti(newUser);
         }
 
         // jwt token 생성
@@ -159,5 +164,18 @@ public class SignupService {
                 .isNew(true)
                 .build();
         myTitleRepository.save(myTitle);
+    }
+
+    // 최초 보상 지급 알림 알림함 추가
+    @Transactional
+    public void addInitialNoti(User user){
+        PushLog firstLog = PushLog.builder()
+                .user(user)
+                .content("회원가입을 축하합니다:) 첫 몽땅 친구와 별가루가 지급되었습니다!")
+                .category(PushLog.Category.game)
+                .createdAt(LocalDateTime.now())
+                .isNew(true)
+                .build();
+        pushLogRepository.save(firstLog);
     }
 }

@@ -10,6 +10,7 @@ import {
 } from './RoutineBtnGroup.styles';
 import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
+import { useStopwatchStore } from '../../model/useStopwatchStore';
 
 type RoutineBtnGroupProps = {
   changeRoutine: (currentRoutine: string) => void;
@@ -19,6 +20,9 @@ type RoutineBtnGroupProps = {
 };
 
 const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
+  const { time, finalTime } = useStopwatchStore();
+  console.log('타임', time)
+  console.log('finalTime', finalTime)
   return (
     <div css={container}>
       {props.currentRoutine === '먹는 중' ||
@@ -29,8 +33,8 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
             <Typography color="dark" size="1" weight={500}>
               {props.currentRoutine}
             </Typography>
-            <Typography color="dark" size="1" weight={400}>
-              00:01
+            <Typography color="dark" size="1" weight={500}>
+              {finalTime}
             </Typography>
           </div>
           <Button

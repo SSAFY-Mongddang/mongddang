@@ -12,8 +12,8 @@ import { INickname, checkNickname } from '@/pages/profile/ui/nickname-edit/api';
 import { Palette } from '@/shared/model/globalStylesTyes';
 import { AxiosResponse } from 'axios';
 import { signUp } from '../../api/api';
-import { UserService } from '@/shared/api/user/user.service';
-import { useUserStore } from '@/entities/user/model/store';
+import { useUserStore } from '@/entities/user/model';
+import { useShallow } from 'zustand/shallow';
 
 export const DataForm = ({ role }: { role: UserRole }) => {
   const [gender, setGender] = useState<'male' | 'female' | undefined>(
@@ -29,7 +29,12 @@ export const DataForm = ({ role }: { role: UserRole }) => {
   const nav = useNavigate();
   const location = useLocation();
   const idToken = location.state?.idToken;
-  const setUser = useUserStore((state) => state.setUser);
+  const { setUser, getUserInfo } = useUserStore(
+    useShallow((state) => ({
+      setUser: state.setUser,
+      getUserInfo: state.getUserInfo,
+    }))
+  );
 
   const handleDateChangeWrapper =
     (type: 'year' | 'month' | 'day') =>
@@ -75,11 +80,10 @@ export const DataForm = ({ role }: { role: UserRole }) => {
       const birth = getBirthString();
       return await signUp(idToken, role, birth, name, nickname, gender);
     },
-    onSuccess: async () => {
+    onSuccess: async (data) => {
       alert('회원가입이 완료되었습니다.');
       // preference에 user 정보 저장
-      const { data } = await UserService.userQuery();
-      setUser(data);
+      setUser({ userToken: data.data.accessToken });
       nav('/login');
     },
     onError: (error) => {
@@ -88,7 +92,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
     },
   });
 
-  const accessToken = localStorage.getItem('accessToken') || '';
+  const accessToken = getUserInfo().userToken || '';
   const { mutate } = useMutation<
     AxiosResponse<INickname>,
     Error,

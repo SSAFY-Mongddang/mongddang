@@ -34,8 +34,10 @@ export interface User extends CreateUser {
 }
 
 export interface UserInfo {
-  user: User | undefined;
+  user?: User;
+  userToken?: string;
 }
+
 
 export interface UserResponse {
   code: number;

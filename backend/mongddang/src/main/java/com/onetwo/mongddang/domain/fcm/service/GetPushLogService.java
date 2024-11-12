@@ -53,6 +53,7 @@ public class GetPushLogService {
         // 하나씩 dto에 맞춰 감싸기
         for (PushLog pushLog : pushLogs.getContent()) {
             PushLogDto pushLogDto = PushLogDto.builder()
+                    .id(pushLog.getId())
                     .category(pushLog.getCategory())
                     .content(pushLog.getContent())
                     .createdAt(pushLog.getCreatedAt())

@@ -46,12 +46,47 @@ public class RecordController {
         return ResponseEntity.ok(responseDto);
     }
 
+    // 환아의 해당 일 활동 기록 조회
+    @GetMapping("day")
+    @Tag(name = "Record API", description = "기록 api")
+    @Operation(summary = "환아의 활동 기록 조회", description = "환아의 활동 기록을 조회합니다.")
+    public ResponseEntity<ResponseDto> getRecordDay(
+            @NotBlank(message = "닉네임은 필수입니다.") @RequestParam String nickname,
+            @NotBlank(message = "종료 날짜는 필수입니다.")
+            @Pattern(regexp = "^(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$", message = "종료 날짜는 YYYY-MM-dd 형식이어야 하며, 월은 01부터 12 사이여야 합니다.") String date,
+            HttpServletRequest request
+    ) {
+        log.info("GET /api/record/day?nickname={}&date={}", nickname, date);
+
+        Long userId = jwtExtratService.jwtFindId(request);
+
+        ResponseDto responseDto = recordService.getRecordDay(userId, nickname, date);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    // 환아의 활동 기록 조회
+    @GetMapping("package")
+    public ResponseEntity<ResponseDto> getRecordForPackage(
+            @NotBlank(message = "닉네임은 필수입니다.") @RequestParam String nickname,
+            @NotBlank(message = "시작 날짜는 필수입니다.") @Pattern(regexp = "^(19|20)\\d{2}-(0[1-9]|1[0-2])$", message = "시작 날짜는 YYYY-MM 형식이어야 하며, 월은 01부터 12 사이여야 합니다.") @RequestParam String startDate,
+            @NotBlank(message = "종료 날짜는 필수입니다.")
+            @Pattern(regexp = "^(19|20)\\d{2}-(0[1-9]|1[0-2])$", message = "종료 날짜는 YYYY-MM 형식이어야 하며, 월은 01부터 12 사이여야 합니다.") @RequestParam String endDate,
+            HttpServletRequest request
+    ) {
+        log.info("GET /api/record/package?nickname={}&startDate={}&endDate={}", nickname, startDate, endDate);
+
+        Long userId = jwtExtratService.jwtFindId(request);
+
+        ResponseDto responseDto = recordService.getRecordForPackage(userId, nickname, startDate, endDate);
+        return ResponseEntity.ok(responseDto);
+    }
+
     // 진행 중인 활동 찾기 api
     @GetMapping("ongoing")
     @ChildRequired
     @Tag(name = "Record API", description = "기록 api")
     @Operation(summary = "진행 중인 식사 찾기 api", description = "진행 중인 식사를 찾습니다.")
-    public ResponseEntity<ResponseDto> findMeal(HttpServletRequest request) {
+    public ResponseEntity<ResponseDto> getOngoingRecord(HttpServletRequest request) {
         log.info("GET /api/record/meal/ongoing");
 
         Long childId = jwtExtratService.jwtFindId(request);

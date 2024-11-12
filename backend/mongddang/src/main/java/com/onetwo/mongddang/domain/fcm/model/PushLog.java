@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor // JPA용 기본 생성자
 @AllArgsConstructor // Builder에서 모든 필드를 초기화하는 생성자
 public class PushLog {
@@ -34,6 +34,9 @@ public class PushLog {
 
     @NotNull
     private LocalDateTime createdAt;
+
+    @NotNull
+    private Boolean isNew;
 
     public enum Category {
         game,blood_sugar,medication

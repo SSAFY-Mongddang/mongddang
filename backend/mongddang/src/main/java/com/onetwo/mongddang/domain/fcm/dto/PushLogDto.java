@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 public class PushLogDto {
+    private Long id;
     private PushLog.Category category;
     private String content;
     private LocalDateTime createdAt;

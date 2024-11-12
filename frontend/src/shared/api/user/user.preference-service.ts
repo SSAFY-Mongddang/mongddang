@@ -7,6 +7,7 @@ export class PreferencesUser {
     if (value === null) {
       const state: UserInfo = {
         user: undefined,
+        userToken: undefined,
       };
       await this.setState(state);
       return state;
@@ -25,8 +26,18 @@ export class PreferencesUser {
     return await this.getState();
   }
 
-  static async setUser(user: UserInfo) {
-    await this.setState(user);
-    return user;
+  static async setUser(userInfo: UserInfo) {
+    await this.setState(userInfo);
+    return userInfo;
+  }
+
+  static async updateUser(userInfo: UserInfo) {
+    const currentState = await this.getState();
+    const updateState: UserInfo = {
+      ...currentState,
+      ...userInfo,
+    };
+    await this.setState(updateState);
+    return updateState;
   }
 }

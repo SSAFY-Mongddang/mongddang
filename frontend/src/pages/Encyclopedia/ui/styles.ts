@@ -34,15 +34,15 @@ export const cardsWrapperCss = css`
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
-  word-break: keep-all; /* 단어 단위 줄바꿈 */
-  overflow-wrap: break-word; /* 긴 단어도 줄바꿈 */
+  word-break: keep-all; 
+  overflow-wrap: break-word; 
 `;
 
 // 개별 카드 컨테이너 스타일
 export const cardContainerCss = css`
   flex: 0 0 auto;
   margin: 0.3rem 0;
-  word-break: keep-all; /* 단어 단위 줄바꿈 */
-  overflow-wrap: break-word; /* 긴 단어도 줄바꿈 */
-  white-space: normal; /* 자동 줄바꿈 허용 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  white-space: normal; 
 `;

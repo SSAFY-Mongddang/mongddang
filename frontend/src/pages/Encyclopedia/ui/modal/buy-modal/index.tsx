@@ -11,6 +11,7 @@ export const BuyModal = ({bluehandler, redhandler}:OwnModalProps) => {
   return (
     <div>
       <Notification
+        style={{boxSizing:'content-box'}}
         redHandler={redhandler}
         bluehandler={bluehandler}
         ment={
