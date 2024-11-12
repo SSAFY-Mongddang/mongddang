@@ -17,12 +17,14 @@ import { debounce } from 'lodash';
 import { saveDiet } from '../../api/dietApi';
 
 type DietModalProps = {
+  accessToken: string | null;
   closeDietModal: () => void;
+  changeRoutine: (currentRoutine: string) => void;
+  handleAlert: (status: string) => void;
+  handleBloodSugar: (bloodSugar: number) => void;
 };
 
 const DietModal = (props: DietModalProps) => {
-  // 엑세스 토큰
-  const accessToken = localStorage.getItem('accessToken');
   const [selectedMealTime, setSelectedMealTime] = useState('breakfast');
   const [isDisabled, setIsDisabled] = useState(true);
   const [diet, setDiet] = useState('');
@@ -63,7 +65,29 @@ const DietModal = (props: DietModalProps) => {
     };
     return handleDisabledBtn();
   }, [diet, dietImgFile]);
-  console.log(diet, dietImgFile);
+
+  // 식단 저장
+  const handleSaveDiet = async (
+    accessToken: string | null,
+    selectedMealTime: string,
+    dietImgFile: File | null,
+    diet: string
+  ) => {
+    try {
+      const response = await saveDiet(
+        accessToken,
+        selectedMealTime,
+        dietImgFile,
+        diet
+      );
+      if (response.code === 200) {
+        props.closeDietModal();
+        props.changeRoutine('먹는 중');
+        props.handleAlert('startRoutine');
+        props.handleBloodSugar(response.data.bloodSugarLevel);
+      }
+    } catch {}
+  };
 
   return (
     <div>
@@ -112,7 +136,12 @@ const DietModal = (props: DietModalProps) => {
             scale="A200"
             variant="contained"
             handler={() => {
-              saveDiet(accessToken, selectedMealTime, dietImgFile, diet);
+              handleSaveDiet(
+                props.accessToken,
+                selectedMealTime,
+                dietImgFile,
+                diet
+              );
             }}
             disabled={isDisabled}
           >

@@ -58,26 +58,21 @@ public class GameLogUtils {
     /**
      * 게임 로그 추가
      *
-     * @param id       사용자 id
+     * @param child       사용자
      * @param category 게임 로그 카테고리
      * @return 추가된 게임 로그
      */
     @Transactional
-    public GameLog addGameLog(Long id, GameLogCategory category) {
-        log.info("addGameLog - userId: {}, category: {}", id, category);
-
-        // id 에 해당하는 User 조회
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
-
+    public GameLog addGameLog(User child, GameLogCategory category) {
+        log.info("addGameLog - userId: {}, category: {}", child.getId(), category);
 
         // userId에 해당하는 GameLog 조회
-        GameLog foundGameLog = gameLogRepository.findTopByChildIdOrderByIdDesc(id)
+        GameLog foundGameLog = gameLogRepository.findTopByChildOrderByIdDesc(child)
                 .orElseThrow(() -> new RestApiException(CustomGameLogErrorCode.GAME_LOG_NOT_FOUND));
 
         // 게임 로그 생성
         GameLog newGameLog = GameLog.builder()
-                .child(user)
+                .child(child)
                 .mealCount(category.equals(GameLogCategory.meal_count) ? foundGameLog.getMealCount() + 1 : foundGameLog.getMealCount())
                 .exerciseCount(category.equals(GameLogCategory.exercise_count) ? foundGameLog.getExerciseCount() + 1 : foundGameLog.getExerciseCount())
                 .sleepingCount(category.equals(GameLogCategory.sleeping_count) ? foundGameLog.getSleepingCount() + 1 : foundGameLog.getSleepingCount())

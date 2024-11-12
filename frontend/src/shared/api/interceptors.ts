@@ -7,3 +7,14 @@ export const api = axios.create({
   },
   withCredentials: true,
 });
+
+// 요청에 자동으로 accessToken 추가
+api.interceptors.request.use((config) => {
+  const accessToken = localStorage.getItem('accessToken');
+
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+
+  return config;
+});

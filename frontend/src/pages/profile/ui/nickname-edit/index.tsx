@@ -9,13 +9,15 @@ import { Palette } from '@/shared/model/globalStylesTyes';
 import { useMutation } from '@tanstack/react-query';
 import { INickname, checkNickname, updateNickname } from './api';
 import { AxiosResponse } from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const NicknameEdit = () => {
   const [nickname, setNickname] = useState<string>('');
   const [color, setColor] = useState<Palette>('primary');
   const [msg, setMsg] = useState<string>('');
   const nav = useNavigate();
+  const location = useLocation();
+  const prenickname = location.state?.nickname;
 
   const nicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
@@ -76,7 +78,7 @@ export const NicknameEdit = () => {
       <TopBar type="iconpage" iconHandler={()=>nav('/profile')}>닉네임 수정</TopBar>
       <div css={containerCss}>
         <Typography color="dark" size="1" weight={700}>
-          현재 닉네임 :
+          현재 닉네임 : {prenickname}
         </Typography>
         <div css={editCss}>
           <TextField

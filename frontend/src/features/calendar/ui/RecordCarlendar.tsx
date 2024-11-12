@@ -40,7 +40,7 @@ export const RecordCalendar = () => {
       CalendarService.isSameDate(lastTappedDate, tappedDate)
     ) {
       setDateValue(null);
-      nav(`record:${dayjs(tappedDate).format('YYYY-MM-DD')}`);
+      nav(`/record/${dayjs(tappedDate).format('YYYY-MM-DD')}`);
     } else {
       setLastTappedDate(tappedDate);
       setDateValue(tappedDate);

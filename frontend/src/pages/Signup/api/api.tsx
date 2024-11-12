@@ -9,7 +9,7 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-// 회원정보 닉네임 수정
+// 회원가입
 export const signUp = (
   idToken: string,
   role: UserRole,
@@ -28,6 +28,19 @@ export const signUp = (
       name: name,
       nickname: nickname,
       gender: gender,
+    },
+  });
+};
+
+// 아이 초대코드 입력
+export const invitation = (
+  invitationCode:string
+) => {
+  return api({
+    url: '/api/ctop/connect',
+    method: 'post',
+    data: {
+      invitationCode:invitationCode
     },
   });
 };

@@ -1,0 +1,1 @@
+export { TodayRecordPage } from './ui';

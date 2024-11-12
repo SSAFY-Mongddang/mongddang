@@ -16,5 +16,6 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
 
     List<Record> findByChildAndStartTimeBetween(User child, LocalDateTime startDate, LocalDateTime endDate);
 
-//    List<Record> findByChildIdAndStartTimeBetween(Long childId, LocalDateTime todayStart, LocalDateTime todayEnd);
+    Optional<Record> findTopByChildAndEndTimeIsNullOrderByIdDesc(User child);
+
 }

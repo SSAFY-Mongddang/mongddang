@@ -66,15 +66,3 @@ export const iconVerticalCss = css`
   flex-direction: column;
   gap: 1rem;
 `;
-
-export const routineGroupCss = css`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 15rem;
-  height: 3.5rem;
-  background-color: rgba(255, 255, 255, 0.7);
-  border-radius: 10px;
-  padding: 0.25rem;
-  box-sizing: content-box;
-`;

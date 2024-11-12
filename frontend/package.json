@@ -17,6 +17,7 @@
     "@capacitor/camera": "^6.1.0",
     "@capacitor/core": "^6.1.2",
     "@capacitor/filesystem": "^6.0.1",
+    "@capacitor/preferences": "^6.0.2",
     "@emotion/react": "^11.13.3",
     "@mantine/charts": "^7.13.4",
     "@mantine/core": "^7.13.4",

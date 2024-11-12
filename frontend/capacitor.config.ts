@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'mongddang',
   webDir: 'dist',
   server: {
-    url: 'http://192.168.0.15:8100',
+    url: 'https://62d5-14-46-142-178.ngrok-free.app',
     cleartext: true,
   },
 };

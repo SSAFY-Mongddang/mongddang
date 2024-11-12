@@ -8,13 +8,12 @@ import { handleDateChange } from '@/Utils/birthUtils';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { UserRole } from '../..';
 import { useMutation } from '@tanstack/react-query';
-import {
-  INickname,
-  checkNickname,
-} from '@/pages/profile/ui/nickname-edit/api';
+import { INickname, checkNickname } from '@/pages/profile/ui/nickname-edit/api';
 import { Palette } from '@/shared/model/globalStylesTyes';
 import { AxiosResponse } from 'axios';
 import { signUp } from '../../api/api';
+import { UserService } from '@/shared/api/user/user.service';
+import { useUserStore } from '@/entities/user/model/store';
 
 export const DataForm = ({ role }: { role: UserRole }) => {
   const [gender, setGender] = useState<'male' | 'female' | undefined>(
@@ -30,6 +29,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
   const nav = useNavigate();
   const location = useLocation();
   const idToken = location.state?.idToken;
+  const setUser = useUserStore((state) => state.setUser);
 
   const handleDateChangeWrapper =
     (type: 'year' | 'month' | 'day') =>
@@ -54,47 +54,47 @@ export const DataForm = ({ role }: { role: UserRole }) => {
   };
 
   const signupHandler = async () => {
-    if (
-      !nickname ||
-      !birthYear ||
-      !birthMonth ||
-      !birthDay ||
-      !name ||
-      !gender ||
-      !role
-    ) {
-      alert('모든 필드를 입력해주세요.');
-      return;
-    }
+    signUpMutation.mutate();
+  };
 
-    const birth = getBirthString();
-    try {
-      const response = await signUp(
-        idToken,
-        role,
-        birth,
-        name,
-        nickname,
-        gender
-      );
-      if (response) {
-        alert('회원가입이 완료되었습니다.');
-        nav('/login'); // 또는 다음 페이지로 이동
+  const signUpMutation = useMutation({
+    mutationFn: async () => {
+      if (
+        !nickname ||
+        !birthYear ||
+        !birthMonth ||
+        !birthDay ||
+        !name ||
+        !gender ||
+        !role
+      ) {
+        alert('모든 필드를 입력해주세요.');
+        throw new Error('모든 필드를 입력해주세요.');
       }
-    } catch (error) {
+
+      const birth = getBirthString();
+      return await signUp(idToken, role, birth, name, nickname, gender);
+    },
+    onSuccess: async () => {
+      alert('회원가입이 완료되었습니다.');
+      // preference에 user 정보 저장
+      const { data } = await UserService.userQuery();
+      setUser(data);
+      nav('/login');
+    },
+    onError: (error) => {
       console.error('회원가입 실패:', error);
       alert('회원가입에 실패했습니다. 다시 시도해주세요.');
-    }
-  };
+    },
+  });
+
   const accessToken = localStorage.getItem('accessToken') || '';
   const { mutate } = useMutation<
     AxiosResponse<INickname>,
     Error,
     { accessToken: string; nickname: string }
   >({
-    mutationFn: async ({
-      nickname,
-    }): Promise<AxiosResponse<INickname>> => {
+    mutationFn: async ({ nickname }): Promise<AxiosResponse<INickname>> => {
       return await checkNickname(nickname);
     },
     onSuccess: () => {
