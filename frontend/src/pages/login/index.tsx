@@ -64,10 +64,10 @@ const Login = () => {
         console.error('토큰 저장 실패:', error);
         console.log(idToken);
       });
+  };
 
-    } catch (error) {
-      console.error('로그인 실패:', error);
-    }
+  const handleLoginError = () => {
+    console.log('로그인 실패');
   };
 
   return (
