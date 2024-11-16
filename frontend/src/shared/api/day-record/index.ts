@@ -9,7 +9,7 @@ export type {
   LongActingMedicationContent,
   FastActingMedicationContent,
   DayRecords,
-  DayRecordsResponse,
+  // DayRecordsResponse,
   RecordParams,
   DayRecordTypes,
 } from './day-record.types';

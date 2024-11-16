@@ -1,85 +1,79 @@
+/** @jsxImportSource @emotion/react */
 import { TopBar } from '@/shared/ui/TopBar';
-import { base, containerCss, toastCss } from './ui/styles';
+import { base, containerCss } from './ui/styles';
 import { Chip } from '@/shared/ui/Chip';
 import { imgCss } from '../Encyclopedia/ui/styles';
 import space from '../../assets/img/space.png';
 import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
-// import { useQuery } from '@tanstack/react-query';
-// import { getUserInfo } from './api/mypage-api';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/entities/user/model';
+import { ModalProvider } from './ui/modal/ModalContext';
+import { SamsungModal } from './ui/modal';
+import { useState } from 'react';
 
-export const SamsungSetting = () => {
-  const nav = useNavigate();
+export const SamsungSetting: React.FC = () => {
+  const navigate = useNavigate();
   const getUserInfo = useUserStore((state) => state.getUserInfo);
+  const user = getUserInfo()?.user; // Safely access user information
+  // const { isModalOpen, openModal, closeModal } = ModalProvider.useModal();
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const onClickPermBtn = ()=>{
+    setIsModalOpen(true)
+  }
 
-  const user = getUserInfo().user;
-
+  const closePermModel = ()=>{
+    setIsModalOpen(false)
+  }
 
   return (
     <div>
-      <div >
-        상단
-      </div>
-      <TopBar type="iconpage" iconHandler={() => nav('/menu')}>
-        삼성세팅
+      <TopBar type="iconpage" iconHandler={() => navigate('/menu')}>
+        삼성헬스 세팅
       </TopBar>
-      <div css={base}>
-        가나다
-      </div>
+      <div css={base}></div>
       <img css={imgCss} src={space} alt="배경 이미지" />
       <div css={containerCss}>
         <Chip border={1} color="primary" fontSize={0.8} fontWeight={600}>
-          삼성 세팅
+          삼성헬스 모니터링
         </Chip>
         <div
-          style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '0.5rem',
+          }}
         >
           <Typography color="dark" size="1" weight={700}>
-            이름: {user?.name}
-          </Typography>
-          <Typography color="dark" size="1" weight={700}>
-            닉네임: {user?.nickname}
-          </Typography>
-          <Typography color="dark" size="1" weight={700}>
-            성별:
-            {user?.gender === 'male' ? '남자' : '여자'}
-          </Typography>
-          <Typography color="dark" size="1" weight={700}>
-            생년월일: {user?.birth}
+            삼성헬스 정보와 연동합니다.
           </Typography>
         </div>
-        <div
-          style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}
-        >
-          {user?.role === 'child' && (
-            <Chip border={1} color="primary" fontSize={0.8} fontWeight={600}>
-              연결된 보호자
-            </Chip>
-          )}
-          {user?.connected?.map((guardian, index) => (
-            <Typography key={index} color="dark" size="1" weight={700}>
-              {guardian.name} ({guardian.nickname})
-            </Typography>
-          ))}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <Button
+            handler={onClickPermBtn}
+            color="primary" 
+            fontSize="1.25"
+            variant="contained"
+            fullwidth
+          >
+            권한설정
+          </Button>
+          <SamsungModal isOpen={isModalOpen} onClose={closePermModel}>
+            <h2>모달 제목</h2>
+            <p>모달 내용이 여기에 표시됩니다.</p>
+          </SamsungModal>
         </div>
-      </div>
-      <div style={{ display: 'flex', margin: '0 1rem', gap: '1rem' }}>
-        <Button
-          handler={() =>
-            nav('/nickname/edit', {
-              state: { nickname: user?.nickname },
-            })
-          }
-          color="primary"
-          fontSize="1.25"
-          variant="contained"
-          fullwidth
-        >
-          닉네임 수정
-        </Button>
       </div>
     </div>
   );
 };
+
+const Root: React.FC = () => (
+  <ModalProvider>
+    <SamsungSetting />
+  </ModalProvider>
+);
+
+export default Root;
