@@ -8,7 +8,7 @@ import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
-  alignmentStyle,
+  // alignmentStyle,
   base,
   modalCss,
   storyTypographyCss,

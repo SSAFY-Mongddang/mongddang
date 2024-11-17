@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { BloodsugarQueries } from '@/entities/blood-sugar/api';
 import { article, chart } from './style';
 import { BloodSugarChart } from '@/widgets/blood-sugar-chart';
+import { useSelectedChildStore } from '@/entities/selected-child/model/store';
 
 export const DayRecordPage = () => {
   const nav = useNavigate();
@@ -19,7 +20,13 @@ export const DayRecordPage = () => {
   const { getUserInfo } = useUserStore(
     useShallow((state) => ({ getUserInfo: state.getUserInfo }))
   );
-  const nickname = getUserInfo()?.user?.nickname ?? 'test';
+  const userInfo = getUserInfo();
+  const selectedChild = useSelectedChildStore((state) => state.selectedChild);
+  // const nickname = getUserInfo()?.user?.nickname ?? 'test';
+  const nickname =
+    userInfo.user?.role === 'child'
+      ? userInfo.user.nickname
+      : (selectedChild?.name ?? '');
 
   const {
     data: bloodSugarData,

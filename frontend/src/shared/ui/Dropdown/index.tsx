@@ -11,7 +11,7 @@ export const Dropdown = ({
   options,
   onSelect,
   selectedValue,
-  buttonLabel = '선택하세요',
+  buttonLabel = '아이를 선택하세요',
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
@@ -21,7 +21,7 @@ export const Dropdown = ({
     if (isOpen && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
       setDropdownPosition({
-        top: rect.bottom + 2, 
+        top: rect.bottom + 2,
         left: rect.left,
       });
     }
@@ -34,7 +34,7 @@ export const Dropdown = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        buttonRef.current && 
+        buttonRef.current &&
         !buttonRef.current.contains(event.target as Node) &&
         !(event.target as Element).closest('[data-dropdown-portal]')
       ) {
@@ -54,7 +54,12 @@ export const Dropdown = ({
   return (
     <div css={styles.dropdownContainer}>
       <div ref={buttonRef}>
-        <Button css={styles.button} fontSize="1" handler={handleButtonClick}>
+        <Button
+          css={styles.button}
+          fontSize="1"
+          handler={handleButtonClick}
+          disabled={options.length === 0}
+        >
           <span>{selectedValue || buttonLabel}</span>
           <Icon size={2} css={isOpen ? styles.iconOpen : styles.iconClose}>
             <RiArrowRightSFill />
@@ -74,15 +79,15 @@ export const Dropdown = ({
           >
             {options.map((option) => (
               <div
-                key={option}
+                key={option.name}
                 css={styles.option}
-                className={selectedValue === option ? 'selected' : ''}
+                className={selectedValue === option.name ? 'selected' : ''}
                 onClick={() => {
                   onSelect(option);
                   setIsOpen(false);
                 }}
               >
-                {option}
+                {option.name}
               </div>
             ))}
           </div>,

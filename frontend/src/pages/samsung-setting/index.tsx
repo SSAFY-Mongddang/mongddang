@@ -1,5 +1,7 @@
+/** @jsxImportSource @emotion/react */
+
 import { TopBar } from '@/shared/ui/TopBar';
-import { base, containerCss, toastCss } from './ui/styles';
+import { base, containerCss } from './ui/styles';
 import { Chip } from '@/shared/ui/Chip';
 import { imgCss } from '../Encyclopedia/ui/styles';
 import space from '../../assets/img/space.png';
@@ -16,18 +18,13 @@ export const SamsungSetting = () => {
 
   const user = getUserInfo().user;
 
-
   return (
     <div>
-      <div >
-        상단
-      </div>
+      <div>상단</div>
       <TopBar type="iconpage" iconHandler={() => nav('/menu')}>
         삼성세팅
       </TopBar>
-      <div css={base}>
-        가나다
-      </div>
+      <div css={base}>가나다</div>
       <img css={imgCss} src={space} alt="배경 이미지" />
       <div css={containerCss}>
         <Chip border={1} color="primary" fontSize={0.8} fontWeight={600}>

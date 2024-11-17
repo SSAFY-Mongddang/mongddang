@@ -18,7 +18,7 @@ const MenuBtnGroup = (props: MenuBtnGroupProps) => {
           <div
             css={btn}
             onClick={() => {
-              navigate(item.urlTo);
+              navigate(item.urlTo[props.userRole]);
             }}
             key={`menuBtn-${i}`}
           >

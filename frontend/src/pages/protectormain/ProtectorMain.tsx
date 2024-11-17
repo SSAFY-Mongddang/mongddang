@@ -11,12 +11,27 @@ import {
   menuContent,
 } from './styles';
 import { Dropdown } from '@/shared/ui/Dropdown';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Typography } from '@/shared/ui/Typography';
+import { useUserStore } from '@/entities/user/model';
+import { useSelectedChildStore } from '@/entities/selected-child/model/store';
 
 const ProtectorMain = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState('김싸피');
+  const [selected, setSelected] = useState<string | undefined>(undefined);
+  const connectedChild = useUserStore(
+    (state) => state.getUserInfo().user?.connected
+  );
+  const setSelectedChild = useSelectedChildStore(
+    (state) => state.setSelectedChild
+  );
+
+  useEffect(() => {
+    if (connectedChild) {
+      setSelected(connectedChild[0].name);
+    }
+  }, [connectedChild]);
+
   return (
     <div css={container}>
       <div css={menuContent}>
@@ -24,9 +39,10 @@ const ProtectorMain = () => {
         <div css={childList}>
           <div css={bubbleBox}>
             <Dropdown
-              options={['김싸피', '박싸피', '이싸피']}
+              options={connectedChild ?? []}
               onSelect={(value) => {
-                setSelected(value);
+                setSelected(value.name);
+                setSelectedChild(value);
               }}
               isOpen={isOpen}
               onClose={() => setIsOpen(false)}

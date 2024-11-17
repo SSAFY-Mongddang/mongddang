@@ -7,7 +7,10 @@ export const menuBtnData: MenuBtnItem[] = [
       child: '약 챙기기',
       protector: '복약관리',
     },
-    urlTo: '',
+    urlTo: {
+      child: '',
+      protector: '',
+    },
   },
   {
     icon: '/img/%EB%A7%90%EB%9E%911.png',
@@ -15,7 +18,10 @@ export const menuBtnData: MenuBtnItem[] = [
       child: '급식표 등록',
       protector: '급식표 등록',
     },
-    urlTo: '',
+    urlTo: {
+      child: '',
+      protector: '',
+    },
   },
   {
     icon: '/img/%EB%A7%90%EB%9E%911.png',
@@ -23,7 +29,10 @@ export const menuBtnData: MenuBtnItem[] = [
       child: '주간 리포트',
       protector: '주간 리포트',
     },
-    urlTo: '/report',
+    urlTo: {
+      child: '/report',
+      protector: '/report',
+    },
   },
   {
     icon: '/img/%EB%A7%90%EB%9E%911.png',
@@ -31,7 +40,10 @@ export const menuBtnData: MenuBtnItem[] = [
       child: '내 기록',
       protector: '어린이 기록',
     },
-    urlTo: '/record',
+    urlTo: {
+      child: '/record',
+      protector: '/record',
+    },
   },
   {
     icon: '/img/%EB%A7%90%EB%9E%911.png',
@@ -39,7 +51,10 @@ export const menuBtnData: MenuBtnItem[] = [
       child: '프로필',
       protector: '프로필',
     },
-    urlTo: '/profile',
+    urlTo: {
+      child: '/profile',
+      protector: '/profile',
+    },
   },
   {
     icon: '/img/%EB%A7%90%EB%9E%911.png',
@@ -47,7 +62,10 @@ export const menuBtnData: MenuBtnItem[] = [
       child: '설정',
       protector: '설정',
     },
-    urlTo: '/setting',
+    urlTo: {
+      child: '/setting',
+      protector: '/invitecode',
+    },
   },
   {
     icon: '/img/%EB%A7%90%EB%9E%911.png',
@@ -55,7 +73,10 @@ export const menuBtnData: MenuBtnItem[] = [
       child: '삼성설정',
       protector: '삼성설정',
     },
-    urlTo: '/samsungsetting',
+    urlTo: {
+      child: '/samsungsetting',
+      protector: '',
+    },
   },
   {
     icon: '/img/%EB%A7%90%EB%9E%911.png',
@@ -63,6 +84,9 @@ export const menuBtnData: MenuBtnItem[] = [
       child: '포그라운드 설정',
       protector: '포그라운드설정',
     },
-    urlTo: '/foregroundsetting',
+    urlTo: {
+      child: '/foregroundsetting',
+      protector: '',
+    },
   },
 ];

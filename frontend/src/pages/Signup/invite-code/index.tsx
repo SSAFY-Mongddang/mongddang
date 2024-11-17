@@ -8,10 +8,18 @@ import { invitation } from '../api/api';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChangeEvent } from 'react';
+import { UserInfo, useUserStore } from '@/entities/user/model';
+import { useShallow } from 'zustand/shallow';
 
 export const InviteCode = () => {
   const nav = useNavigate();
   const [code, setCode] = useState('');
+  const { updateUserInfo, getUserInfo } = useUserStore(
+    useShallow((state) => ({
+      updateUserInfo: state.updateUserInfo,
+      getUserInfo: state.getUserInfo,
+    }))
+  );
 
   const inviteMutation = useMutation({
     mutationFn: async () => {
@@ -19,6 +27,15 @@ export const InviteCode = () => {
     },
     onSuccess: async () => {
       alert('연결이 되었습니다.');
+      const userInfo = getUserInfo();
+      const newUserInfo = userInfo.user && {
+        ...userInfo,
+        user: {
+          ...userInfo.user,
+          connected: [...userInfo.user.connected, code],
+        },
+      };
+      updateUserInfo(newUserInfo as Partial<UserInfo>);
       nav('/');
     },
     onError: (error) => {

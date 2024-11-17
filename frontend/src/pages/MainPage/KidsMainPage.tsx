@@ -44,10 +44,10 @@ export interface EchoPlugin {
 
 export interface ForegroundPlugin {
   startForeground(): Promise<{ message: string }>;
-  stopForeground(): Promise<{ message: string}>;
+  stopForeground(): Promise<{ message: string }>;
 }
 
-export const Foreground = registerPlugin<ForegroundPlugin>('Foreground')
+export const Foreground = registerPlugin<ForegroundPlugin>('Foreground');
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
@@ -61,18 +61,18 @@ const KidsMainPage = () => {
   const [openDietModal, setOpenDietModal] = useState(false);
   const [openMailBox, setOpenMailBox] = useState(false);
 
-  console.log(openMailBox)
+  console.log(openMailBox);
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   // 초기 루틴 상태 조회
   useEffect(() => {
     const fetchMainInfo = async () => {
       const mainInfo = await getMainInfo();
       setMainInfo(mainInfo);
-      setIsLoading(false)
+      setIsLoading(false);
     };
     const fetchRoutine = async () => {
       const routineValue = await getInitialRoutine();
@@ -130,7 +130,7 @@ const KidsMainPage = () => {
   const closeMailBox = () => {
     setOpenMailBox(false);
   };
-console.log(closeMailBox)
+  console.log(closeMailBox);
   // 일상 수행 상태 관리
   const changeRoutine = (currentRoutine: string) => {
     console.log('루틴 변경', currentRoutine);
@@ -160,8 +160,8 @@ console.log(closeMailBox)
   };
   console.log('알림창 상태', alertStatus);
   console.log('루틴 상태', currentRoutine);
-  return (
-    !isLoading ? <div css={kidsMainBase}>
+  return !isLoading ? (
+    <div css={kidsMainBase}>
       <div css={kidsMainContent}>
         {/* 상단 컴포넌트들 */}
         <div css={topContainer}>
@@ -174,25 +174,26 @@ console.log(closeMailBox)
           {/* 아이콘 모음 */}
           <div css={iconGroupCss}>
             <div css={iconHorizontalCss}>
-              <div
-                onClick={() => {
-                  setOpenBaseModal(true);
-                  setContentType('dailyMission');
-                }}
-              >
-                <IconTypo
-                  icon={mainIcons.mission}
-                  fontSize="0.75"
-                  menu={
-                    <span>
-                      오늘의 <br />
-                      퀘스트
-                    </span>
-                  }
-                />
+              <div css={iconVerticalCss}>
+                <div
+                // TODO: 어디에 사용했었는지, 필요한지 체크
+                // onClick={() => {
+                //   setOpenBaseModal(true);
+                //   setContentType('dailyMission');
+                // }}
+                >
+                  <IconTypo
+                    icon={mainIcons.mission}
+                    fontSize="0.75"
+                    menu={
+                      <span>
+                        오늘의 <br />
+                        퀘스트
+                      </span>
+                    }
+                  />
+                </div>
               </div>
-            </div>
-            <div css={iconVerticalCss}>
               <div
                 onClick={() => {
                   setOpenMailBox(true);
@@ -230,7 +231,11 @@ console.log(closeMailBox)
           {/* 메인캐릭터 + 말풍선 */}
           <div css={CharacterContainer}>
             {/* <ChatBubble /> */}
-            <img src={characterImages[formatId(mainInfo.mainMongddangId)]} alt="" css={mainCharacterCss} />
+            <img
+              src={characterImages[formatId(mainInfo.mainMongddangId)]}
+              alt=""
+              css={mainCharacterCss}
+            />
           </div>
 
           {/* 일상생활 버튼 3종 */}
@@ -301,7 +306,9 @@ console.log(closeMailBox)
           <></>
         )
       }
-    </div> : <Loading/>
+    </div>
+  ) : (
+    <Loading />
   );
 };
 
