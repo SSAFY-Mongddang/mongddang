@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { Button } from '@/shared/ui/Button';
-import { Modal } from '@/shared/ui/Modal';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
-import { base, modalContentStyle, modalCss, modalOverlay, storyTypographyCss, xiconCss } from './styles';
-import { useState } from 'react';
-import { getMainInfo } from '@/pages/Encyclopedia/api/api';
+// import { Modal } from '@/shared/ui/Modal';
+// import { useMutation, useQueryClient } from '@tanstack/react-query';
+// import { AxiosResponse } from 'axios';
+import {modalContentStyle, modalOverlay} from './styles';
+// import PermissionHandler from '../../plugin/PermissionHandler';
+// import { useState } from 'react';
 
 
-interface SamsungModalProps {
+interface SamsungModalProps {  
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
@@ -17,7 +17,10 @@ interface SamsungModalProps {
 export const SamsungModal: React.FC<SamsungModalProps>= ({ isOpen, onClose, children }) => {
   // const queryClient = useQueryClient();
   if (!isOpen) return null;
-  
+  // async function checkForegroundServicePermission() {
+  //   const result = await PermissionHandler.checkPermission('android.permission.FOREGROUND_SERVICE');
+  //   console.log(`Permission granted: ${result.isGranted}`);
+  // }
   
   return (
     <div css={modalOverlay} onClick={onClose}>

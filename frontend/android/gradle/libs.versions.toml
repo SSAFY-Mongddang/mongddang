@@ -8,7 +8,6 @@ constraintlayout = "2.1.4"
 preferenceKtx = "1.2.1"
 composeBom = "2023.06.01"
 material = "1.12.0"
-coreKtx = "1.15.0"
 
 [libraries]
 # Kotlin 표준 라이브러리
@@ -31,7 +30,6 @@ androidx-preference-ktx = { group = "androidx.preference", name = "preference-kt
 # 안드로이드 컴포즈 라이브러리
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
 [plugins]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

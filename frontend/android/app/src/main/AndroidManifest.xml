@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mongddang.app">
-
+    <uses-permission android:name="com.samsung.health.permission.READ_BLOOD_GLUCOSE" />
     <!-- Queries -->
     <queries>
+
         <!-- Samsung Health 앱이 설치되어 있는지 확인하기 위한 쿼리 -->
         <package android:name="com.sec.android.app.shealth" />
-    </queries>
-
-    <!-- Permissions -->
+    </queries> <!-- Permissions -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -21,9 +20,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <!-- Features -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- Features -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -35,11 +32,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.samsung.health.permission.READ_USER_PROFILE"
+            android:value="true" />
+        <meta-data
+            android:name="com.samsung.health.permission.READ_BLOOD_GLUCOSE"
+            android:value="true" />
+        <meta-data
+            android:name="com.samsung.health.permission.READ_EXERCISE"
+            android:value="true" />
+        <meta-data
+            android:name="com.samsung.health.permission.READ_SLEEP"
+            android:value="true" />
+        <activity
+            android:name=".SamsungHealthPermActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+
+                <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
+            </intent-filter>
+        </activity>
         <service
             android:name=".ForegroundService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="dataSync" />
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
@@ -49,6 +68,7 @@
             android:theme="@style/AppTheme.NoActionBarLaunch">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

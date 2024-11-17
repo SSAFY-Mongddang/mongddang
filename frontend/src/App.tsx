@@ -21,7 +21,7 @@ import { Tir } from './pages/report/ui/detail/tir/indesx';
 import { DayRecordPage } from './pages/day-record';
 import { useEffect } from 'react';
 import { SocialLogin } from '@capgo/capacitor-social-login';
-import { SamsungSetting } from './pages/samsung-setting/index';
+import {SamsungSetting} from './pages/samsung-setting/index';
 import {ForegoundServiceSetting } from './pages/foreground-setting/index';
 
 function App() {
@@ -44,9 +44,9 @@ function App() {
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}>
       <Router>
         <Routes>
-          <Route path="/main" element={<KidsMainPage />} />
+          <Route path="/" element={<KidsMainPage />} />
           <Route path="/btn" element={<Btn />} />
-          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/invitecode" element={<InviteCode />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/encyclopedia" element={<Encyclopedia />} />

@@ -7,18 +7,33 @@ import space from '../../assets/img/space.png';
 import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
 import { useNavigate } from 'react-router-dom';
-import { useUserStore } from '@/entities/user/model';
+// import { useUserStore } from '@/entities/user/model';
 import { ModalProvider } from './ui/modal/ModalContext';
 import { SamsungModal } from './ui/modal';
 import { useState } from 'react';
+import SamsungHealth from './plugin/SamsungHealthPlugin';
 
 export const SamsungSetting: React.FC = () => {
+  console.log(4)
   const navigate = useNavigate();
-  const getUserInfo = useUserStore((state) => state.getUserInfo);
-  const user = getUserInfo()?.user; // Safely access user information
+  // const getUserInfo = useUserStore((state) => state.getUserInfo);
+  // const user = getUserInfo()?.user; // Safely access user information
   // const { isModalOpen, openModal, closeModal } = ModalProvider.useModal();
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
+  // const [isOpen, setIsOpen] = useState(false)
+  const [permissionResult, setPermissionResult] = useState<null | boolean>(null);
+
+  const requestPermission = async (healthDataType: string) => {
+    try {
+      const result = await SamsungHealth.requestHealthPermission({
+        healthDataType,
+      });
+      setPermissionResult(result.granted);
+    } catch (error) {
+      console.error("Error requesting health data permission:", error);
+    }
+  };
+
   const onClickPermBtn = ()=>{
     setIsModalOpen(true)
   }
@@ -63,6 +78,12 @@ export const SamsungSetting: React.FC = () => {
           <SamsungModal isOpen={isModalOpen} onClose={closePermModel}>
             <h2>모달 제목</h2>
             <p>모달 내용이 여기에 표시됩니다.</p>
+            <Button 
+            handler={()=>{requestPermission("bloodGlucose")}}
+            color="primary" 
+            fontSize="1.25"
+            variant="contained"
+            fullwidth>혈당 권한</Button>
           </SamsungModal>
         </div>
       </div>
