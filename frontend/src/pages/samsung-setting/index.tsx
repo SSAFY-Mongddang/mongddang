@@ -12,9 +12,10 @@ import { ModalProvider } from './ui/modal/ModalContext';
 import { SamsungModal } from './ui/modal';
 import { useState, useEffect } from 'react';
 import SamsungHealth from './plugin/SamsungHealthPlugin';
-import { Toggle } from '@/shared/ui/Toggle';
-import { toggleContainerCss } from '../nickname-title/ui/styles';
 import PermissionToggles from './ui/modal/PermissionToggles';
+import { mainIcons } from '../MainPage/constants/iconsData';
+import { IconTypo } from '@/shared/ui/IconTypo';
+import {Foreground} from './plugin/ForegroundPlugin';
 
 export const SamsungSetting: React.FC = () => {
   const navigate = useNavigate();
@@ -40,6 +41,19 @@ export const SamsungSetting: React.FC = () => {
     setIsModalOpen(false)
   }
 
+  const startForegroundPermission = async() =>{
+    const response = Foreground.startForeground()
+    console.log(`startForeground: ${response}`)
+  }
+  const stopForegroundPermission = async() =>{
+    const response = Foreground.stopForeground()
+    console.log(`stopForeground: ${response}`)
+  }
+
+  const onClickSearchBloodGlucose = ()=>{
+    navigate('/checksamsungdata')
+  }
+
   return (
     <div>
       <TopBar type="iconpage" iconHandler={() => navigate('/menu')}>
@@ -63,11 +77,36 @@ export const SamsungSetting: React.FC = () => {
             삼성헬스 정보와 연동합니다.
           </Typography>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <PermissionToggles/>
-          {/* <div css={toggleContainerCss}>
-              <Toggle color="primary" size={2.5} isOn={isBloodGlucosePermOn} onClick={()=>{ checkHealthDataPermission("bloodGlucose")}} />
-          </div> */}
+          <Chip border={1} color="primary" fontSize={0.8} fontWeight={600}>
+            혈당 모니터링
+          </Chip>
+          <div
+            >
+              <div style={{display:'flex', justifyContent:'space-between', width:'100%'}}>
+                  <div
+                    onClick={startForegroundPermission}
+                  >
+                    <IconTypo
+                      icon={mainIcons.notification}
+                      fontSize="0.75"
+                      menu="시작" 
+                    />
+                  </div>
+                  <div
+                    onClick={stopForegroundPermission}
+                  >
+                    <IconTypo
+                      icon={mainIcons.notification}
+                      fontSize="0.75"
+                      menu="종료" 
+                    />
+                  </div>
+          </div>
+          <Typography color="dark" size="1" weight={700}>
+            5분마다 혈당이 체크됩니다. 
+          </Typography>
+        </div>
           <Button
             handler={onClickPermBtn}
             color="primary" 
@@ -76,6 +115,15 @@ export const SamsungSetting: React.FC = () => {
             fullwidth
           >
             권한설정
+          </Button>
+          <Button
+            handler={onClickSearchBloodGlucose}
+            color="primary" 
+            fontSize="1.25"
+            variant="contained"
+            fullwidth
+          >
+            삼성데이터조회
           </Button>
           <SamsungModal isOpen={isModalOpen} onClose={closePermModel}>
             <h2>모달 제목</h2>
@@ -87,7 +135,6 @@ export const SamsungSetting: React.FC = () => {
             variant="contained"
             fullwidth>혈당 권한</Button>
           </SamsungModal>
-        </div>
       </div>
     </div>
   );

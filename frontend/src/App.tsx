@@ -22,7 +22,7 @@ import { DayRecordPage } from './pages/day-record';
 import { useEffect } from 'react';
 import { SocialLogin } from '@capgo/capacitor-social-login';
 import {SamsungSetting} from './pages/samsung-setting/index';
-import {ForegoundServiceSetting } from './pages/foreground-setting/index';
+import {CheckSamsungData} from './pages/check-samsung-data/index';
 
 function App() {
   useLoadState();
@@ -63,7 +63,7 @@ function App() {
           <Route path="/record/:date" element={<DayRecordPage />} />
           <Route path="/protector-main" element={<ProtectorMain />} />
           <Route path="/samsungsetting" element={<SamsungSetting />} />
-          <Route path="/foregroundsetting" element={<ForegoundServiceSetting />} />
+          <Route path="/checksamsungdata" element={<CheckSamsungData/>}/>
         </Routes>
       </Router>
     </GoogleOAuthProvider>

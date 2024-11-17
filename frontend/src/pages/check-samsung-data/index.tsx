@@ -12,6 +12,7 @@ import { useUserStore } from '@/entities/user/model';
 import { registerPlugin } from '@capacitor/core';
 import { mainIcons } from '../MainPage/constants/iconsData';
 
+
 export interface ForegroundPlugin {
   startForeground(): Promise<{ message: string }>;
   stopForeground(): Promise<{ message: string}>;
@@ -20,28 +21,18 @@ export interface ForegroundPlugin {
 export const Foreground = registerPlugin<ForegroundPlugin>('Foreground')
 
 
-export const ForegoundServiceSetting = () => {
+export const CheckSamsungData = () => {
   const nav = useNavigate();
   const getUserInfo = useUserStore((state) => state.getUserInfo);
 
   const user = getUserInfo().user;
-
-  const startForegroundPermission = async() =>{
-    const response = Foreground.startForeground()
-    console.log(`startForeground: ${response}`)
-  }
-  const stopForegroundPermission = async() =>{
-    const response = Foreground.stopForeground()
-    console.log(`stopForeground: ${response}`)
-  }
-
 
   return (
     <div>
       <div>
       </div>
       <TopBar type="iconpage" iconHandler={() => nav('/menu')}>
-        모니터링 세팅
+        삼성데이터 조회
       </TopBar>
       <div css={base}>
       </div>
@@ -53,25 +44,7 @@ export const ForegoundServiceSetting = () => {
         <div
           style={{ display: 'flex', width:'100%', flexDirection: 'column', gap: '0.5rem', alignItems:'center' }}
         >
-              <div style={{display:'flex', justifyContent:'space-between', width:'70%'}}>
-                  <div
-                    onClick={startForegroundPermission}
-                  >
-                    <IconTypo
-                      icon={mainIcons.notification}
-                      fontSize="0.75"
-                      menu="시작" 
-                    />
-                  </div>
-                  <div
-                    onClick={stopForegroundPermission}
-                  >
-                    <IconTypo
-                      icon={mainIcons.notification}
-                      fontSize="0.75"
-                      menu="종료" 
-                    />
-                  </div>
+          <div style={{display:'flex', justifyContent:'space-between', width:'70%'}}>
           </div>
           <Typography color="dark" size="1" weight={700}>
             5분마다 혈당이 체크됩니다. 
