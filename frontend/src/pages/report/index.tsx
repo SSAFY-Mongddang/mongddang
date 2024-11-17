@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getreport } from './api/api';
 import useBloodSugarStore from './store/bloodSugarStore';
 import { useEffect } from 'react';
+import Loading from '@/shared/ui/Loading';
 
 export const Report = () => {
   const nav = useNavigate();
@@ -39,7 +40,7 @@ export const Report = () => {
 
   if (isLoading) {
     console.log('Loading data...');
-    return <div>Loading...</div>;
+    return <Loading/>;
   }
 
   if (error) {
@@ -52,7 +53,7 @@ export const Report = () => {
 
   return (
     <div>
-      <TopBar type="iconpage" iconHandler={() => nav('/menu')}>
+      <TopBar type="iconpage" iconHandler={() => nav(-1)}>
         주간 리포트
       </TopBar>
       <WeekChart data={measurementList} />

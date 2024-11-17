@@ -63,7 +63,7 @@ export const Profile = () => {
           초대 코드가 복사되었습니다.
         </Toast>
       </div>
-      <TopBar type="iconpage" iconHandler={() => nav('/menu')}>
+      <TopBar type="iconpage" iconHandler={() => nav(-1)}>
         프로필
       </TopBar>
       <div css={base}>

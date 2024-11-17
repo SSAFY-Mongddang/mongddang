@@ -39,7 +39,7 @@ export const NicknameTitle = () => {
   console.log(TitleQuery.data?.data?.data)
   return (
     <div>
-      <TopBar type="iconpage" iconHandler={() => nav('/')}>
+      <TopBar type="iconpage" iconHandler={() => nav('/main')}>
         칭호 도감
       </TopBar>
       <img css={imgCss} src={space} alt="배경 이미지" />

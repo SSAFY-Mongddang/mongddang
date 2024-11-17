@@ -21,7 +21,7 @@ export const Newcharacter = ({ data }: OwnCharacterProps) => {
           menu={data.name}
           size={5}
         />
-        <Typography color="primary" size="1" weight={600} css={newCss}>
+        <Typography style={{background:'#fff', borderRadius:'1rem'}} color="primary" size="1" weight={600} css={newCss}>
           New!!
         </Typography>
       </div>
