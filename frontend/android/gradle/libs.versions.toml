@@ -8,6 +8,8 @@ constraintlayout = "2.1.4"
 preferenceKtx = "1.2.1"
 composeBom = "2023.06.01"
 material = "1.12.0"
+room = "2.7.0-alpha11"
+lifecycle = "2.5.1"
 
 [libraries]
 # Kotlin 표준 라이브러리
@@ -30,6 +32,19 @@ androidx-preference-ktx = { group = "androidx.preference", name = "preference-kt
 # 안드로이드 컴포즈 라이브러리
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# Room (Android용 ORM 라이브러리)
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+
+# AndroidX Lifecycle 라이브러리
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-common-java8 = { group = "androidx.lifecycle", name = "lifecycle-common-java8", version.ref = "lifecycle" }
+androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycle" }
+androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }
 
 [plugins]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

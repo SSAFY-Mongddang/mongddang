@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id("com.google.devtools.ksp") version("1.9.22-1.0.16")
 //    id 'com.google.dagger.hilt.android'
 }
 
@@ -92,6 +93,20 @@ dependencies {
 
     //권한 상태 저장용 데이터 스토어 추가
     implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
+    //뷰모델용 라이프사이클
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.common.java8)
+    implementation(libs.androidx.lifecycle.service)
+    implementation(libs.androidx.lifecycle.process)
+
 }
 
 kapt {

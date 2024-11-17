@@ -1,4 +1,4 @@
-package com.mongddang.app.healthdata
+package com.mongddang.app.healthdata.viewmodel
 
 import android.app.Activity
 import android.content.Context
@@ -10,6 +10,8 @@ class HealthViewModelFactory(private val context: Context) : ViewModelProvider.F
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T = when (modelClass) {
         HealthMainViewModel::class.java ->
+            HealthMainViewModel(HealthDataService.getStore(context), context as Activity)
+        BloodGlucoseViewModel::class.java ->
             HealthMainViewModel(HealthDataService.getStore(context), context as Activity)
 
         else -> throw IllegalArgumentException("Unknown ViewModel class")

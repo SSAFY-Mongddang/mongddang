@@ -1,4 +1,4 @@
-package com.mongddang.app.healthdata
+package com.mongddang.app.healthdata.viewmodel
 
 import android.app.Activity
 import android.content.Context
@@ -6,6 +6,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mongddang.app.healthdata.utils.AppConstants
+import com.mongddang.app.healthdata.utils.PermissionStateManager
 import com.samsung.android.sdk.health.data.HealthDataStore
 import com.samsung.android.sdk.health.data.permission.Permission
 import kotlinx.coroutines.CoroutineScope
@@ -73,7 +75,11 @@ class HealthMainViewModel(private val healthDataStore: HealthDataStore, private 
                 val result = healthDataStore.requestPermissions(permissionSet, context as Activity)
                 Log.i(TAG, "requestPermissions: Success ${result.size}")
                 if(result.contains(permission)){
-                    PermissionStateManager.updateStateByValue(context, permissionKey, AppConstants.SUCCESS)
+                    PermissionStateManager.updateStateByValue(
+                        context,
+                        permissionKey,
+                        AppConstants.SUCCESS
+                    )
                 } else {
                     Log.e(TAG, "Permission key not found for: $permission")
                 }
