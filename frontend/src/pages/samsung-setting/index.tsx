@@ -14,25 +14,13 @@ import { useState, useEffect } from 'react';
 import SamsungHealth from './plugin/SamsungHealthPlugin';
 import { Toggle } from '@/shared/ui/Toggle';
 import { toggleContainerCss } from '../nickname-title/ui/styles';
+import PermissionToggles from './ui/modal/PermissionToggles';
 
 export const SamsungSetting: React.FC = () => {
-  console.log(4)
   const navigate = useNavigate();
-  // const getUserInfo = useUserStore((state) => state.getUserInfo);
-  // const user = getUserInfo()?.user; // Safely access user information
-  // const { isModalOpen, openModal, closeModal } = ModalProvider.useModal();
   const [isModalOpen, setIsModalOpen] = useState(false)
-  // const [isOpen, setIsOpen] = useState(false)
   const [permissionResult, setPermissionResult] = useState<null | boolean>(null);
 
-  const [isBloodGlucosePermOn, setIsBloodGlucosePermOn] = useState(false);
-  
-  // useEffect(() => {
-  //   const savedToggleState = localStorage.getItem('titleToggle');
-  //   if (savedToggleState) {
-  //     setIsOn(JSON.parse(savedToggleState));
-  //   }
-  // }, []);
 
   const requestPermission = async (healthDataType: string) => {
     try {
@@ -44,19 +32,6 @@ export const SamsungSetting: React.FC = () => {
       console.error("Error requesting health data permission:", error);
     }
   };
-  const checkAllPermissions = async () => {
-    try {
-      const result = await SamsungHealth.checkPermissionStatusForHealthData();
-  
-      console.log('All Permissions:', result);
-      for (const [key, value] of Object.entries(result)) {
-        console.log(`${key}: ${value}`);
-      }
-      // Example: { bloodglucose: 'SUCCESS', steps: 'WAITING', ... }
-    } catch (error) {
-      console.error('Error checking permissions:', error);
-    }
-  }
   const onClickPermBtn = ()=>{
     setIsModalOpen(true)
   }
@@ -89,9 +64,10 @@ export const SamsungSetting: React.FC = () => {
           </Typography>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <div css={toggleContainerCss}>
+          <PermissionToggles/>
+          {/* <div css={toggleContainerCss}>
               <Toggle color="primary" size={2.5} isOn={isBloodGlucosePermOn} onClick={()=>{ checkHealthDataPermission("bloodGlucose")}} />
-          </div>
+          </div> */}
           <Button
             handler={onClickPermBtn}
             color="primary" 
@@ -110,13 +86,6 @@ export const SamsungSetting: React.FC = () => {
             fontSize="1.25"
             variant="contained"
             fullwidth>혈당 권한</Button>
-            <Button 
-            handler={()=>{ checkAllPermissions()}}
-            color="primary" 
-            fontSize="1.25"
-            variant="contained"
-            fullwidth>상태 확인
-            </Button>
           </SamsungModal>
         </div>
       </div>
