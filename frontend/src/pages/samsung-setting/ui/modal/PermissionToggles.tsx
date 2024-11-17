@@ -47,9 +47,6 @@ const PermissionToggles: React.FC = () => {
 
   return (
     <div css={toggleContainerCss}>
-                {/* <div css={toggleContainerCss}>
-              <Toggle color="primary" size={2.5} isOn={isBloodGlucosePermOn} onClick={()=>{ checkHealthDataPermission("bloodGlucose")}} />
-          </div> */}
       <ul style={{listStyle:"none"}}>
         {Object.entries(permissions).map(([key, value]) => (
           <PermissionListItem
@@ -63,17 +60,5 @@ const PermissionToggles: React.FC = () => {
     </div>
   );
 };
-
-// Reusable label component
-type PermissionLabelProps = {
-  keyName: string;
-  children: React.ReactNode;
-};
-
-const PermissionLabel: React.FC<PermissionLabelProps> = ({ keyName, children }) => (
-  <label>
-    {keyName}: {children}
-  </label>
-);
 
 export default PermissionToggles;

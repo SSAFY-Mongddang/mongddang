@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 // import { useUserStore } from '@/entities/user/model';
 import { ModalProvider } from './ui/modal/ModalContext';
 import { SamsungModal } from './ui/modal';
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import SamsungHealth from './plugin/SamsungHealthPlugin';
 import PermissionToggles from './ui/modal/PermissionToggles';
 import { mainIcons } from '../MainPage/constants/iconsData';
@@ -21,8 +21,8 @@ export const SamsungSetting: React.FC = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [permissionResult, setPermissionResult] = useState<null | boolean>(null);
-
-
+  console.log(permissionResult)
+  
   const requestPermission = async (healthDataType: string) => {
     try {
       const result = await SamsungHealth.requestHealthPermission({

@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { TopBar } from '@/shared/ui/TopBar';
-import { IconTypo } from '@/shared/ui/IconTypo';
 import { base, containerCss} from './ui/styles';
 import { Chip } from '@/shared/ui/Chip';
 import { imgCss } from '../Encyclopedia/ui/styles';
@@ -10,7 +9,6 @@ import { Button } from '@/shared/ui/Button';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/entities/user/model';
 import { registerPlugin } from '@capacitor/core';
-import { mainIcons } from '../MainPage/constants/iconsData';
 
 
 export interface ForegroundPlugin {
