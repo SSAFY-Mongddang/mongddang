@@ -54,6 +54,7 @@ public class GetPushLogService {
                     .category(pushLog.getCategory())
                     .content(pushLog.getContent())
                     .createdAt(pushLog.getCreatedAt())
+                    .isNew(pushLog.getIsNew())
                     .build();
             // list에 넣기
             pushLogDtoList.add(pushLogDto);

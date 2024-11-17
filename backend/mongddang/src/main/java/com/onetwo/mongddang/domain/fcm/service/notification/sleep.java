@@ -29,7 +29,7 @@ public class sleep {
 
         // 안자는 어린이들에게 알림 보내기
         for (User child : childrenList) {
-            String message = "오후 10시입니다. 몽땅친구들과 함께 잠자리에 들 준비를 하는 건 어떨까요?";
+            String message = "오후 10시입니다.\n몽땅친구들과 함께 잠자리에 들 준비를 하는 건 어떨까요?";
             Notification notification = Notification.builder()
                     .title("수면 시간 알림")
                     .message(message)

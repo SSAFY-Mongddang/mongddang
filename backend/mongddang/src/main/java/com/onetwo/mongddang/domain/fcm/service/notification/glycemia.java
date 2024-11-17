@@ -35,7 +35,7 @@ public class glycemia {
         for (Vital vital : vitals) {
             if (vital.getStatus() == Vital.GlucoseStatusType.low || vital.getStatus() == Vital.GlucoseStatusType.high) {
                 User child = vital.getChild();
-                String message = (vital.getStatus() == Vital.GlucoseStatusType.low ? "저혈당" : "고혈당") + "이 관측되고 있습니다.";
+                String message = (vital.getStatus() == Vital.GlucoseStatusType.low ? "저혈당" : "고혈당") + "증상이 나타나고 있어요.";
                 Notification notification = Notification.builder()
                         .title("이상 혈당 알림")
                         .message(message)

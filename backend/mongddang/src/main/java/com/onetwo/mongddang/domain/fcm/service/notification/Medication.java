@@ -28,7 +28,7 @@ public class Medication {
 
         for (Record record : records) {
             User child = record.getChild();
-            String message = "복약 시간입니다.";
+            String message = "인슐린을 맞을 시간이에요.";
             Notification notification = Notification.builder()
                     .title("복약 알림")
                     .message(message)

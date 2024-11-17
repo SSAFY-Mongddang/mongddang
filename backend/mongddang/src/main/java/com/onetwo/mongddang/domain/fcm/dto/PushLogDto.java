@@ -13,4 +13,5 @@ public class PushLogDto {
     private PushLog.Category category;
     private String content;
     private LocalDateTime createdAt;
+    private Boolean isNew;
 }
