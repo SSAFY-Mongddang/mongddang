@@ -51,6 +51,7 @@ public class MedicationService {
     @Transactional
     public ResponseDto registerMedication(Long userId, String requestRegisterMedicationDtoJson, MultipartFile imageFile) {
 
+        log.info(requestRegisterMedicationDtoJson);
         // JSON 문자열을 RequestRegisterMedicationDto 객체로 변환
         RequestRegisterMedicationDto requestDto = medicationUtils.jsonToMedicationDto(requestRegisterMedicationDtoJson);
 
@@ -162,8 +163,8 @@ public class MedicationService {
                     .imageUrl(medicationManagement.getImageUrl())
                     .repeatStartTime(medicationManagement.getRepeatStartTime())
                     .repeatEndTime(medicationManagement.getRepeatEndTime())
-                    .isFast(medicationTimeList.getFirst().getIsFast())
-                    .repeatTimes(medicationTimeList.stream().map(MedicationTime::getMedicationTime).toList())
+                    .isFast(medicationTimeList.size() == 0 ? false : medicationTimeList.getFirst().getIsFast())
+                    .repeatTimes(medicationTimeList.size() == 0 ? new ArrayList<>() : medicationTimeList.stream().map(MedicationTime::getMedicationTime).toList())
                     .standards(medicationStandardDtoList)
                     .build();
 

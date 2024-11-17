@@ -95,11 +95,10 @@ const Login = () => {
       const userIdToken = res.result.idToken;
 
       await updateUserInfo({ userIdToken });
-      
+
       await api
         .post('/api/auth/login', { idToken })
         .then(async (res: AxiosResponse<LoginResponse>) => {
-
           if (res.data.data.isRegistered) {
             // TODO: Access Token 하드코딩 수정
             // const userAccessToken = res.data.data.accessToken;

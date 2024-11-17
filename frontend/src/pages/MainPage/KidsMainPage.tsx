@@ -37,6 +37,7 @@ import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
 import { registerPlugin } from '@capacitor/core';
+import ChatBubble from './ui/ChatBubble/ChatBubble';
 
 export interface EchoPlugin {
   echo(options: { value: string }): Promise<{ value: string }>;
@@ -231,7 +232,7 @@ const KidsMainPage = () => {
         <div css={bottomContainer}>
           {/* 메인캐릭터 + 말풍선 */}
           <div css={CharacterContainer}>
-            <ChatBubble status={currentRoutine}/>
+            <ChatBubble status={currentRoutine} />
             <img
               src={characterImages[formatId(mainInfo.mainMongddangId)]}
               alt=""
@@ -268,7 +269,9 @@ const KidsMainPage = () => {
       )}
 
       {/* 알림창 */}
-      {openBaseModal && <BaseModal contentType={contentType} closeBaseModal={closeBaseModal} />}
+      {openBaseModal && (
+        <BaseModal contentType={contentType} closeBaseModal={closeBaseModal} />
+      )}
 
       {
         // 루틴 시작 여부 질문 알림
@@ -310,7 +313,7 @@ const KidsMainPage = () => {
     </div>
   ) : (
     <Loading />
-  )
+  );
 };
 
 export default KidsMainPage;

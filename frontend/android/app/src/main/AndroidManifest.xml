@@ -23,6 +23,14 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!-- for microphone -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
+
+
+
+
+
     <!-- Features -->
     <uses-feature
         android:name="android.hardware.camera"
@@ -68,18 +76,6 @@
         </provider>
     </application>
 
-    <!-- Permissions -->
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- for camera  -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" android:required="false"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <!-- for microphone -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
