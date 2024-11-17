@@ -28,5 +28,8 @@ object AppConstants {
     // 상태 상수
     const val SUCCESS = "SUCCESS"
     const val WAITING = "WAITING"
-    const val NO_PERMISSION = "NO PERMISSION"
+
+    fun findKeyByInsensitiveValue(value: String): String? {
+        return AppConstants.PERMISSION_MAPPING.keys.firstOrNull { it.equals(value, ignoreCase = true) }
+    }
 }

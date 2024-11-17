@@ -24,9 +24,8 @@ private const val TAG = "HealthMainViewModel"
 class HealthMainViewModel(private val healthDataStore: HealthDataStore, private val activity: Activity) :
     ViewModel() {
     private val viewModelScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-    private val _permissionResponse = MutableStateFlow(Pair(AppConstants.WAITING, ""))
+
     private val _exceptionResponse = MutableLiveData<String>()
-    val permissionResponse: StateFlow<Pair<String, String>> = _permissionResponse
     val exceptionResponse: LiveData<String> = _exceptionResponse
 
     /**
@@ -46,21 +45,27 @@ class HealthMainViewModel(private val healthDataStore: HealthDataStore, private 
     ) {
         // PermissionKey에 따른 Permission 객체 매핑
         val permission = mapToPermission(permissionKey)
-
+        val permissionSet = setOf(permission) // 중복 제거를 위한 변수 분리
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val grantedPermissions = healthDataStore.getGrantedPermissions(setOf(permission))
-                if (grantedPermissions.containsAll(setOf(permission))) {
+                // 현재 권한 상태 확인
+                val grantedPermissions = healthDataStore.getGrantedPermissions(permissionSet)
+
+                if (grantedPermissions.containsAll(permissionSet)) {
+                    healthDataStore.requestPermissions(permissionSet, context as Activity)
                     Log.d(TAG, "checkForPermission: 권한 통과!")
-                    // permissionKey를 SUCCESS와 함께 방출
-                    _permissionResponse.emit(Pair(AppConstants.SUCCESS, permission.dataType.name))
+                    // 상태를 SUCCESS로 업데이트
+                    PermissionStateManager.updateStateByValue(permissionKey, AppConstants.SUCCESS)
                 } else {
                     Log.d(TAG, "checkForPermission: 권한 없음!")
-                    requestForPermission(context, permission)
+                    // 상태를 NO_PERMISSION으로 업데이트
+//                    PermissionStateManager.updateStateByValue(permissionKey,  AppConstants.WAITING)
+//                    requestForPermission(context, permission)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "checkForPermission failed: ${e.message}")
-                _permissionResponse.emit(Pair(AppConstants.NO_PERMISSION, permission.dataType.name))
+                // 상태를 오류 상태로 업데이트
+                PermissionStateManager.updatePermissionState(permissionKey, "ERROR")
             }
         }
     }
@@ -77,7 +82,7 @@ class HealthMainViewModel(private val healthDataStore: HealthDataStore, private 
                 val result = healthDataStore.requestPermissions(setOf(permission), activity)
                 Log.i(TAG, "requestPermissions: Success ${result.size}")
                 if(result.contains(permission)){
-                    _permissionResponse.emit(Pair(AppConstants.SUCCESS, permission.dataType.name))
+//                    _permissionResponse.emit(Pair(AppConstants.SUCCESS, permission.dataType.name))
                 } else {
                         Log.e(TAG, "Permission key not found for: $permission")
                 }

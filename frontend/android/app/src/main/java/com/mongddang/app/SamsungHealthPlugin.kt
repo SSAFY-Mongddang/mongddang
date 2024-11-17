@@ -6,6 +6,12 @@ import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private const val TAG = "SamsungHealthPlugin"
 
@@ -35,9 +41,10 @@ class SamsungHealthPlugin: Plugin() {
         Log.d(TAG, "requestHealthPermission: $checkPermission")
     }
 
-    private fun requestPermissionForHealthData(call: PluginCall) {
-        val permissionKey = call.getString("permissionKey")?: run {
-            call.reject("dataTypes parameter is required")
+    @PluginMethod
+    fun checkPermissionStatusForHealthData(call: PluginCall) {
+        val healthDataType = call.getString("healthDataType") ?: run {
+            call.reject("healthDataType parameter is required")
             return
         }
 
@@ -46,9 +53,38 @@ class SamsungHealthPlugin: Plugin() {
             return
         }
 
-        val currentPermission = healthMainViewModel.mapToPermission(permissionKey)
-        Log.d(TAG, "requestPermissionForHealthData: $currentPermission")
+        // 대소문자 무시한 키 찾기
+        val key = AppConstants.findKeyByInsensitiveValue(healthDataType)
+        if (key == null) {
+            call.reject("Invalid healthDataType: $healthDataType")
+            return
+        }
 
+        // 권한 상태 확인 및 반환
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val stateFlow = PermissionStateManager.getPermissionState(key)
+                if (stateFlow == null) {
+                    call.reject("No state found for key: $key")
+                    return@launch
+                }
+
+                // 현재 상태 가져오기
+                val state = stateFlow.first() // StateFlow의 첫 번째 값
+                Log.d("PermissionStateManager", "$key state: $state")
+
+                // 클라이언트에 응답
+                val response = JSObject().put("state", state)
+                withContext(Dispatchers.Main) {
+                    call.resolve(response)
+                }
+            } catch (e: Exception) {
+                Log.e("PermissionStateManager", "Error checking permission: ${e.message}")
+                withContext(Dispatchers.Main) {
+                    call.reject("Failed to check or update permission: ${e.message}")
+                }
+            }
+        }
     }
 
     @PluginMethod

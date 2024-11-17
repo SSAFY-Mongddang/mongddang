@@ -34,6 +34,17 @@ export const SamsungSetting: React.FC = () => {
     }
   };
 
+  async function checkPermissionStatus(healthDataType: string) {
+    try {
+      const result = await SamsungHealth.checkPermissionStatusForHealthData({
+        healthDataType: healthDataType,
+      });
+      console.log(`Permission state for ${healthDataType}:`, result.state);
+    } catch (error) {
+      console.error("Error checking permission status:", error);
+    }
+  }
+
   const onClickPermBtn = ()=>{
     setIsModalOpen(true)
   }
@@ -84,6 +95,12 @@ export const SamsungSetting: React.FC = () => {
             fontSize="1.25"
             variant="contained"
             fullwidth>혈당 권한</Button>
+              <Button 
+            handler={()=>{checkPermissionStatus("bloodGlucose")}}
+            color="primary" 
+            fontSize="1.25"
+            variant="contained"
+            fullwidth>혈당 권한 상태</Button>
           </SamsungModal>
         </div>
       </div>

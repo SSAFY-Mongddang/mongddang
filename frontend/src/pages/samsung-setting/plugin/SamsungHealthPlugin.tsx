@@ -7,6 +7,7 @@ export interface SamsungHealthPlugin {
    * @returns 권한 부여 상태
    */
   requestHealthPermission(options: HealthPermissionOptions): Promise<HealthPermissionResult>;
+  checkPermissionStatusForHealthData(options: { healthDataType: string }): Promise<{ state: string }>;
   connectToSamsungHealth(): Promise<void>;
 }
 
