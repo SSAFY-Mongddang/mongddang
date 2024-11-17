@@ -1,6 +1,12 @@
-import { DayRecordService, DayRecordTypes } from '@/shared/api/day-record';
+import {
+  DayRecords,
+  DayRecordService,
+  DayRecordTypes,
+} from '@/shared/api/day-record';
 import { queryOptions } from '@tanstack/react-query';
 import { RecordCategory, RecordFilter, RecordType } from './type';
+import { DayRecordError } from '../model';
+import { BaseApiResponse } from '@/shared/api/base.types';
 // import dayjs from 'dayjs';
 
 export class DayRecordQueries {
@@ -9,6 +15,19 @@ export class DayRecordQueries {
     filtered: (filters: RecordFilter<RecordCategory>) =>
       [...this.queryKeys.all, { filters }] as const,
   };
+
+  private static validateBaseResponse(data: BaseApiResponse<DayRecords[]>) {
+    if (!data.data || data.data.length === 0) {
+      throw new DayRecordError('No records found', 'NO_RECORDS');
+    }
+
+    const firstRecord = data.data[0];
+    if (!firstRecord || !firstRecord.records) {
+      throw new DayRecordError('Invalid record structure', 'INVALID_STRUCTURE');
+    }
+
+    return firstRecord;
+  }
 
   private static dayRecordQuery(nickname: string, date: string) {
     return queryOptions({
@@ -21,7 +40,8 @@ export class DayRecordQueries {
           },
         });
 
-        return data.data[0].records;
+        const firstRecord = this.validateBaseResponse(data);
+        return firstRecord.records;
       },
       enabled: !!nickname,
     });
@@ -47,7 +67,19 @@ export class DayRecordQueries {
         //   endTime: item.endTime ? dayjs(item.endTime).format('HH:mm') : null,
         // })) as RecordType<T>;
 
-        return data.data[0].records[filters.category];
+        const firstRecord = this.validateBaseResponse(data);
+
+        if (
+          !firstRecord.records[filters.category] ||
+          firstRecord.records[filters.category].length === 0
+        ) {
+          throw new DayRecordError(
+            `No ${filters.category} records found`,
+            'NO_CATEGORY_RECORDS'
+          );
+        }
+
+        return firstRecord.records[filters.category];
       },
       enabled: !!filters.nickname,
     });
@@ -61,7 +93,7 @@ export class DayRecordQueries {
   static mealRecordsQuery(nickname: string, date: string) {
     console.log(nickname, date);
     return this.filteredDayRecordsQuery({
-      nickname: '어린이 서원',
+      nickname,
       date: '2024-11-11',
       category: 'meal',
     });
@@ -70,7 +102,7 @@ export class DayRecordQueries {
   static exerciseRecordsQuery(nickname: string, date: string) {
     console.log(nickname, date);
     return this.filteredDayRecordsQuery({
-      nickname: '어린이 서원',
+      nickname,
       date: '2024-11-11',
       category: 'exercise',
     });
@@ -79,7 +111,7 @@ export class DayRecordQueries {
   static sleepRecordsQuery(nickname: string, date: string) {
     console.log(nickname, date);
     return this.filteredDayRecordsQuery({
-      nickname: '어린이 서원',
+      nickname,
       date: '2024-11-11',
       category: 'sleep',
     });
@@ -88,7 +120,7 @@ export class DayRecordQueries {
   static medicationRecordsQuery(nickname: string, date: string) {
     console.log(nickname, date);
     return this.filteredDayRecordsQuery({
-      nickname: '어린이 서원',
+      nickname,
       date: '2024-11-11',
       category: 'medication',
     });

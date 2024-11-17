@@ -19,8 +19,6 @@ api.interceptors.request.use(async (config) => {
   console.log(accessToken);
   console.log('***accessTokenaccessToken***');
   console.log('***accessTokenaccessToken***');
-  
-  
 
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;

@@ -37,7 +37,6 @@ import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
 import { registerPlugin } from '@capacitor/core';
-import ChatBubble from './ui/ChatBubble/ChatBubble';
 
 export interface EchoPlugin {
   echo(options: { value: string }): Promise<{ value: string }>;

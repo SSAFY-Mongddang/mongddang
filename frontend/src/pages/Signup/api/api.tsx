@@ -1,13 +1,13 @@
-import axios from 'axios';
 import { UserRole } from '..';
+import { api } from '@/shared/api/interceptors';
 
-export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  withCredentials: true,
-});
+// export const api = axios.create({
+//   baseURL: import.meta.env.VITE_API_BASE_URL,
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+//   withCredentials: true,
+// });
 
 // 회원가입
 export const signUp = (
@@ -33,14 +33,12 @@ export const signUp = (
 };
 
 // 아이 초대코드 입력
-export const invitation = (
-  invitationCode:string
-) => {
+export const invitation = (invitationCode: string) => {
   return api({
     url: '/api/ctop/connect',
     method: 'post',
     data: {
-      invitationCode:invitationCode
+      invitationCode: invitationCode,
     },
   });
 };

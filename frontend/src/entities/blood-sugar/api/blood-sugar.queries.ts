@@ -33,6 +33,16 @@ export class BloodsugarQueries {
             date: randomDate,
           },
         });
+
+        console.log('********************************');
+        console.log('********************************');
+        console.log(data);
+        console.log(data);
+        console.log(data);
+        console.log(data);
+        console.log('********************************');
+        console.log('********************************');
+
         // const formattedData = data.data.bloodSugar.map((item) => ({
         //   ...item,
         //   measurementTime: dayjs(item.measurementTime).format('HH:mm'),

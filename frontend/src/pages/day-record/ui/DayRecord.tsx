@@ -10,6 +10,7 @@ import { BloodsugarQueries } from '@/entities/blood-sugar/api';
 import { article, chart } from './style';
 import { BloodSugarChart } from '@/widgets/blood-sugar-chart';
 import { useSelectedChildStore } from '@/entities/selected-child/model/store';
+import { useMemo } from 'react';
 
 export const DayRecordPage = () => {
   const nav = useNavigate();
@@ -23,10 +24,13 @@ export const DayRecordPage = () => {
   const userInfo = getUserInfo();
   const selectedChild = useSelectedChildStore((state) => state.selectedChild);
   // const nickname = getUserInfo()?.user?.nickname ?? 'test';
-  const nickname =
-    userInfo.user?.role === 'child'
-      ? userInfo.user.nickname
-      : (selectedChild?.name ?? '');
+  const nickname = useMemo(
+    () =>
+      userInfo.user?.role === 'child'
+        ? userInfo.user.nickname
+        : (selectedChild?.nickname ?? ''),
+    [userInfo.user?.role, userInfo.user?.nickname, selectedChild?.nickname]
+  );
 
   const {
     data: bloodSugarData,
@@ -39,7 +43,12 @@ export const DayRecordPage = () => {
     console.log(JSON.stringify(error));
     throw new Error('Blood data error');
   }
+
   if (isBloodSugarLoading) return <div>Loading...</div>;
+
+  if (!nickname) {
+    return <div>no nickname</div>;
+  }
 
   return (
     <>

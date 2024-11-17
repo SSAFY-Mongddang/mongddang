@@ -15,22 +15,32 @@ import { useEffect, useState } from 'react';
 import { Typography } from '@/shared/ui/Typography';
 import { useUserStore } from '@/entities/user/model';
 import { useSelectedChildStore } from '@/entities/selected-child/model/store';
+import { useShallow } from 'zustand/shallow';
 
 const ProtectorMain = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string | undefined>(undefined);
-  const connectedChild = useUserStore(
-    (state) => state.getUserInfo().user?.connected
+  const { connectedChild } = useUserStore(
+    useShallow((state) => ({
+      connectedChild: state.getUserInfo().user?.connected,
+    }))
   );
-  const setSelectedChild = useSelectedChildStore(
-    (state) => state.setSelectedChild
+  const { setSelectedChild, selectedChild } = useSelectedChildStore(
+    useShallow((state) => ({
+      setSelectedChild: state.setSelectedChild,
+      selectedChild: state.selectedChild,
+    }))
   );
 
   useEffect(() => {
-    if (connectedChild) {
+    if (!selectedChild && connectedChild) {
       setSelected(connectedChild[0].name);
+      setSelectedChild(connectedChild[0]);
     }
-  }, [connectedChild]);
+    if (selectedChild) {
+      setSelected(selectedChild.name);
+    }
+  }, [connectedChild, selectedChild, setSelected, setSelectedChild]);
 
   return (
     <div css={container}>

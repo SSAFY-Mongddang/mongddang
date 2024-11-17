@@ -4,7 +4,9 @@ import { useShallow } from 'zustand/shallow';
 
 export const useLoadState = () => {
   const { fetchUserInfo } = useUserStore(
-    useShallow((state) => ({ fetchUserInfo: state.fetchUserInfo }))
+    useShallow((state) => ({
+      fetchUserInfo: state.fetchUserInfo,
+    }))
   );
 
   useEffect(() => {

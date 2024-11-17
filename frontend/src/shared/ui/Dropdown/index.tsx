@@ -29,6 +29,7 @@ export const Dropdown = ({
 
   const handleButtonClick = () => {
     setIsOpen((prev) => !prev);
+    console.log(options);
   };
 
   useEffect(() => {
@@ -58,7 +59,7 @@ export const Dropdown = ({
           css={styles.button}
           fontSize="1"
           handler={handleButtonClick}
-          disabled={options.length === 0}
+          // disabled={options.length === 0}
         >
           <span>{selectedValue || buttonLabel}</span>
           <Icon size={2} css={isOpen ? styles.iconOpen : styles.iconClose}>

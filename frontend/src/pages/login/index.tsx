@@ -100,10 +100,20 @@ const Login = () => {
         .post('/api/auth/login', { idToken })
         .then(async (res: AxiosResponse<LoginResponse>) => {
           if (res.data.data.isRegistered) {
-            // TODO: Access Token 하드코딩 수정
-            // const userAccessToken = res.data.data.accessToken;
+            // const userAccessToken =
+            //   res.data.data.userInfo.role === 'child'
+            //     ? import.meta.env.VITE_TEST_USER_ACCESS_TOKEN
+            //     : import.meta.env.VITE_TEST_PROTECTOR_ACCESS_TOKEN;
+            const userAccessToken = res.data.data.accessToken;
             const userInfo = res.data.data.userInfo;
-            await updateUserInfo({ user: userInfo });
+
+            console.log('*******userInfo when login*********');
+            console.log('*******userInfo when login*********');
+            console.log(userInfo);
+            console.log('*******userInfo when login*********');
+            console.log('*******userInfo when login*********');
+
+            await updateUserInfo({ userAccessToken, user: userInfo });
 
             const user = getUserInfo();
             console.log('****user rola****');
@@ -141,7 +151,7 @@ const Login = () => {
       <div css={contentCss}>
         <div>
           <Icon size={14}>
-            <img alt="icon-0" src="/img/logo.png" />
+            <img alt="icon-0" src="" />
           </Icon>
           <Typography
             style={{ textAlign: 'center' }}
