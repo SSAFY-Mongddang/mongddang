@@ -58,7 +58,7 @@ export const Default = () => {
       <Dropdown
         options={options}
         onSelect={(value) => {
-          setSelected(value);
+          setSelected(value.name);
         }}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
