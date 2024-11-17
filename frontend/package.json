@@ -19,6 +19,7 @@
     "@capacitor/core": "^6.1.2",
     "@capacitor/filesystem": "^6.0.1",
     "@capacitor/preferences": "^6.0.2",
+    "@capacitor/push-notifications": "^6.0.2",
     "@capgo/capacitor-social-login": "^0.0.68",
     "@emotion/react": "^11.13.3",
     "@mantine/charts": "^7.13.4",

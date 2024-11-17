@@ -22,27 +22,40 @@ import { DayRecordPage } from './pages/day-record';
 import SettingPage from './pages/settingPage/SettingPage';
 import { useEffect } from 'react';
 import { SocialLogin } from '@capgo/capacitor-social-login';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { usePushNotificationStore } from './shared/model/usePushNotificationStore';
+import { PushNotification } from './shared/ui/PushNotification/PushNotification';
 import { SamsungSetting } from './pages/samsung-setting/index';
-import {ForegoundServiceSetting } from './pages/foreground-setting/index';
+import { ForegoundServiceSetting } from './pages/foreground-setting/index';
+import { initPushNotification } from './shared/lib/pushNotification/initNotification';
 
 function App() {
   useLoadState();
+  const { setPushNotification } = usePushNotificationStore();
   useEffect(() => {
     SocialLogin.initialize({
       google: {
         webClientId: import.meta.env.VITE_GOOGLE_WEB_CLIENT_ID,
       },
     });
+
+    // 푸시 알림 받기
+    const initializePushListener = async () => {
+      await initPushNotification()
+      PushNotifications.removeAllListeners();
+      PushNotifications.addListener(
+        'pushNotificationReceived',
+        (notification) => {
+          setPushNotification(notification);
+        }
+      );
+    };
+    initializePushListener();
   }, []);
-  useEffect(() => {
-    SocialLogin.initialize({
-      google: {
-        webClientId: import.meta.env.VITE_GOOGLE_WEB_CLIENT_ID,
-      },
-    });
-  }, []);
+
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}>
+      <PushNotification />
       <Router>
         <Routes>
           <Route path="/main" element={<KidsMainPage />} />
@@ -65,7 +78,10 @@ function App() {
           <Route path="/protector-main" element={<ProtectorMain />} />
           <Route path="/setting" element={<SettingPage />} />
           <Route path="/samsungsetting" element={<SamsungSetting />} />
-          <Route path="/foregroundsetting" element={<ForegoundServiceSetting />} />
+          <Route
+            path="/foregroundsetting"
+            element={<ForegoundServiceSetting />}
+          />
         </Routes>
       </Router>
     </GoogleOAuthProvider>

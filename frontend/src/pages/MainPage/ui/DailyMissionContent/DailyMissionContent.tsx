@@ -15,7 +15,7 @@ import {
 } from './DailyMissionContent.styles';
 import { mainIcons } from '../../constants/iconsData';
 import DailyMissionBtn from '../DailyMissionBtn/DailyMissionBtn';
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   useDailyMissionQuery,
   useMissionRewardMutation,
@@ -32,9 +32,6 @@ type MissionInfo = {
 const DailyMissionContent = () => {
   const { data, isLoading } = useDailyMissionQuery();
   const missionRewardMutation = useMissionRewardMutation();
-
-  useEffect(() => {
-  }, [data]);
 
   if (isLoading) return <Loading />;
 

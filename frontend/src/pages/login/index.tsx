@@ -154,6 +154,7 @@ const Login = () => {
             <br />
             당뇨 관리!
           </Typography>
+          <a href="/main">메인</a>
         </div>
         <div css={googleCss}>
           {/* <GoogleLogin
