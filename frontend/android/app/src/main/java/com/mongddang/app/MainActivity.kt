@@ -8,10 +8,12 @@ import com.getcapacitor.BridgeActivity
 import com.mongddang.app.healthdata.viewmodel.HealthMainViewModel
 import com.mongddang.app.healthdata.viewmodel.HealthViewModelFactory
 import com.mongddang.app.healthdata.SamsungHealthPlugin
+import dagger.hilt.android.AndroidEntryPoint
 
 
 private const val TAG = "MainActivity"
 
+@AndroidEntryPoint
 class MainActivity : BridgeActivity(){
 
     private lateinit var healthMainViewModel: HealthMainViewModel
@@ -21,6 +23,7 @@ class MainActivity : BridgeActivity(){
         // ExamplePlugin 인스턴스 생성 후 메서드 호출
         registerPlugin(ForegroundPlugin::class.java)
         registerPlugin(SamsungHealthPlugin::class.java)
+        registerPlugin(BloodGlucosePlugin::class.java)
         super.onCreate(savedInstanceState)
 
         healthMainViewModel = ViewModelProvider(

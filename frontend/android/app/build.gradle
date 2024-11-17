@@ -1,10 +1,9 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.devtools.ksp' // ksp 설정
+    id 'dagger.hilt.android.plugin' // hilt 설정
     id 'kotlin-kapt'
-    id 'kotlin-parcelize'
-    id("com.google.devtools.ksp") version("1.9.22-1.0.16")
-//    id 'com.google.dagger.hilt.android'
 }
 
 apply plugin: 'com.android.application'
@@ -23,6 +22,11 @@ android {
             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.incremental" : "true"]
+            }
         }
     }
     sourceSets {
@@ -54,6 +58,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    packagingOptions {
+        // Multiple dependency bring these files in. Exclude them to enable
+        // our test APK to build (has no effect on our AARs)
+        excludes += "/META-INF/AL2.0"
+        excludes += "/META-INF/LGPL2.1"
     }
 }
 
@@ -106,6 +116,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.common.java8)
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.androidx.lifecycle.process)
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
 }
 

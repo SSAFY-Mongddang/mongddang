@@ -13,14 +13,12 @@ import com.samsung.android.sdk.health.data.data.entries.BloodGlucose
 import com.samsung.android.sdk.health.data.request.DataType
 import java.time.LocalDateTime
 import androidx.lifecycle.viewModelScope
-import com.mongddang.app.healthdata.data.local.database.AppDatabase
 import com.mongddang.app.healthdata.utils.AppConstants
 import com.mongddang.app.healthdata.utils.dateFormat
 import com.mongddang.app.healthdata.utils.getExceptionHandler
 import com.samsung.android.sdk.health.data.request.DataTypes
 import com.samsung.android.sdk.health.data.request.LocalTimeFilter
 import com.samsung.android.sdk.health.data.request.Ordering
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -28,8 +26,7 @@ private const val TAG = "BloodGlucoseViewModel"
 
 class BloodGlucoseViewModel(
     private val healthDataStore: HealthDataStore,
-    private val activity: Activity,
-    private val appDatabase: AppDatabase
+    activity: Activity,
     ) :
     ViewModel() {
     data class GlucoseLevel(
@@ -68,23 +65,23 @@ class BloodGlucoseViewModel(
                 glucoseDataList.add(glucoseLevel)
 
                 // GlucoseLevel을 BloodGlucoseData로 변환하여 저장
-                val saveglu = saveBloodGlucoseData(glucoseLevel.toEntity())
-                Log.d(TAG, "saveglu $saveglu")
+//                val saveglu = saveBloodGlucoseData(glucoseLevel.toEntity())
+//                Log.d(TAG, "saveglu $saveglu")
             }
         }
         _glucoseData.postValue(glucoseDataList)
     }
 
-    // ViewModel 내에서
-    fun saveBloodGlucoseData(data: BloodGlucoseData) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val newRowId = appDatabase.bloodGlucoseDataDao().insertBloodGlucoseData(data)
-            if (newRowId != -1L) {
-                val insertedData = appDatabase.bloodGlucoseDataDao().getBloodGlucoseDataById(newRowId)
-                Log.d(TAG, "Inserted data: $insertedData")
-            }
-        }
-    }
+//    // ViewModel 내에서
+//    fun saveBloodGlucoseData(data: BloodGlucoseData) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            val newRowId = appDatabase.bloodGlucoseDataDao().insertBloodGlucoseData(data)
+//            if (newRowId != -1L) {
+//                val insertedData = appDatabase.bloodGlucoseDataDao().getBloodGlucoseDataById(newRowId)
+//                Log.d(TAG, "Inserted data: $insertedData")
+//            }
+//        }
+//    }
     fun readBloodGlucoseData(dateTime: LocalDateTime) {
         Log.i(TAG, "readBloodGlucoseData")
         dayStartTimeAsText.set(dateTime.format(dateFormat))
@@ -107,7 +104,7 @@ class BloodGlucoseViewModel(
                 Log.d(TAG, "data.getEndLocalDateTime() : ${data.getEndLocalDateTime()}" )
                 Log.d(TAG, "data.dataSource : ${DataType.UserProfileDataType}")
             }
-            processGlucoseData(glucoseLevelList)
+//            processGlucoseData(glucoseLevelList)
         }
     }
 

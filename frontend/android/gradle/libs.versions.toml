@@ -1,8 +1,8 @@
 [versions]
 kotlin = "1.9.0"
-hilt = "2.46.1"
+hilt = "2.51"
 coroutines = "1.7.0"
-ksp = "1.9.22-1.0.16"
+ksp = "1.9.0-1.0.13"
 androidx_appcompat = "1.6.1"
 constraintlayout = "2.1.4"
 preferenceKtx = "1.2.1"
@@ -10,6 +10,7 @@ composeBom = "2023.06.01"
 material = "1.12.0"
 room = "2.7.0-alpha11"
 lifecycle = "2.5.1"
+activity = "1.9.3"
 
 [libraries]
 # Kotlin 표준 라이브러리
@@ -45,6 +46,7 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 androidx-lifecycle-common-java8 = { group = "androidx.lifecycle", name = "lifecycle-common-java8", version.ref = "lifecycle" }
 androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycle" }
 androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 
 [plugins]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

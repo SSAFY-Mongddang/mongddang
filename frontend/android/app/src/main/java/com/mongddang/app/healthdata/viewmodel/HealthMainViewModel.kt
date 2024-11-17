@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "HealthMainViewModel"
 
-class HealthMainViewModel(private val healthDataStore: HealthDataStore, private val activity: Activity) :
+class HealthMainViewModel(private val healthDataStore: HealthDataStore, activity: Activity) :
     ViewModel() {
     private val viewModelScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
@@ -93,17 +93,17 @@ class HealthMainViewModel(private val healthDataStore: HealthDataStore, private 
     /**
      * Samsung Health 연결
      */
-    fun connectToSamsungHealth() {
-        val permissions = AppConstants.PERMISSION_MAPPING.values.toMutableSet()
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                healthDataStore.requestPermissions(permissions, activity)
-                Log.i(TAG, "connectToSamsungHealth: Permissions requested")
-            } catch (e: Exception) {
-                Log.e(TAG, "connectToSamsungHealth failed: ${e.message}")
-            }
-        }
-    }
+//    fun connectToSamsungHealth() {
+//        val permissions = AppConstants.PERMISSION_MAPPING.values.toMutableSet()
+//        viewModelScope.launch(Dispatchers.IO) {
+//            try {
+//                healthDataStore.requestPermissions(permissions, activity)
+//                Log.i(TAG, "connectToSamsungHealth: Permissions requested")
+//            } catch (e: Exception) {
+//                Log.e(TAG, "connectToSamsungHealth failed: ${e.message}")
+//            }
+//        }
+//    }
 
     override fun onCleared() {
         super.onCleared()

@@ -8,15 +8,7 @@ import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/entities/user/model';
-import { registerPlugin } from '@capacitor/core';
-
-
-export interface ForegroundPlugin {
-  startForeground(): Promise<{ message: string }>;
-  stopForeground(): Promise<{ message: string}>;
-}
-
-export const Foreground = registerPlugin<ForegroundPlugin>('Foreground')
+import {BloodGlucosePlugin} from './plugin/BloodGlucosePlugin';
 
 
 export const CheckSamsungData = () => {
@@ -24,6 +16,14 @@ export const CheckSamsungData = () => {
   const getUserInfo = useUserStore((state) => state.getUserInfo);
 
   const user = getUserInfo().user;
+  
+  BloodGlucosePlugin.getThisTimeBloodGlucose({ datetime: "2024-11-08T08:00:00" })
+  .then((response) => {
+    console.log("Response:", response);
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
 
   return (
     <div>

@@ -83,15 +83,15 @@ class SamsungHealthPlugin: Plugin() {
         }
     }
 
-    @PluginMethod
-    fun connectToSamsungHealth(call: PluginCall) {
-        try {
-            healthMainViewModel.connectToSamsungHealth()
-            call.resolve() // 성공 시 응답 전송
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to connect to Samsung Health: ${e.message}")
-            call.reject("Failed to connect to Samsung Health", e)
-        }
-    }
+//    @PluginMethod
+//    fun connectToSamsungHealth(call: PluginCall) {
+//        try {
+//            healthMainViewModel.connectToSamsungHealth()
+//            call.resolve() // 성공 시 응답 전송
+//        } catch (e: Exception) {
+//            Log.e(TAG, "Failed to connect to Samsung Health: ${e.message}")
+//            call.reject("Failed to connect to Samsung Health", e)
+//        }
+//    }
 
 }
