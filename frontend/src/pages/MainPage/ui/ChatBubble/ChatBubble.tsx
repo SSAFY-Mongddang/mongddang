@@ -9,6 +9,7 @@ import {
   mongddangStatusMessages,
 } from '../../constants/mongddangDefaultMessages';
 import { TextField } from '@/shared/ui/TextField';
+import Microphone from '../Microphone/Microphone';
 
 interface ChatBubbleProps {
   status: string;
@@ -71,6 +72,8 @@ const ChatBubble = ({ status }: ChatBubbleProps) => {
 
   return (
     <div css={container} style={{ display: 'flex', flexDirection: 'column' }}>
+      <Microphone />
+
       <Typography color="dark" size="1" weight={600}>
         <span>
           {displayMessage || filteredMongddangStatusMessage || defaultMessage}
