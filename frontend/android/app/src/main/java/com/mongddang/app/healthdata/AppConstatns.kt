@@ -1,4 +1,4 @@
-package com.mongddang.app
+package com.mongddang.app.healthdata
 
 import com.samsung.android.sdk.health.data.permission.AccessType
 import com.samsung.android.sdk.health.data.permission.Permission
@@ -30,6 +30,6 @@ object AppConstants {
     const val WAITING = "WAITING"
 
     fun findKeyByInsensitiveValue(value: String): String? {
-        return AppConstants.PERMISSION_MAPPING.keys.firstOrNull { it.equals(value, ignoreCase = true) }
+        return PERMISSION_MAPPING.keys.firstOrNull { it.equals(value, ignoreCase = true) }
     }
 }

@@ -89,6 +89,9 @@ dependencies {
 
     //삼성sdk 추가
     implementation (files("libs/samsung-health-data-1.0.0-beta01.aar"))
+
+    //권한 상태 저장용 데이터 스토어 추가
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 }
 
 kapt {

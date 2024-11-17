@@ -1,4 +1,4 @@
-package com.mongddang.app
+package com.mongddang.app.healthdata
 
 import android.app.Activity
 import android.content.Context

@@ -10,8 +10,10 @@ import { useNavigate } from 'react-router-dom';
 // import { useUserStore } from '@/entities/user/model';
 import { ModalProvider } from './ui/modal/ModalContext';
 import { SamsungModal } from './ui/modal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SamsungHealth from './plugin/SamsungHealthPlugin';
+import { Toggle } from '@/shared/ui/Toggle';
+import { toggleContainerCss } from '../nickname-title/ui/styles';
 
 export const SamsungSetting: React.FC = () => {
   console.log(4)
@@ -23,6 +25,15 @@ export const SamsungSetting: React.FC = () => {
   // const [isOpen, setIsOpen] = useState(false)
   const [permissionResult, setPermissionResult] = useState<null | boolean>(null);
 
+  const [isBloodGlucosePermOn, setIsBloodGlucosePermOn] = useState(false);
+  
+  // useEffect(() => {
+  //   const savedToggleState = localStorage.getItem('titleToggle');
+  //   if (savedToggleState) {
+  //     setIsOn(JSON.parse(savedToggleState));
+  //   }
+  // }, []);
+
   const requestPermission = async (healthDataType: string) => {
     try {
       const result = await SamsungHealth.requestHealthPermission({
@@ -33,18 +44,19 @@ export const SamsungSetting: React.FC = () => {
       console.error("Error requesting health data permission:", error);
     }
   };
-
-  async function checkPermissionStatus(healthDataType: string) {
+  const checkAllPermissions = async () => {
     try {
-      const result = await SamsungHealth.checkPermissionStatusForHealthData({
-        healthDataType: healthDataType,
-      });
-      console.log(`Permission state for ${healthDataType}:`, result.state);
+      const result = await SamsungHealth.checkPermissionStatusForHealthData();
+  
+      console.log('All Permissions:', result);
+      for (const [key, value] of Object.entries(result)) {
+        console.log(`${key}: ${value}`);
+      }
+      // Example: { bloodglucose: 'SUCCESS', steps: 'WAITING', ... }
     } catch (error) {
-      console.error("Error checking permission status:", error);
+      console.error('Error checking permissions:', error);
     }
   }
-
   const onClickPermBtn = ()=>{
     setIsModalOpen(true)
   }
@@ -77,6 +89,9 @@ export const SamsungSetting: React.FC = () => {
           </Typography>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <div css={toggleContainerCss}>
+              <Toggle color="primary" size={2.5} isOn={isBloodGlucosePermOn} onClick={()=>{ checkHealthDataPermission("bloodGlucose")}} />
+          </div>
           <Button
             handler={onClickPermBtn}
             color="primary" 
@@ -88,19 +103,20 @@ export const SamsungSetting: React.FC = () => {
           </Button>
           <SamsungModal isOpen={isModalOpen} onClose={closePermModel}>
             <h2>모달 제목</h2>
-            <p>모달 내용이 여기에 표시됩니다.</p>
+            <p>모달 내용이 여기에 표시됩니다.</p> 
             <Button 
             handler={()=>{requestPermission("bloodGlucose")}}
             color="primary" 
             fontSize="1.25"
             variant="contained"
             fullwidth>혈당 권한</Button>
-              <Button 
-            handler={()=>{checkPermissionStatus("bloodGlucose")}}
+            <Button 
+            handler={()=>{ checkAllPermissions()}}
             color="primary" 
             fontSize="1.25"
             variant="contained"
-            fullwidth>혈당 권한 상태</Button>
+            fullwidth>상태 확인
+            </Button>
           </SamsungModal>
         </div>
       </div>

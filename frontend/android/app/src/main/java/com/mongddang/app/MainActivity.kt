@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.getcapacitor.BridgeActivity
+import com.mongddang.app.healthdata.HealthMainViewModel
+import com.mongddang.app.healthdata.HealthViewModelFactory
+import com.mongddang.app.healthdata.SamsungHealthPlugin
 
 
 private const val TAG = "MainActivity"
