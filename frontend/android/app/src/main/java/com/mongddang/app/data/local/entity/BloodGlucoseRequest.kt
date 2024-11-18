@@ -11,9 +11,26 @@ data class BloodGlucoseRequest(
     @SerialName("measurementTime")
     val measurementTime: LocalDateTime? = null,
     @SerialName("status")
-    val status: Status? = Status.isStatus(bloodSugarLevel),
+    val status: Status? = null,
     @SerialName("notification")
     val notification: Boolean? = false,
     @SerialName("packageName")
     val packageName: String? = null
-)
+){
+    companion object {
+        fun create(
+            bloodSugarLevel: Int,
+            measurementTime: LocalDateTime? = null,
+            notification: Boolean? = false,
+            packageName: String? = null
+        ): BloodGlucoseRequest {
+            return BloodGlucoseRequest(
+                bloodSugarLevel = bloodSugarLevel,
+                measurementTime = measurementTime,
+                status = Status.isStatus(bloodSugarLevel),
+                notification = notification,
+                packageName = packageName
+            )
+        }
+    }
+}

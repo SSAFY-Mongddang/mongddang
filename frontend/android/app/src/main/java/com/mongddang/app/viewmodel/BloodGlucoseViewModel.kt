@@ -123,5 +123,12 @@ class BloodGlucoseViewModel (
             processGlucoseData(glucoseLevelList)
         }
     }
+//
+//    fun getHourlyBloodGlucoseData(dateTime: LocalDateTime): LiveData<List<BloodGlucoseData>>  {
+//        Log.d(TAG, "getHourlyBloodGlucoseData: ")
+//        val startTime = dateTime
+//        val endTime =dateTime.plusMinutes(60)
+//        return getHourlyBloodGlucoseData()
+//    }
 
 }

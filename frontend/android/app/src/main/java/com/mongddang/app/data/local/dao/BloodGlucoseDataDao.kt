@@ -43,4 +43,5 @@ interface BloodGlucoseDataDao {
     // 전체 데이터 삭제 (Optional 추가)
     @Query("DELETE FROM blood_glucose_data")
     suspend fun clearAll()
+
 }
