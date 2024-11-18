@@ -37,6 +37,7 @@ import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
 import { registerPlugin } from '@capacitor/core';
+import Microphone from './ui/Microphone/Microphone';
 
 export interface EchoPlugin {
   echo(options: { value: string }): Promise<{ value: string }>;
@@ -174,56 +175,62 @@ const KidsMainPage = () => {
           {/* 아이콘 모음 */}
           <div css={iconGroupCss}>
             <div css={iconHorizontalCss}>
-              <div css={iconVerticalCss}>
-                <div
-                // TODO: 어디에 사용했었는지, 필요한지 체크
-                // onClick={() => {
-                //   setOpenBaseModal(true);
-                //   setContentType('dailyMission');
-                // }}
-                >
-                  <IconTypo
-                    icon={mainIcons.mission}
-                    fontSize="0.75"
-                    menu={
-                      <span>
-                        오늘의 <br />
-                        퀘스트
-                      </span>
-                    }
-                  />
-                </div>
-              </div>
               <div
                 onClick={() => {
                   setOpenBaseModal(true);
-                  setContentType('notification');
+                  setContentType('dailyMission');
                 }}
               >
                 <IconTypo
-                  icon={mainIcons.notification}
-                  fontSize="0.75"
-                  menu="알림"
-                />
-              </div>
-              <div
-                onClick={() => {
-                  navigate('/nickname/title');
-                }}
-              >
-                <IconTypo
-                  icon={mainIcons.achievement}
+                  icon={mainIcons.mission}
                   fontSize="0.75"
                   menu={
-                    <div>
-                      도전
-                      <br />
+                    <span>
+                      오늘의 <br />
                       퀘스트
-                    </div>
+                    </span>
                   }
                 />
               </div>
-              <CurrentBloodSugar />
+              <div css={iconVerticalCss}>
+                <div
+                  onClick={() => {
+                    setOpenBaseModal(true);
+                    setContentType('notification');
+                  }}
+                >
+                  <IconTypo
+                    icon={mainIcons.notification}
+                    fontSize="0.75"
+                    menu="알림"
+                  />
+                </div>
+                <div
+                  onClick={() => {
+                    navigate('/nickname/title');
+                  }}
+                >
+                  <IconTypo
+                    icon={mainIcons.achievement}
+                    fontSize="0.75"
+                    menu={
+                      <div>
+                        도전
+                        <br />
+                        퀘스트
+                      </div>
+                    }
+                  />
+                </div>
+                <CurrentBloodSugar />
+                <Microphone>
+                  <div
+                    onClick={() => {
+                      navigate('/nickname/title');
+                    }}
+                  ></div>
+                </Microphone>
+              </div>
             </div>
           </div>
         </div>

@@ -1,39 +1,42 @@
 /** @jsxImportSource @emotion/react */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { talkWithMongddang } from '../../api/chatWithMongddangApi';
-// import { CapacitorHttp, HttpOptions, HttpResponse } from '@capacitor/core';
-// import { base } from '@/shared/ui/Typography/Typography.styles';
+import { IconTypo } from '@/shared/ui/IconTypo';
+import { mainIcons } from '../../constants/iconsData';
+import {
+  buttonNoneStyle,
+  recordingBackDrop,
+  recordingSign,
+  waveMic,
+} from './Microphone.styles';
+import { Backdrop } from '@/shared/ui/Backdrop';
+import { Typography } from '@/shared/ui/Typography';
+import { Button } from '@/shared/ui/Button';
+import { Icon } from '@/shared/ui/Icon';
 
-const Microphone = () => {
+const Microphone = ({ children }: PropsWithChildren) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
   const [isRecording, setIsRecording] = useState(false);
-  // const [isPlaying, setIsPlaying] = useState(false);
-  // const [recordedAudio, setRecordedAudio] = useState<>(null);
 
   const startRecording = useCallback(async () => {
     try {
-      // 권한 요청
-      const permissionResult =
-        await VoiceRecorder.requestAudioRecordingPermission();
-      console.log('-------record-------- 권한 요청', permissionResult.value);
-
-      // 권한 확인
-      const permissionCheck = await VoiceRecorder.hasAudioRecordingPermission();
-      console.log(
-        '-------record-------- 권한이 있는지 확인',
-        permissionCheck.value
-      );
-
-      // 녹음 시작
-      const startResult = await VoiceRecorder.startRecording();
-      console.log('-------record--------녹음 시작', startResult.value);
+      await VoiceRecorder.requestAudioRecordingPermission(); // 권한 요청
+      await VoiceRecorder.hasAudioRecordingPermission(); // 권한 확인
+      await VoiceRecorder.startRecording(); // 녹음 시작
 
       setIsRecording(true);
-      // console.log('녹음 시작');
+      console.log('-------record-------- 녹음 시작');
     } catch (error) {
-      console.error('-------record--------녹음 시작 실패:', error);
+      console.error('-------record-------- 녹음 시작 실패:', error);
     }
   }, []);
 
@@ -41,16 +44,13 @@ const Microphone = () => {
     try {
       // 녹음 종료
       const stopResult = await VoiceRecorder.stopRecording();
-      // console.log('-------record--------녹음 종료', stopResult.value);
 
       // base64 데이터와 mimeType을 변수에 저장
       const base64Sound = stopResult.value.recordDataBase64;
-      // console.log('base64Sound:', base64Sound);
       const mimeType = stopResult.value.mimeType;
 
       // Blob 객체를 생성하여 File 객체로 변환
       const byteCharacters = atob(base64Sound);
-      // console.log('byteCharacters:', byteCharacters);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
@@ -64,89 +64,34 @@ const Microphone = () => {
         mimeType: file.type,
       };
 
-      // console.log('-------record--------파일 생성 완료, file:', file);
-      // console.log('byteArray', byteArray);
-
       // talkWithMongddang 함수 호출
       const response = await talkWithMongddang(jsonData);
-      // console.log('API 응답:', response);
-      // for (const key in response) {
-      //   console.log('res key:', key);
-      //   console.log('res value:', response[key]);
-      // }
-      // console.log('response.response:', response.response);
-      // const responseRs = response.response;
-      // console.log('responseRs:', responseRs);
-      // for (const key in responseRs) {
-      //   console.log('Rs key:', key);
-      //   console.log('Rs value:', responseRs[key]);
-      // }
-      // const rsData = responseRs.data;
-      // console.log('rsData:', rsData);
-      // for (const key in rsData) {
-      //   console.log('rsData key:', key);
-      //   console.log('rsData value:', rsData[key]);
-      // }
 
-      // Base64 디코딩
-      // console.log('-------record--------Base64 디코딩 시작');
+      // base64 문자열을 Blob 객체로 변환
       const base64String = response.data;
-      // console.log('Base64:', base64String);
       const binaryString = atob(base64String);
-      // console.log('Binary:', binaryString);
       const len = binaryString.length;
-      // console.log('Length:', len);
       const bytes = new Uint8Array(len);
-      // console.log('-------record--------Base64 디코딩 완료');
-
       for (let i = 0; i < len; i++) {
         bytes[i] = binaryString.charCodeAt(i);
       }
-      // Blob 객체 생성
+
+      // Blob 객체 / Blob URL / Audio 객체 생성
       const blob = new Blob([bytes], { type: 'audio/wav' });
-      // console.log('-------record--------Blob 생성 완료');
-
-      // Blob URL 생성
       const url = URL.createObjectURL(blob);
-      // console.log('-------record--------Blob URL 생성 완료');
-
-      // Audio 객체 생성 및 재생
-      // console.log('-------record--------녹음 종료, 음성 재생');
       const audio = new Audio(url);
+
+      // 재생
       audio.play();
 
       // Audio 객체를 생성하여 audioRef에 저장
       audioRef.current = new Audio(`data:${mimeType};base64,${base64Sound}`);
-      // setRecordedAudio({ base64: base64Sound, mimeType });
 
       setIsRecording(false);
-      // console.log('-------record--------녹음 종료');
     } catch (error) {
       console.error('-------record--------녹음 종료 실패:', error);
     }
   }, []);
-
-  // const playAudio = useCallback(() => {
-  //   if (audioRef.current) {
-  //     audioRef.current
-  //       .play()
-  //       .then(() => {
-  //         setIsPlaying(true);
-  //         console.log('오디오 재생 시작');
-  //       })
-  //       .catch((playError) => {
-  //         console.error('오디오 재생 실패:', playError);
-  //       });
-  //   }
-  // }, []);
-
-  // const pauseAudio = useCallback(() => {
-  //   if (audioRef.current) {
-  //     audioRef.current.pause();
-  //     setIsPlaying(false);
-  //     console.log('오디오 재생 중지');
-  //   }
-  // }, []);
 
   useEffect(() => {
     const checkStatus = async () => {
@@ -159,23 +104,46 @@ const Microphone = () => {
     };
 
     checkStatus();
-  }, [startRecording, stopRecording]);
+  }, [isRecording]);
 
   return (
-    <div>
-      <h1>녹음기</h1>
-      <button onClick={isRecording ? stopRecording : startRecording}>
-        {isRecording ? '녹음 중지' : '녹음 시작'}
+    <button css={buttonNoneStyle}>
+      {children}
+      <button css={buttonNoneStyle} onClick={startRecording}>
+        <IconTypo
+          icon={mainIcons.mic}
+          fontSize="0.75"
+          menu={<div>대화하기</div>}
+        />
       </button>
-      {/* {recordedAudio && (
-        <div>
-          <h2>녹음된 오디오</h2>
-          <button onClick={isPlaying ? pauseAudio : playAudio}>
-            {isPlaying ? '재생 중지' : '재생'}
-          </button>
+
+      {isRecording && (
+        <div css={recordingBackDrop}>
+          <div css={recordingSign}>
+            <Icon css={waveMic} size={14}>
+              <img src={mainIcons.mic} alt="mic" />
+            </Icon>
+            <Typography
+              color="light"
+              size="1.75"
+              weight={300}
+              style={{ marginBottom: '0.5rem' }}
+            >
+              녹음 중입니다
+            </Typography>
+            <Button
+              color="secondary"
+              fontSize="1"
+              variant="outlined"
+              handler={stopRecording}
+            >
+              대화 전송하기
+            </Button>
+          </div>
+          <Backdrop />
         </div>
-      )} */}
-    </div>
+      )}
+    </button>
   );
 };
 

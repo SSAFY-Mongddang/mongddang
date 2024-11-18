@@ -14,6 +14,8 @@ import exercise_mongddang from '@/assets/img/main_mongddang/exercise_mongddang.p
 import sleep_mongddang from '@/assets/img/main_mongddang/sleep_mongddang.png';
 import medication_icon from '@/assets/img/icon/medication_icon.png';
 import high_mongddang from '@/assets/img/main_mongddang/high_mongddang.png';
+import malang_question from '@/assets/img/말랑3.png';
+import mic from '@/assets/img/icon/mic.png';
 
 export const mainIcons = {
   starCoinBag: star_coin_bag,
@@ -32,4 +34,6 @@ export const mainIcons = {
   sleepMongddang: sleep_mongddang,
   medication: medication_icon,
   alertMongddang: high_mongddang,
+  malang_question: malang_question,
+  mic: mic,
 };

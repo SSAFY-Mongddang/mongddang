@@ -13,13 +13,11 @@ const SettingPage = () => {
 
   const { bgm, bubble } = useAudioStore();
 
-  console.log('bgm', bgm.audioRef?.volume);
-
   const [bgmState, setBgmState] = useState<boolean>(
-    bgm?.audioRef?.volume === 0 ? false : true
+    bgm?.audioRef[0]?.volume === 0 ? false : true
   );
   const [bubbleState, setBubbleState] = useState<boolean>(
-    bubble?.audioRef?.volume === 0 ? false : true
+    bubble?.audioRef[0]?.volume === 0 ? false : true
   );
 
   useEffect(() => {}, []);
