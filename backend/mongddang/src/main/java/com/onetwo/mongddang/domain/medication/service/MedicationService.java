@@ -2,11 +2,10 @@ package com.onetwo.mongddang.domain.medication.service;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.common.s3.S3ImageService;
-import com.onetwo.mongddang.common.s3.errors.CustomS3ErrorCode;
 import com.onetwo.mongddang.domain.medication.application.MedicationUtils;
 import com.onetwo.mongddang.domain.medication.dto.MedicationStandardDto;
 import com.onetwo.mongddang.domain.medication.dto.RegisteredMedicationDto;
-import com.onetwo.mongddang.domain.medication.dto.RequestRegisterMedicationDto;
+import com.onetwo.mongddang.domain.medication.dto.RequestMedicationDto;
 import com.onetwo.mongddang.domain.medication.dto.ResponseMedicationDto;
 import com.onetwo.mongddang.domain.medication.errors.CustomMedicationErrorCode;
 import com.onetwo.mongddang.domain.medication.model.MedicationManagement;
@@ -22,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,27 +38,20 @@ public class MedicationService {
     private final CtoPUtils ctoPUtils;
 
 
-    /**
-     * 복약 등록하기
-     *
-     * @param userId                           유저 아이디
-     * @param requestRegisterMedicationDtoJson 복약 정보
-     * @param imageFile                        이미지 파일
-     * @return ResponseDto
-     */
     @Transactional
-    public ResponseDto registerMedication(Long userId, String requestRegisterMedicationDtoJson, MultipartFile imageFile) {
+    public ResponseDto registerMedication(Long userId, RequestMedicationDto requestMedicationDto) {
+        log.info("복약 등록 (In English : Medication Registration)");
 
-        log.info(requestRegisterMedicationDtoJson);
-        // JSON 문자열을 RequestRegisterMedicationDto 객체로 변환
-        RequestRegisterMedicationDto requestDto = medicationUtils.jsonToMedicationDto(requestRegisterMedicationDtoJson);
+//        // JSON 문자열을 RequestRegisterMedicationDto 객체로 변환
+//        RequestRegisterMedicationDto requestDto = medicationUtils.jsonToMedicationDto(requestRegisterMedicationDtoJson);
 
         // 요청자의 정보
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
+        log.info("요청자의 정보 (In English : Requester's Information)");
         // 환아의 정보
-        User child = userRepository.findByNickname(requestDto.getNickname())
+        User child = userRepository.findByNickname(requestMedicationDto.getNickname())
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.THIS_NICKNAME_USER_NOT_FOUND));
 
         // 접근하려는 유저가 대상의 데이터에 접근 권한이 있는지 확인
@@ -68,38 +59,38 @@ public class MedicationService {
 
         // 이미지 파일이 존재하는 경우 S3에 이미지 파일 업로드
         String imageUrl = null;
-        if (imageFile != null && !imageFile.isEmpty()) {
-            // 이미지 파일을 S3에 업로드
-            try {
-                imageUrl = s3ImageService.upload(imageFile); // MultipartFile을 File로 변환 후 S3에 업로드
-            } catch (Exception e) {
-                throw new RestApiException(CustomS3ErrorCode.IMAGE_UPLOAD_FAILED);
-            }
-        }
-        log.info("식사 이미지 파일 없음 (in english : No meal image file)");
+//        if (imageFile != null && !imageFile.isEmpty()) {
+//            // 이미지 파일을 S3에 업로드
+//            try {
+//                imageUrl = s3ImageService.upload(imageFile); // MultipartFile을 File로 변환 후 S3에 업로드
+//            } catch (Exception e) {
+//                throw new RestApiException(CustomS3ErrorCode.IMAGE_UPLOAD_FAILED);
+//            }
+//        }
+//        log.info("식사 이미지 파일 없음 (in english : No meal image file)");
 
         // 복약 관리 기록 DB 에 저장
         MedicationManagement medicationManagement = MedicationManagement.builder()
                 .child(child)
-                .name(requestDto.getName())
-                .route(requestDto.getRoute())
-                .isRepeated(requestDto.getIsRepeated())
-                .repeatDays(requestDto.getRepeatDays())
-                .repeatStartTime(requestDto.getRepeatStartTime())
-                .repeatEndTime(requestDto.getRepeatEndTime())
-                .imageUrl(imageUrl)
+                .name(requestMedicationDto.getName())
+                .route(MedicationManagement.RouteType.injection)
+                .isRepeated(false)
+                .repeatDays(new ArrayList<>())
+                .repeatStartTime(requestMedicationDto.getRepeatStartTime())
+                .repeatEndTime(requestMedicationDto.getRepeatEndTime())
+                .imageUrl(null)
                 .build();
 
         //복약 시간 기록 DB 에 저장
         List<MedicationTime> medicationTimeList = new ArrayList<>();
-        for (String repeatTime : requestDto.getRepeatTimes()) {
-            for (MedicationStandardDto medicationStandard : requestDto.getStandards()) {
+        for (String repeatTime : requestMedicationDto.getRepeatTimes()) {
+            for (MedicationStandardDto medicationStandard : requestMedicationDto.getStandards()) {
                 MedicationTime medicationTime = MedicationTime.builder()
                         .medicationManagement(medicationManagement)
                         .medicationTime(repeatTime)
-                        .isFast(requestDto.getIsFast())
-                        .minGlucose(requestDto.getIsFast() ? medicationStandard.getMinGlucose() : null)
-                        .maxGlucose(requestDto.getIsFast() ? medicationStandard.getMaxGlucose() : null)
+                        .isFast(requestMedicationDto.getIsFast())
+                        .minGlucose(requestMedicationDto.getIsFast() ? medicationStandard.getMinGlucose() : null)
+                        .maxGlucose(requestMedicationDto.getIsFast() ? medicationStandard.getMaxGlucose() : null)
                         .volume(medicationStandard.getVolume())
                         .build();
 
