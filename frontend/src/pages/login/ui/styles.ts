@@ -8,7 +8,8 @@ export const base = css`
   align-items: center; // 수직 중앙 정렬
   justify-content: center; // 수평 중앙 정렬
   height: 100vh;
-  background: url(${loginBackground}) 0 -2rem no-repeat;
+  background: url(${loginBackground}) no-repeat center center;
+  background-size: cover;
   /* background-color: ${Colors.primary[400]}; */
 `;
 

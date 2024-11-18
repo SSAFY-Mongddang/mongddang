@@ -5,6 +5,7 @@ import { BottomBar } from '@/shared/ui/BottomBar';
 import {
   bottomContainer,
   CharacterContainer,
+  dotCss,
   iconGroupCss,
   iconHorizontalCss,
   iconVerticalCss,
@@ -58,6 +59,9 @@ const KidsMainPage = () => {
     mainTitleName: '',
     mainMongddangId: 0,
     coin: 0,
+    unreadNotification: false,
+    unclaimedMissionReward: false,
+    unclaimedAchivementReward: false,
   });
   const [openDietModal, setOpenDietModal] = useState(false);
   const [openBaseModal, setOpenBaseModal] = useState(false);
@@ -180,7 +184,19 @@ const KidsMainPage = () => {
                   setOpenBaseModal(true);
                   setContentType('dailyMission');
                 }}
+                style={{
+                  position: 'relative',
+                }}
               >
+                <img
+                  src={mainIcons.redDot}
+                  alt="dot"
+                  css={dotCss}
+                  style={{
+                    display:
+                      mainInfo.unclaimedMissionReward === false ? 'none' : '',
+                  }}
+                />
                 <IconTypo
                   icon={mainIcons.mission}
                   fontSize="0.75"
@@ -198,7 +214,20 @@ const KidsMainPage = () => {
                     setOpenBaseModal(true);
                     setContentType('notification');
                   }}
+                  style={{
+                    position: 'relative',
+                  }}
                 >
+                  <img
+                    src={mainIcons.redDot}
+                    alt="dot"
+                    css={dotCss}
+                    style={{
+                      display:
+                        mainInfo.unreadNotification === false ? 'none' : '',
+                    }}
+                  />
+
                   <IconTypo
                     icon={mainIcons.notification}
                     fontSize="0.75"
@@ -209,7 +238,21 @@ const KidsMainPage = () => {
                   onClick={() => {
                     navigate('/nickname/title');
                   }}
+                  style={{
+                    position: 'relative',
+                  }}
                 >
+                  <img
+                    src={mainIcons.redDot}
+                    alt="dot"
+                    css={dotCss}
+                    style={{
+                      display:
+                        mainInfo.unclaimedAchivementReward === false
+                          ? 'none'
+                          : '',
+                    }}
+                  />
                   <IconTypo
                     icon={mainIcons.achievement}
                     fontSize="0.75"
@@ -222,7 +265,7 @@ const KidsMainPage = () => {
                     }
                   />
                 </div>
-                <CurrentBloodSugar />
+                <CurrentBloodSugar nickname={mainInfo.nickname} />
                 <Microphone>
                   <div
                     onClick={() => {

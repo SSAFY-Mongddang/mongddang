@@ -6,6 +6,8 @@ import {
   bubbleChat,
   childList,
   container,
+  imgContainer,
+  imgCss,
   menuBtnContainer,
   menuBtnGroup,
   menuContent,
@@ -17,6 +19,7 @@ import { useUserStore } from '@/entities/user/model';
 import { useSelectedChildStore } from '@/entities/selected-child/model/store';
 import { useShallow } from 'zustand/shallow';
 import { Toggle } from '@/shared/ui/Toggle';
+import MenuMongddang from '@/assets/img/page/menu.png';
 import { useAudioStore } from '@/shared/model/useAudioStore';
 
 const ProtectorMain = () => {
@@ -74,6 +77,9 @@ const ProtectorMain = () => {
           </div>
         </div>
         <div css={menuBtnContainer}>
+          <div css={imgContainer}>
+            <img src={MenuMongddang} alt="" css={imgCss} />
+          </div>
           {/* 메뉴 버튼 모음 */}
           <div css={menuBtnGroup}>
             <MenuBtnGroup userRole={'protector'} />

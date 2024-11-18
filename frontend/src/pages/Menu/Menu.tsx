@@ -2,12 +2,15 @@
 
 import MenuBtnGroup from '@/features/MenuBtnGroup/ui/MenuBtnGroup';
 import {
+  imgContainer,
+  imgCss,
   menuBase,
   menuBtnContainer,
   menuBtnGroup,
   menuContent,
 } from './styles';
 import CloseBtn from './ui/CloseBtn/CloseBtn';
+import MenuMongddang from '@/assets/img/page/menu.png';
 
 const Menu = () => {
   return (
@@ -15,8 +18,11 @@ const Menu = () => {
       <div css={menuContent}>
         {/* 메뉴 버튼 모음 */}
         <div css={menuBtnContainer}>
+          <div css={imgContainer}>
+            <img src={MenuMongddang} alt="" css={imgCss} />
+          </div>
           <div css={menuBtnGroup}>
-            <MenuBtnGroup userRole={'child'}/>
+            <MenuBtnGroup userRole={'child'} />
           </div>
         </div>
       </div>

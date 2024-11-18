@@ -8,6 +8,7 @@ import {
   notificationItemCss,
   notificationListCss,
   textCss,
+  xCss,
 } from './NotificationContent.styles';
 import { useCallback } from 'react';
 import {
@@ -22,6 +23,7 @@ type NotificationItem = {
   category: string;
   content: string;
   createdAt: Date;
+  isNew: boolean;
 };
 
 const NotificationContent = () => {
@@ -42,17 +44,22 @@ const NotificationContent = () => {
         {notifications ? (
           notifications.map((notification: NotificationItem) => {
             return (
-              <div
-                css={notificationItemCss}
-                onClick={() => {
-                  onDelete(notification.notificationId);
-                }}
-                key={`notification-${notification.notificationId}`}
-              >
-                <Typography color="dark" size="1" weight={500} css={textCss}>
-                  {notification.content}
-                </Typography>
-              </div>
+              notification.isNew && (
+                <div
+                  css={notificationItemCss}
+                  onClick={() => {
+                    onDelete(notification.notificationId);
+                  }}
+                  key={`notification-${notification.notificationId}`}
+                >
+                  <Typography color="dark" size="0.75" weight={400} css={xCss}>
+                    x
+                  </Typography>
+                  <Typography color="dark" size="1" weight={500} css={textCss}>
+                    {notification.content}
+                  </Typography>
+                </div>
+              )
             );
           })
         ) : (

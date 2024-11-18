@@ -43,10 +43,24 @@ export const bubbleChat = css`
 export const menuBtnContainer = css`
   display: flex;
   width: 100%;
+  position: relative;
   height: fit-content;
   background-color: #fff;
   border: 0.5rem solid #e1f5fe;
   border-radius: 10px;
+`;
+
+export const imgContainer = css`
+  display: flex;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  transform: translateY(-60%);
+  justify-content: flex-end;
+`;
+
+export const imgCss = css`
+  height: 10rem;
 `;
 
 export const menuBtnGroup = css`

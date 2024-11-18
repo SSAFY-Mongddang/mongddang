@@ -21,11 +21,18 @@ export const notificationListCss = css`
 
 export const notificationItemCss = css`
   display: flex;
+  position: relative;
   width: 100%;
   background-color: #e1f5fe;
   border-radius: 10px;
-  padding: 5%;
+  padding: 8% 5%;
   white-space: break-spaces;
+`;
+
+export const xCss = css`
+  position: absolute;
+  top: 5%;
+  right: 5%;
 `;
 
 export const noNotificationCss = css`
