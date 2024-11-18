@@ -5,19 +5,24 @@ import { CalendarService } from '../model';
 import calendarStyle from './style.module.css';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { useAudioStore } from '@/shared/model/useAudioStore';
 
 export const RecordCalendar = () => {
   const [dateValue, setDateValue] = useState<Date | null>(null);
   const [currentMonth, setCurrentMonth] = useState<Date | null>(null);
   const [lastTappedDate, setLastTappedDate] = useState<Date | null>(null);
   const nav = useNavigate();
+  const { bubble } = useAudioStore();
 
   const setDayProps: DatePickerProps['getDayProps'] = (date) => {
+    // 빈 객체 생성
+    const props: { style?: React.CSSProperties; onClick?: () => void } = {
+      onClick: () => bubble.play(), // 기본적으로 모든 날짜에 클릭 이벤트 추가
+    };
+
     // 현재 날짜에 밑줄 표시
     if (CalendarService.isToday(date)) {
-      return {
-        style: { textDecoration: 'underline' },
-      };
+      props.style = { textDecoration: 'underline' };
     }
 
     // 토요일의 경우 파란색 글자
@@ -25,12 +30,12 @@ export const RecordCalendar = () => {
       CalendarService.isCurrentMonth(date, currentMonth) &&
       CalendarService.isSaturday(date)
     ) {
-      return {
-        style: { color: 'blue' },
+      props.style = {
+        ...props.style, // 기존 스타일 유지
+        color: 'blue',
       };
     }
-
-    return {};
+    return props;
   };
 
   const handleDateTap = (tappedDate: Date | null) => {

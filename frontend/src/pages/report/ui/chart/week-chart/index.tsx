@@ -60,75 +60,104 @@ export const WeekChart = ({ data }: WeekChartProps) => {
   const yAxisMax = HIGH_THRESHOLD + 20;
 
   return (
-    <div style={{ position: 'relative', margin:'1rem'}}>
-  {/* Y축 레이블 */}
-  <div style={{
-      position: 'absolute',
-      left: '0',
-      top: '0',
-      height: '100%',
-      pointerEvents: 'none',
-      zIndex: 1
-  }}>
-    {/* 고혈당 영역 레이블 */}
-    <div style={{
-        marginTop: '15vh',  // 고혈당 위치를 조금 더 위로
-    }}>
-      <Text fw={500} size='0.9rem' style={{ color: '#ff9800' }}>고혈당</Text>
-      <Text fw={500} size='0.9rem' style={{ color: '#ff9800' }}>{percentages.high}%</Text>
-    </div>
+    <div style={{ position: 'relative', margin: '1rem' }}>
+      {/* Y축 레이블 */}
+      <div
+        style={{
+          position: 'absolute',
+          left: '0',
+          top: '0',
+          height: '100%',
+          pointerEvents: 'none',
+          zIndex: 1,
+        }}
+      >
+        {/* 고혈당 영역 레이블 */}
+        <div
+          style={{
+            marginTop: '15vh', // 고혈당 위치를 조금 더 위로
+          }}
+        >
+          <Text fw={500} size="0.9rem" style={{ color: '#ff9800' }}>
+            고혈당
+          </Text>
+          <Text fw={500} size="0.9rem" style={{ color: '#ff9800' }}>
+            {percentages.high}%
+          </Text>
+        </div>
 
-    {/* 범위 내 영역 레이블 */}
-    <div style={{
-        marginTop:'9vh'
-    }}>
-      <Text fw={500} size='0.9rem' style={{ color: '#2196f3' }}>범위 내</Text>
-      <Text fw={500} size='0.9rem' style={{ color: '#2196f3', marginLeft: '4px' }}>{percentages.normal}%</Text>
-    </div>
+        {/* 범위 내 영역 레이블 */}
+        <div
+          style={{
+            marginTop: '9vh',
+          }}
+        >
+          <Text fw={500} size="0.9rem" style={{ color: '#2196f3' }}>
+            범위 내
+          </Text>
+          <Text
+            fw={500}
+            size="0.9rem"
+            style={{ color: '#2196f3', marginLeft: '4px' }}
+          >
+            {percentages.normal}%
+          </Text>
+        </div>
 
-    {/* 저혈당 영역 레이블 */}
-    <div style={{
-        marginTop:'5vh'  // 저혈당 위치를 조금 더 아래로
-    }}>
-      <Text fw={500} size='0.9rem' style={{ color: '#f44336' }}>저혈당</Text>
-      <Text fw={500} size='0.9rem' style={{ color: '#f44336', marginLeft: '4px' }}>{percentages.low}%</Text>
-    </div>
-  </div>
+        {/* 저혈당 영역 레이블 */}
+        <div
+          style={{
+            marginTop: '5vh', // 저혈당 위치를 조금 더 아래로
+          }}
+        >
+          <Text fw={500} size="0.9rem" style={{ color: '#f44336' }}>
+            저혈당
+          </Text>
+          <Text
+            fw={500}
+            size="0.9rem"
+            style={{ color: '#f44336', marginLeft: '4px' }}
+          >
+            {percentages.low}%
+          </Text>
+        </div>
+      </div>
 
-  <LineChart
-    h={chartHeight}
-    data={processedData}
-    dataKey="date"
-    series={[
-      { name: 'high', color: '#ff9800' },
-      { name: 'highThreshold', color: '#ff9800', strokeDasharray: '5 5' },
-      { name: 'lowThreshold', color: '#f44336', strokeDasharray: '5 5' },
-      { name: 'normal', color: '#2196f3' },
-      { name: 'low', color: '#f44336' },
-    ]}
-    withDots={false}
-    connectNulls={false}
-    curveType="linear"
-    withLegend={false}
-    gridAxis="xy"
-    tooltipAnimationDuration={200}
-    withTooltip
-    xAxisProps={{
-      tickMargin: 15,
-      interval: Math.floor(processedData.length / 10),
-      style: { fontSize: '12px' }
-    }}
-    yAxisProps={{
-      tickMargin: 1,
-      domain: [0, yAxisMax],
-      ticks: [LOW_THRESHOLD, HIGH_THRESHOLD],
-      style: { fontSize: '12px' }
-    }}
-    style={{
-      backgroundColor: 'white'
-    }}
-  />
-</div>
+      <LineChart
+        h={chartHeight}
+        data={processedData}
+        dataKey="date"
+        series={[
+          { name: 'high', color: '#ff9800' },
+          { name: 'highThreshold', color: '#ff9800', strokeDasharray: '5 5' },
+          { name: 'lowThreshold', color: '#f44336', strokeDasharray: '5 5' },
+          { name: 'normal', color: '#2196f3' },
+          { name: 'low', color: '#f44336' },
+        ]}
+        withDots={false}
+        connectNulls={false}
+        curveType="linear"
+        withLegend={false}
+        gridAxis="xy"
+        tooltipAnimationDuration={200}
+        withTooltip
+        withXAxis={false}
+        // xAxisProps={{
+        //   tickMargin: 15,
+        //   interval: Math.floor(processedData.length / 10),
+        //   style: { fontSize: '12px' },
+        // }}
+        yAxisProps={{
+          tickMargin: 1,
+          domain: [0, yAxisMax],
+          ticks: [LOW_THRESHOLD, HIGH_THRESHOLD],
+          style: { fontSize: '12px' },
+        }}
+        style={{
+          backgroundColor: 'white',
+        }}
+      />
+    </div>
   );
 };
 

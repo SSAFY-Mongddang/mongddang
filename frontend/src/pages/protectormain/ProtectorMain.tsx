@@ -16,6 +16,8 @@ import { Typography } from '@/shared/ui/Typography';
 import { useUserStore } from '@/entities/user/model';
 import { useSelectedChildStore } from '@/entities/selected-child/model/store';
 import { useShallow } from 'zustand/shallow';
+import { Toggle } from '@/shared/ui/Toggle';
+import { useAudioStore } from '@/shared/model/useAudioStore';
 
 const ProtectorMain = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,6 +33,7 @@ const ProtectorMain = () => {
       selectedChild: state.selectedChild,
     }))
   );
+  const audio = useAudioStore();
 
   useEffect(() => {
     if (!selectedChild && connectedChild) {
@@ -65,6 +68,9 @@ const ProtectorMain = () => {
                 어린이의 기록
               </Typography>
             </div>
+          </div>
+          <div>
+            <Toggle size={4} onToggle={audio.bgm.toggleMute} />
           </div>
         </div>
         <div css={menuBtnContainer}>

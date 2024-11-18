@@ -38,7 +38,7 @@ const categoryFeedback: Record<RecordCategory, CategoryFeedbackItem> = {
   sleep: {
     img: sleep_mongddang,
     category: '수면',
-    message: '몽땅이가 수면핑의 마법에 걸려버렸어요.',
+    message: '몽땅이가 코자핑의 마법에 걸려버렸어요.',
   },
 };
 

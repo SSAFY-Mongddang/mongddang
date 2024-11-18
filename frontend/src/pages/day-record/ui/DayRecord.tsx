@@ -7,10 +7,13 @@ import { useUserStore } from '@/entities/user/model/store';
 import { useShallow } from 'zustand/shallow';
 import { useQuery } from '@tanstack/react-query';
 import { BloodsugarQueries } from '@/entities/blood-sugar/api';
-import { article, chart } from './style';
+import { article, chart, nickNameErr, nickNameErrImg } from './style';
 import { BloodSugarChart } from '@/widgets/blood-sugar-chart';
 import { useSelectedChildStore } from '@/entities/selected-child/model/store';
 import { useMemo } from 'react';
+import Loading from '@/shared/ui/Loading';
+import useMinimumLoading from '@/shared/hooks/useMinimumLoading';
+import sruprizeCapybara from '@/assets/img/fox_and_capybara/mongddang14_surprised.png';
 
 export const DayRecordPage = () => {
   const nav = useNavigate();
@@ -39,16 +42,27 @@ export const DayRecordPage = () => {
     error,
   } = useQuery(BloodsugarQueries.todayBloodSugarQuery(nickname, date));
 
+  const showLoading = useMinimumLoading(isBloodSugarLoading);
+
   if (isBloodSugarErr) {
     console.log(JSON.stringify(error));
     throw new Error('Blood data error');
   }
 
-  if (isBloodSugarLoading) return <div>Loading...</div>;
+  if (showLoading) return <Loading />;
 
-  if (!nickname) {
-    return <div>no nickname</div>;
-  }
+  const nicknameErrRender = () => {
+    return (
+      <>
+        <div css={nickNameErr}>
+          <img css={nickNameErrImg} src={sruprizeCapybara} />
+          <div>
+            <span>아이를 다시 선택해주세요!</span>
+          </div>
+        </div>
+      </>
+    );
+  };
 
   return (
     <>
@@ -57,20 +71,24 @@ export const DayRecordPage = () => {
           내 기록
         </TopBar>
       </header>
-      <article css={article}>
-        <section css={chart}>
-          {!isBloodSugarErr && !isBloodSugarLoading && (
-            <BloodSugarChart data={bloodSugarData} />
-          )}
-        </section>
-        <section>
-          <DayRecordCategory
-            nickname={nickname}
-            bloodSugarData={bloodSugarData}
-            date={date}
-          />
-        </section>
-      </article>
+      {nickname ? (
+        <article css={article}>
+          <section css={chart}>
+            {!isBloodSugarErr && !isBloodSugarLoading && (
+              <BloodSugarChart data={bloodSugarData} />
+            )}
+          </section>
+          <section>
+            <DayRecordCategory
+              nickname={nickname}
+              bloodSugarData={bloodSugarData}
+              date={date}
+            />
+          </section>
+        </article>
+      ) : (
+        nicknameErrRender()
+      )}
     </>
   );
 };

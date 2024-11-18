@@ -19,6 +19,7 @@ export const menuContent = css`
 
 export const childList = css`
   display: flex;
+  justify-content: space-between;
   width: 100%;
   padding: 3%;
 `;

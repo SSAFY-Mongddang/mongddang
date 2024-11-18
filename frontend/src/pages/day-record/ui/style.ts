@@ -15,3 +15,18 @@ export const chart = css`
   justify-content: center;
   align-items: center;
 `;
+
+export const nickNameErr = css`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.5rem;
+`;
+
+export const nickNameErrImg = css`
+  width: 15rem;
+  height: 15rem;
+`;
