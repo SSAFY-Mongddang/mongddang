@@ -1,9 +1,12 @@
 package com.mongddang.app.di
 
 import android.content.Context
+import androidx.datastore.core.DataStore
 import androidx.room.Room
+import com.capacitorjs.plugins.preferences.Preferences
 import com.mongddang.app.data.local.dao.BloodGlucoseDataDao
 import com.mongddang.app.data.local.database.AppDatabase
+import com.mongddang.app.data.local.repository.DataStoreRepositoryImpl
 import com.mongddang.app.viewmodel.BloodGlucoseViewModel
 import dagger.Binds
 import dagger.Module
@@ -36,5 +39,5 @@ object DatabaseModule {
     fun provideBloodGlucoseDao(database: AppDatabase): BloodGlucoseDataDao {
         return database.bloodGlucoseDataDao()
     }
-
+    
 }

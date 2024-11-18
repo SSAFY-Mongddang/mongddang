@@ -7,24 +7,29 @@ import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.mongddang.app.data.local.repository.DataStoreRepositoryImpl
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
-private const val TAG = "AccessTokenPlugin"
+open class AccessTokenPlugin : Plugin() {
 
-@CapacitorPlugin(name="AccessTokenPlugin")
-class AccessTokenPlugin : Plugin(){
+    protected lateinit var dataStoreRepositoryImpl: DataStoreRepositoryImpl
 
-    private lateinit var dataStoreRepositoryImpl: DataStoreRepositoryImpl
+    @PluginMethod
+    fun getAccessTokenPlugin(call: PluginCall) {
+        CoroutineScope(Dispatchers.IO).launch {
+            handleAccessToken(call)
+        }
+    }
 
-    @PluginMethod()
-    suspend fun getAccessTokenPlugin(call: PluginCall){
-        Log.i(TAG, "getAccessTokenPlugin: ")
+    suspend fun handleAccessToken(call: PluginCall) {
         val token = call.getString("token")
-        if(token != null && token != "") {
+        if (token != null && token.isNotBlank()) {
             dataStoreRepositoryImpl.saveAccessToken(token)
-            val message = "토큰 : ${token}이 등록완료되었습니다."
+            val message = "토큰 : $token 이 등록완료되었습니다."
             call.resolve(JSObject().put("message", message))
-        } else{
+        } else {
             val errorMessage = "토큰이 유효하지 않습니다."
             call.reject("message", errorMessage)
         }
