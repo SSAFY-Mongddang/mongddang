@@ -29,7 +29,7 @@ const Login = () => {
       getUserInfo: state.getUserInfo,
     }))
   );
-  const tokenPayload: TokenPayload = {"token": getUserInfo().userAccessToken ?? ""}
+  const tokenPayload: TokenPayload = {"token": getUserInfo().userAccessToken ?? "", "nickName":getUserInfo().user?.nickname??"어린이 서원"}
   AccessTokenPlugin.getAccessTokenPlugin(tokenPayload)
   .then((response) => {
     console.log('Response from native:', response.message);

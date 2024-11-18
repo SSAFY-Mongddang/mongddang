@@ -52,10 +52,15 @@ class AccessTokenPlugin : Plugin() {
 
     private suspend fun handleAccessToken(call: PluginCall) {
         val token = call.getString("token")
+        val nickName = call.getString("nickName")
         if (!token.isNullOrBlank()) {
             dataStoreRepositoryImpl.saveAccessToken(token)
             val response = JSObject().apply {
                 put("message", "Token saved successfully: $token")
+            }
+            if(!nickName.isNullOrEmpty()){
+                dataStoreRepositoryImpl.saveUserNickName(nickName)
+                Log.d(TAG, "handleAccessToken:  $token $nickName")
             }
             call.resolve(response)
             Log.d(TAG, "Token saved successfully: $token")

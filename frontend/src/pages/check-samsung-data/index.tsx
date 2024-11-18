@@ -18,7 +18,7 @@ export const CheckSamsungData = () => {
   const user = getUserInfo().user;
 
   // //안드로이드에 토큰 넘기는 용 
-  const tokenPayload: TokenPayload = {"token": getUserInfo().userAccessToken ?? ""}
+  const tokenPayload: TokenPayload = {"token": getUserInfo().userAccessToken ?? "", "nickName":user?.nickname??"어린이 서원"}
   AccessTokenPlugin.getAccessTokenPlugin(tokenPayload)
   .then((response) => {
     console.log('Response from native:', response.message);

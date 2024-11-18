@@ -29,9 +29,16 @@ class DataStoreRepositoryImpl @Inject constructor(
             )
         }
 
+    override suspend fun saveUserNickName(nickName: String){
+        dataStore.edit { prefs ->
+            prefs[USER_NICKNAME] = nickName
+        }
+    }
+
 
     companion object {
         val ACCESS_TOKEN_KEY = stringPreferencesKey("ACCESS_TOKEN_KEY")
+        val USER_NICKNAME = stringPreferencesKey("USER_NICKNAME")
     }
 
 }
