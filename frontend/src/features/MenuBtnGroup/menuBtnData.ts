@@ -16,8 +16,8 @@ export const menuBtnData: MenuBtnItem[] = [
       protector: '복약관리',
     },
     urlTo: {
-      child: '',
-      protector: '',
+      child: '/medication',
+      protector: '/medication',
     },
   },
   {
