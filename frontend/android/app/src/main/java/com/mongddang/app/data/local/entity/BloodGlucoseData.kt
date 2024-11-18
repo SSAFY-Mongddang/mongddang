@@ -9,5 +9,5 @@ data class BloodGlucoseData (
     @PrimaryKey(autoGenerate = true) val id: Long = 0L,
     val packageName: String,
     val time: LocalDateTime,
-    val glucoseValue: Float
+    val glucoseValueMgPerDl: Int
 )

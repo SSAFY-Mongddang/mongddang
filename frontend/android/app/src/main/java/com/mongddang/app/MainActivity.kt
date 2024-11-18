@@ -59,12 +59,5 @@ class MainActivity : BridgeActivity() {
             BloodGlucoseViewModelFactory(healthDataStore, this, appDatabase)
         )[BloodGlucoseViewModel::class.java]
 
-        // 테스트 데이터 생성 및 저장
-        val testData = BloodGlucoseData(
-            time = LocalDateTime.now(),
-            glucoseValue = 5.5f,
-            packageName = "com.example"
-        )
-        bloodGlucoseViewModel.saveBloodGlucoseData(testData)
     }
 }

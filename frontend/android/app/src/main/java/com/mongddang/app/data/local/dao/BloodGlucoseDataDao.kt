@@ -9,36 +9,38 @@ import com.mongddang.app.data.local.entity.BloodGlucoseData
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 
-
 @Dao
 interface BloodGlucoseDataDao {
-    // 특정 ID로 데이터를 가져오기
+
+    // 특정 ID로 데이터를 가져오기 (Flow)
     @Query("SELECT * FROM blood_glucose_data WHERE id = :id")
-    fun loadDataById(id: Long): Flow<BloodGlucoseData>
+    fun fetchByIdFlow(id: Long): Flow<BloodGlucoseData?>
 
+    // 특정 ID로 데이터를 가져오기 (suspend)
+    @Query("SELECT * FROM blood_glucose_data WHERE id = :id")
+    suspend fun fetchById(id: Long): BloodGlucoseData?
 
-    // 데이터 삽입 시 반환 타입을 Long으로 설정
+    // 데이터 삽입 (Long 반환: 삽입된 행의 ID)
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertBloodGlucoseData(data: BloodGlucoseData): Long
+    suspend fun insert(data: BloodGlucoseData): Long
 
-
-    // 데이터 삭제 시 반환 타입을 Int로 설정 (삭제된 행의 수 반환)
+    // 데이터 삭제 (Int 반환: 삭제된 행의 수)
     @Delete
-    suspend fun delete(bloodGlucoseData: BloodGlucoseData): Int
+    suspend fun delete(data: BloodGlucoseData): Int
 
-    // 특정 시간 간격으로 데이터를 로드
-    @Query("SELECT * FROM blood_glucose_data WHERE time BETWEEN :startTime AND :endTime")
-    fun loadDataByTimeInterval(startTime: LocalDateTime, endTime: LocalDateTime): Flow<List<BloodGlucoseData>>
+    // 특정 시간 간격 내 데이터를 가져오기
+    @Query("SELECT * FROM blood_glucose_data WHERE time BETWEEN :startTime AND :endTime ORDER BY time ASC")
+    fun fetchByTimeInterval(startTime: LocalDateTime, endTime: LocalDateTime): Flow<List<BloodGlucoseData>>
 
-    // 특정 날짜의 데이터 가져오기
+    // 특정 날짜 데이터를 가져오기
     @Query("SELECT * FROM blood_glucose_data WHERE time = :date")
-    suspend fun getDataByDate(date: LocalDateTime): List<BloodGlucoseData>
+    suspend fun fetchByDate(date: LocalDateTime): List<BloodGlucoseData>
 
     // 특정 날짜와 수치가 존재하는지 확인
-    @Query("SELECT COUNT(*) FROM blood_glucose_data WHERE time = :date AND glucoseValue = :glucoseLevel")
-    suspend fun isDataExists(date: LocalDateTime, glucoseLevel: Float): Int
+    @Query("SELECT COUNT(*) > 0 FROM blood_glucose_data WHERE time = :date AND glucoseValueMgPerDl = :glucoseValue")
+    suspend fun exists(date: LocalDateTime, glucoseValue: Int): Boolean
 
-    // DAO에 데이터 조회 메서드 추가
-    @Query("SELECT * FROM blood_glucose_data WHERE id = :id")
-    suspend fun getBloodGlucoseDataById(id: Long): BloodGlucoseData?
+    // 전체 데이터 삭제 (Optional 추가)
+    @Query("DELETE FROM blood_glucose_data")
+    suspend fun clearAll()
 }

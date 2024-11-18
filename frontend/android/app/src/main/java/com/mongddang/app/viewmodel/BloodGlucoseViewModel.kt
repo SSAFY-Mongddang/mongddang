@@ -49,7 +49,7 @@ class BloodGlucoseViewModel (
         fun toEntity(): BloodGlucoseData {
             return BloodGlucoseData(
                 time = time,
-                glucoseValue = this.glucoseValue,
+                glucoseValueMgPerDl = (this.glucoseValue * 18).toInt(),
                 packageName = "com.samsung.health"
             )
         }
@@ -89,12 +89,12 @@ class BloodGlucoseViewModel (
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 // 데이터 중복 확인
-                val existingData = appDatabase.bloodGlucoseDataDao().isDataExists(data.time, data.glucoseValue)
+                val existingData = appDatabase.bloodGlucoseDataDao().exists(data.time, data.glucoseValueMgPerDl)
                 if (existingData == null) {
                     // 중복되지 않은 경우 삽입
-                    val newRowId = appDatabase.bloodGlucoseDataDao().insertBloodGlucoseData(data)
+                    val newRowId = appDatabase.bloodGlucoseDataDao().insert(data)
                     if (newRowId != -1L) {
-                        val insertedData = appDatabase.bloodGlucoseDataDao().getBloodGlucoseDataById(newRowId)
+                        val insertedData = appDatabase.bloodGlucoseDataDao().fetchById(newRowId)
                         Log.d(TAG, "Inserted data: $insertedData")
                     } else {
                         Log.e(TAG, "Failed to insert data: $data")

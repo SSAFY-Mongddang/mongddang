@@ -30,11 +30,6 @@ class BloodGlucoseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        bloodGlucoseViewModel = ViewModelProvider(
-//            this, HealthViewModelFactory(this)
-//        )[BloodGlucoseViewModel::class.java]
-        // healthDataStore를 전달하여 ViewModel 생성
-        // HealthDataStore 및 AppDatabase 초기화
         val healthDataStore = HealthDataService.getStore(this)
         val appDatabase = AppDatabase.getDatabase(this)
 
