@@ -34,14 +34,14 @@ export class BloodsugarQueries {
           },
         });
 
-        console.log('********************************');
-        console.log('********************************');
-        console.log(data);
-        console.log(data);
-        console.log(data);
-        console.log(data);
-        console.log('********************************');
-        console.log('********************************');
+        // console.log('********************************');
+        // console.log('********************************');
+        // console.log(data);
+        // console.log(data);
+        // console.log(data);
+        // console.log(data);
+        // console.log('********************************');
+        // console.log('********************************');
 
         // const formattedData = data.data.bloodSugar.map((item) => ({
         //   ...item,

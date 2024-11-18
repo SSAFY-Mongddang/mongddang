@@ -22,38 +22,21 @@ import { DayRecordPage } from './pages/day-record';
 import SettingPage from './pages/settingPage/SettingPage';
 import { useEffect } from 'react';
 import { SocialLogin } from '@capgo/capacitor-social-login';
-import { PushNotifications } from '@capacitor/push-notifications';
-import { usePushNotificationStore } from './shared/model/usePushNotificationStore';
 import { PushNotification } from './shared/ui/PushNotification/PushNotification';
 import { SamsungSetting } from './pages/samsung-setting/index';
 import { ForegoundServiceSetting } from './pages/foreground-setting/index';
-import { initPushNotification } from './shared/lib/pushNotification/initNotification';
 import Medication from './pages/medication/Medication';
 import MedicationAdd from './pages/medicationAdd/MedicationAdd';
 
-
 function App() {
   useLoadState();
-  const { setPushNotification } = usePushNotificationStore();
+
   useEffect(() => {
     SocialLogin.initialize({
       google: {
         webClientId: import.meta.env.VITE_GOOGLE_WEB_CLIENT_ID,
       },
     });
-
-    // 푸시 알림 받기
-    const initializePushListener = async () => {
-      await initPushNotification()
-      PushNotifications.removeAllListeners();
-      PushNotifications.addListener(
-        'pushNotificationReceived',
-        (notification) => {
-          setPushNotification(notification);
-        }
-      );
-    };
-    initializePushListener();
   }, []);
 
   return (

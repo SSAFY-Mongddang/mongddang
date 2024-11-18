@@ -9,6 +9,7 @@ export const base = (type: Tnotification, width: number, height: number) => css`
   padding: 1.5rem 0;
   border-radius: 1.25rem;
   background-color: #fff;
+  box-sizing: content-box;
 
   ${type === 'alert' &&
   css`
@@ -21,12 +22,14 @@ export const base = (type: Tnotification, width: number, height: number) => css`
 `;
 
 export const btnCss = css`
+  position: static;
   display: flex;
-  justify-content: center; /* 가로 방향 가운데 정렬 */
+  justify-content: center;
   position: absolute;
-  bottom: 1.5rem;
-  left: 50%; /* 왼쪽으로 50% 이동 */
-  transform: translateX(-50%); /* 가로 방향으로 50% 이동하여 가운데 정렬 */
+  width: 7rem;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 export const btnContainerCss = css`
@@ -45,9 +48,9 @@ export const backdropCss = css`
   align-items: center;
   justify-content: center;
   position: fixed;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-`
+`;
