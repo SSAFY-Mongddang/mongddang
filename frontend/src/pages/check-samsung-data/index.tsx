@@ -16,15 +16,17 @@ export const CheckSamsungData = () => {
   const getUserInfo = useUserStore((state) => state.getUserInfo);
 
   const user = getUserInfo().user;
-  
-  BloodGlucosePlugin.getThisTimeBloodGlucose({ datetime: "2024-11-08T08:00:00" })
-  .then((response) => {
-    console.log("Response:", response);
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
 
+  const requestBloodGlucose = async () => {
+    try{
+      const result = await BloodGlucosePlugin.getThisTimeBloodGlucose({ datetime: "2024-11-04T00:00:00"})
+      console.log("result:", result);
+    } catch(error){
+    console.error("Error:", error);
+    }
+  }
+
+  requestBloodGlucose()
   return (
     <div>
       <div>

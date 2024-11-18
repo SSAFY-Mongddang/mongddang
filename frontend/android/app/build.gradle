@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.devtools.ksp' // ksp 설정
     id 'dagger.hilt.android.plugin' // hilt 설정
+    id 'kotlin-parcelize'
     id 'kotlin-kapt'
 }
 
@@ -54,6 +55,11 @@ android {
         }
     }
     buildTypes {
+        debug {
+            // 디버그 빌드에서 자동으로 debuggable=true 설정됨
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -118,15 +124,17 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
 
     // Hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+
+
 
 }
 
 kapt {
     correctErrorTypes = true
 }
-
 apply from: 'capacitor.build.gradle'
 
 try {

@@ -4,7 +4,7 @@ buildscript {
     ext {
         kotlin_version = '1.9.0'            // Kotlin 버전
         android_version = "8.3.1"          // Android Gradle Plugin 버전
-        hilt_version = "2.51"              // Hilt 버전
+        hilt_version = "2.46.1"              // Hilt 버전
         ksp_version = "1.9.0-1.0.13"       // Kotlin Symbol Processing (KSP) 버전
     }
     repositories {

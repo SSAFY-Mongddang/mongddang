@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.9.0"
-hilt = "2.51"
+hilt = "2.46.1"
 coroutines = "1.7.0"
 ksp = "1.9.0-1.0.13"
 androidx_appcompat = "1.6.1"
@@ -8,9 +8,10 @@ constraintlayout = "2.1.4"
 preferenceKtx = "1.2.1"
 composeBom = "2023.06.01"
 material = "1.12.0"
-room = "2.7.0-alpha11"
+room = "2.5.0"
 lifecycle = "2.5.1"
 activity = "1.9.3"
+hiltNavigationCompose = "1.2.0"
 
 [libraries]
 # Kotlin 표준 라이브러리
@@ -29,6 +30,7 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "preferenceKtx" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 # 안드로이드 컴포즈 라이브러리
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -50,6 +52,6 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 
 [plugins]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

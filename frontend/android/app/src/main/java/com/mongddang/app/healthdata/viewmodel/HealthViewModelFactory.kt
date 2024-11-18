@@ -12,8 +12,7 @@ class HealthViewModelFactory(private val context: Context) : ViewModelProvider.F
         HealthMainViewModel::class.java ->
             HealthMainViewModel(HealthDataService.getStore(context), context as Activity)
         BloodGlucoseViewModel::class.java ->
-            BloodGlucoseViewModel(HealthDataService.getStore(context), context as Activity)
-
+            HealthMainViewModel(HealthDataService.getStore(context), context as Activity)
         else -> throw IllegalArgumentException("Unknown ViewModel class")
     } as T
 }

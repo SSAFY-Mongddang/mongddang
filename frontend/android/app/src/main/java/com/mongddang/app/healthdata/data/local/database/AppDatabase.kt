@@ -9,8 +9,8 @@ import com.mongddang.app.healthdata.data.local.converters.Converters
 import com.mongddang.app.healthdata.data.local.dao.BloodGlucoseDataDao
 import com.mongddang.app.healthdata.data.local.entity.BloodGlucoseData
 
-@Database(entities = [BloodGlucoseData::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
+@Database(entities = [BloodGlucoseData::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun bloodGlucoseDataDao(): BloodGlucoseDataDao
 
@@ -24,7 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "app_database"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 instance
             }
