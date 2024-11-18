@@ -120,9 +120,9 @@ const Login = () => {
             console.log(user.user?.role);
             console.log('****user rola****');
             console.log('****user rola****');
-            if(user.userAccessToken != null){
-              handleTokenSubmit(user.userAccessToken)
-            }  
+            // if(user.userAccessToken != null){
+            //   handleTokenSubmit(user.userAccessToken)
+            // }  
             if (user.user?.role === 'protector') {
               nav('/protector-main');
             }

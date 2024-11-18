@@ -9,7 +9,6 @@ sealed class ApiResponse<out T : Any?> {
 
     data class Error(
         val code: String = "",
-        val errorStatus: String = "",
         val errorMessage: String = "",
     ) : ApiResponse<Nothing>()
 

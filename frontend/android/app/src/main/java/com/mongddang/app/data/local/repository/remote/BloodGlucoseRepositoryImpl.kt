@@ -47,7 +47,6 @@ class BloodGlucoseRepositoryImpl @Inject constructor(
                     emit(
                         ApiResponse.Error(
                             code = "VT001",
-                            errorStatus = "Bad Request",
                             errorMessage = "5분마다 혈당등록에 실패하였습니다.",
                         ),
                     )

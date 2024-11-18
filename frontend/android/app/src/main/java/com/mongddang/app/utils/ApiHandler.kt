@@ -17,7 +17,7 @@ suspend fun <T> ApiHandler(
             return ApiResponse.Success(code, message, response.body())
         } else {
             return ApiResponse.Error(
-                errorCode = errorData.status ?: 0,
+                code = errorData.code ?: "",
                 errorMessage = errorData.message ?: "",
             )
         }

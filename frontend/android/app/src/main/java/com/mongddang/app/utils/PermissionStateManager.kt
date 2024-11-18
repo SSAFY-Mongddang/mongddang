@@ -5,16 +5,19 @@ import android.util.Log
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.getcapacitor.App
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.Collections
 
 private const val TAG = "PermissionStateManager"
@@ -51,10 +54,10 @@ object PermissionStateManager {
     }
 
     // 특정 키의 상태 가져오기
-    fun getPermissionState(key: String): StateFlow<String>? {
-        return permissionStateMap[key]
+    fun getPermissionState(key: String): String? {
+        val status =  _permissionStateMap[key]?.value
+        return status
     }
-
     // 특정 키의 상태 업데이트
     fun updatePermissionState(context: Context, key: String, state: String): Boolean {
         if (!AppConstants.PERMISSION_MAPPING.containsKey(key)) {
@@ -106,5 +109,14 @@ object PermissionStateManager {
         permissionStateMap.forEach { (key, stateFlow) ->
             Log.d(TAG, "Initial State -> $key: ${stateFlow.value}")
         }
+    }
+
+    //상태 추적
+    suspend fun getCurrentPermissionState(context: Context, key: String): String {
+        return context.dataStore.data
+            .map { preferences ->
+                preferences[PermissionStateManager.getKey(key)] ?: AppConstants.WAITING
+            }
+            .first() // 첫 번째 값을 가져옵니다.
     }
 }
