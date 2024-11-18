@@ -7,24 +7,29 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import com.getcapacitor.App
+import com.mongddang.app.data.local.entity.BloodGlucoseRequest
+import com.mongddang.app.data.local.repository.DataStoreRepository
+import com.mongddang.app.data.local.repository.remote.BloodGlucoseRepository
 import com.mongddang.app.utils.AppConstants
 import com.mongddang.app.utils.PermissionStateManager
-import com.mongddang.app.utils.PermissionStateManager.permissionStateMap
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import javax.inject.Inject
 
 private const val TAG = "ForegroundService"
 
-class ForegroundService : Service() {
+@AndroidEntryPoint
+class ForegroundService @Inject constructor(
+    private val bloodGlucoseRepository: BloodGlucoseRepository,
+    private val dataStoreRepository: DataStoreRepository
+) : Service() {
 
     private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
@@ -107,4 +112,16 @@ class ForegroundService : Service() {
     }
 
     override fun onBind(intent: Intent): IBinder? = null
+
+    fun sendBloodGlucoseToServer(
+       bloodGlucoseRequest: BloodGlucoseRequest
+    ){
+        serviceScope.launch {
+            dataStoreRepository.getAccessToken()?.let{
+                nickName -> bloodGlucoseRepository
+                .sendSamsungBloodGlucose(bloodGlucoseRequest)
+            }
+        }
+    }
+
 }

@@ -2,6 +2,7 @@ package com.mongddang.app.data.local.repository.remote
 
 import com.mongddang.app.data.local.api.BloodGlucoseApi
 import com.mongddang.app.data.local.dao.api.ApiResponse
+import com.mongddang.app.data.local.entity.BloodGlucoseRequest
 import com.mongddang.app.data.local.entity.BloodGlucoseResponse
 import com.mongddang.app.data.local.entity.Status
 import com.mongddang.app.utils.ApiHandler
@@ -24,7 +25,7 @@ class BloodGlucoseRepositoryImpl @Inject constructor(
     val status: Status? = null
     @SerialName("notification")
     val notification: Boolean = false
-   override suspend fun sendSamsungBloodGlucose(): Flow<ApiResponse<BloodGlucoseResponse>> =
+   override suspend fun sendSamsungBloodGlucose(bloodGlucoseRequest: BloodGlucoseRequest): Flow<ApiResponse<BloodGlucoseResponse>> =
         flow{
             val response =
                 ApiHandler{

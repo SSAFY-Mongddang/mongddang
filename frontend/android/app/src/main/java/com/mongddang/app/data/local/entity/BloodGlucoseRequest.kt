@@ -6,8 +6,6 @@ import java.time.LocalDateTime
 
 @Serializable
 data class BloodGlucoseRequest(
-    @SerialName("nickName")
-    val nickName: String? = null,
     @SerialName("bloodSugarLevel")
     val bloodSugarLevel: Int = 0,
     @SerialName("measurementTime")
