@@ -13,7 +13,6 @@ import { api } from './api/api';
 import { AxiosResponse } from 'axios';
 import { LoginResponse } from '@/shared/api/user/user.type';
 import { useShallow } from 'zustand/shallow';
-import { registerPlugin } from '@capacitor/core';
 import { AccessTokenPlugin, TokenPayload } from '../check-samsung-data/plugin/AccessTokenPlugin';
 
 // interface IcredentialResponse {
@@ -30,16 +29,14 @@ const Login = () => {
       getUserInfo: state.getUserInfo,
     }))
   );
-  const handleTokenSubmit = async (userToken: string | null) => {
-    const tokenPayload: TokenPayload = {"token": userToken ?? ""}
-    try {
-      const result = await AccessTokenPlugin.getAccessTokenPlugin(tokenPayload);
-      console.log("Result:", result);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
+  const tokenPayload: TokenPayload = {"token": getUserInfo().userAccessToken ?? ""}
+  AccessTokenPlugin.getAccessTokenPlugin(tokenPayload)
+  .then((response) => {
+    console.log('Response from native:', response.message);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
   // 유저 정보가 존재하면 로그인 안 하고 바로 각각의 메인 페이지로 이동
   // if (getUserInfo().user?.role === 'child') nav('/main');
   // if (getUserInfo().user?.role === 'protector') nav('/protector-main');

@@ -1,6 +1,10 @@
 package com.mongddang.app.plugin
 
 import android.util.Log
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import com.getcapacitor.JSObject
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
@@ -11,27 +15,52 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+private const val TAG = "AccessTokenPlugin"
 
-open class AccessTokenPlugin : Plugin() {
+@CapacitorPlugin(name = "AccessTokenPlugin")
+class AccessTokenPlugin : Plugin() {
 
-    protected lateinit var dataStoreRepositoryImpl: DataStoreRepositoryImpl
+    // DataStore 및 DataStoreRepositoryImpl 초기화
+    private val dataStore: DataStore<Preferences> by lazy {
+        PreferenceDataStoreFactory.create {
+            context.preferencesDataStoreFile("app_preferences")
+        }
+    }
+
+    // DataStoreRepositoryImpl 객체를 직접 생성
+    private val dataStoreRepositoryImpl: DataStoreRepositoryImpl by lazy {
+        DataStoreRepositoryImpl(dataStore)
+    }
+
+    override fun load() {
+        super.load()
+        Log.d(TAG, "AccessTokenPlugin loaded without Hilt")
+    }
 
     @PluginMethod
     fun getAccessTokenPlugin(call: PluginCall) {
+        val token = call.getString("token")
+        if (token.isNullOrEmpty()) {
+            call.reject("Token is missing or invalid.")
+            return
+        }
+
         CoroutineScope(Dispatchers.IO).launch {
             handleAccessToken(call)
         }
     }
 
-    suspend fun handleAccessToken(call: PluginCall) {
+    private suspend fun handleAccessToken(call: PluginCall) {
         val token = call.getString("token")
-        if (token != null && token.isNotBlank()) {
+        if (!token.isNullOrBlank()) {
             dataStoreRepositoryImpl.saveAccessToken(token)
-            val message = "토큰 : $token 이 등록완료되었습니다."
-            call.resolve(JSObject().put("message", message))
+            val response = JSObject().apply {
+                put("message", "Token saved successfully: $token")
+            }
+            call.resolve(response)
+            Log.d(TAG, "Token saved successfully: $token")
         } else {
-            val errorMessage = "토큰이 유효하지 않습니다."
-            call.reject("message", errorMessage)
+            call.reject("Token is invalid.")
         }
     }
 }
