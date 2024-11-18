@@ -4,11 +4,15 @@ const payload: DateTimePayload = {
   dateTime: "2024-11-17T15:30:00",
 };
 
+console.log(payload)
+
 // ISO 8601 검사 함수 (런타임에서 확인)
 function isValidISO8601(dateTime: string): boolean {
   const iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/;
   return iso8601Regex.test(dateTime);
 }
+
+console.log(isValidISO8601)
 
 // DateTimePayload 인터페이스 정의
 export interface DateTimePayload {

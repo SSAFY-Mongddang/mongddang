@@ -1,4 +1,4 @@
-package com.mongddang.app
+package com.mongddang.app.plugin
 
 import android.content.Intent
 import android.util.Log
@@ -7,17 +7,16 @@ import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
-import com.mongddang.app.healthdata.utils.AppConstants
-import com.mongddang.app.healthdata.utils.AppConstants.BLOOD_GLUCOSE
-import com.mongddang.app.healthdata.utils.PermissionStateManager
-import com.mongddang.app.healthdata.utils.dataStore
-import com.mongddang.app.healthdata.viewmodel.HealthMainViewModel
+import com.mongddang.app.BloodGlucoseActivity
+import com.mongddang.app.utils.AppConstants
+import com.mongddang.app.utils.PermissionStateManager
+import com.mongddang.app.utils.dataStore
+import com.mongddang.app.viewmodel.HealthMainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -114,7 +113,7 @@ class BloodGlucosePlugin : Plugin(){
                     }
                 }
                 .first() // 모든 상태를 첫 번째 값으로 가져옴
-            states[BLOOD_GLUCOSE] == AppConstants.SUCCESS
+            states[AppConstants.BLOOD_GLUCOSE] == AppConstants.SUCCESS
         } catch (e: Exception) {
             Log.e(TAG, "checkBloodGlucosePermission 혈당 권한 상태는: ${e.message}")
             false

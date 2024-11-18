@@ -1,4 +1,4 @@
-package com.mongddang.app.healthdata.data.local.converters
+package com.mongddang.app.data.local.converters
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter

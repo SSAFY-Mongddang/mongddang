@@ -1,4 +1,4 @@
-package com.mongddang.app.healthdata.viewmodel
+package com.mongddang.app.viewmodel
 
 import android.app.Activity
 import android.util.Log
@@ -8,19 +8,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.mongddang.app.healthdata.data.local.entity.BloodGlucoseData
+import com.mongddang.app.data.local.entity.BloodGlucoseData
 import com.samsung.android.sdk.health.data.HealthDataStore
 import com.samsung.android.sdk.health.data.data.HealthDataPoint
 import com.samsung.android.sdk.health.data.data.entries.BloodGlucose
 import com.samsung.android.sdk.health.data.request.DataType
 import java.time.LocalDateTime
 import androidx.lifecycle.viewModelScope
-import com.mongddang.app.healthdata.data.local.dao.BloodGlucoseDataDao
-import com.mongddang.app.healthdata.data.local.database.AppDatabase
-import com.mongddang.app.healthdata.data.local.repository.BloodGlucoseDataRepository
-import com.mongddang.app.healthdata.utils.AppConstants
-import com.mongddang.app.healthdata.utils.dateFormat
-import com.mongddang.app.healthdata.utils.getExceptionHandler
+import com.mongddang.app.data.local.dao.BloodGlucoseDataDao
+import com.mongddang.app.data.local.database.AppDatabase
+import com.mongddang.app.data.local.repository.BloodGlucoseDataRepository
+import com.mongddang.app.utils.AppConstants
+import com.mongddang.app.utils.dateFormat
+import com.mongddang.app.utils.getExceptionHandler
 import com.samsung.android.sdk.health.data.request.DataTypes
 import com.samsung.android.sdk.health.data.request.LocalTimeFilter
 import com.samsung.android.sdk.health.data.request.Ordering

@@ -1,4 +1,4 @@
-package com.mongddang.app.healthdata.viewmodel
+package com.mongddang.app.viewmodel
 
 import android.app.Activity
 import android.content.Context

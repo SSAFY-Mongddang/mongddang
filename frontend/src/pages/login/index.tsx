@@ -13,6 +13,18 @@ import { api } from './api/api';
 import { AxiosResponse } from 'axios';
 import { LoginResponse } from '@/shared/api/user/user.type';
 import { useShallow } from 'zustand/shallow';
+import { registerPlugin } from '@capacitor/core';
+
+export interface TokenPayload {
+  token: string; // 반드시 포함해야 하는 필드
+}
+
+export interface AccessTokenPlugin {
+  getAccessTokenPlugin(options: TokenPayload): Promise<{ message: string }>;
+}
+
+export const AccessTokenPlugin = registerPlugin<AccessTokenPlugin>('AccessTokenPlugin')
+
 
 // interface IcredentialResponse {
 //   credential?: string;
@@ -28,6 +40,15 @@ const Login = () => {
       getUserInfo: state.getUserInfo,
     }))
   );
+  const handleTokenSubmit = async (userToken: string | null) => {
+    const tokenPayload: TokenPayload = {token: userToken ?? ""}
+    try {
+      const result = await AccessTokenPlugin.getAccessTokenPlugin(tokenPayload);
+      console.log("Result:", result);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   // 유저 정보가 존재하면 로그인 안 하고 바로 각각의 메인 페이지로 이동
   // if (getUserInfo().user?.role === 'child') nav('/main');
@@ -112,7 +133,9 @@ const Login = () => {
             console.log(user.user?.role);
             console.log('****user rola****');
             console.log('****user rola****');
-
+            if(user.userAccessToken != null){
+              handleTokenSubmit(user.userAccessToken)
+            }  
             if (user.user?.role === 'protector') {
               nav('/protector-main');
             }

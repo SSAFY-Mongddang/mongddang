@@ -1,4 +1,4 @@
-package com.mongddang.app
+package com.mongddang.app.plugin
 
 import android.Manifest
 import android.app.ForegroundServiceStartNotAllowedException
@@ -14,7 +14,7 @@ import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.annotation.Permission
-
+import com.mongddang.app.ForegroundService
 
 private const val TAG = "ForegroundPlugin"
 

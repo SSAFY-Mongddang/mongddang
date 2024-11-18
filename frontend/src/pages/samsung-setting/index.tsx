@@ -17,6 +17,7 @@ import { mainIcons } from '../MainPage/constants/iconsData';
 import { IconTypo } from '@/shared/ui/IconTypo';
 import {Foreground} from './plugin/ForegroundPlugin';
 
+
 export const SamsungSetting: React.FC = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false)

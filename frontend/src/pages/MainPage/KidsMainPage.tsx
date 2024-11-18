@@ -176,8 +176,8 @@ console.log(closeMailBox)
             <div css={iconHorizontalCss}>
               <div
                 onClick={() => {
-                  setOpenBaseModal(true);
-                  setContentType('dailyMission');
+                  // setOpenBaseModal(true);
+                  // setContentType('dailyMission');
                 }}
               >
                 <IconTypo

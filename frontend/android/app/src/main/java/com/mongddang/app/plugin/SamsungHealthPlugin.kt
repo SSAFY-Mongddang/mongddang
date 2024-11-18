@@ -1,4 +1,4 @@
-package com.mongddang.app.healthdata
+package com.mongddang.app.plugin
 
 import android.util.Log
 import com.getcapacitor.JSObject
@@ -6,11 +6,11 @@ import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
-import com.mongddang.app.healthdata.utils.AppConstants
-import com.mongddang.app.healthdata.utils.PermissionStateManager
-import com.mongddang.app.healthdata.utils.dataStore
-import com.mongddang.app.healthdata.viewmodel.HealthMainViewModel
-import com.mongddang.app.healthdata.viewmodel.HealthViewModelFactory
+import com.mongddang.app.utils.AppConstants
+import com.mongddang.app.utils.PermissionStateManager
+import com.mongddang.app.utils.dataStore
+import com.mongddang.app.viewmodel.HealthMainViewModel
+import com.mongddang.app.viewmodel.HealthViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first

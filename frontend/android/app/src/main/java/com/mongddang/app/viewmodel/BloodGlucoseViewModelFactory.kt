@@ -1,9 +1,9 @@
-package com.mongddang.app.healthdata.viewmodel
+package com.mongddang.app.viewmodel
 
 import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.mongddang.app.healthdata.data.local.database.AppDatabase
+import com.mongddang.app.data.local.database.AppDatabase
 import com.samsung.android.sdk.health.data.HealthDataStore
 
 class BloodGlucoseViewModelFactory (

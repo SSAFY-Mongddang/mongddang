@@ -1,7 +1,7 @@
-package com.mongddang.app.healthdata.data.local.repository
+package com.mongddang.app.data.local.repository
 
-import com.mongddang.app.healthdata.data.local.dao.BloodGlucoseDataDao
-import com.mongddang.app.healthdata.data.local.entity.BloodGlucoseData
+import com.mongddang.app.data.local.dao.BloodGlucoseDataDao
+import com.mongddang.app.data.local.entity.BloodGlucoseData
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow

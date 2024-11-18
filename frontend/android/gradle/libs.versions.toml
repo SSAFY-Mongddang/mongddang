@@ -12,6 +12,20 @@ room = "2.5.0"
 lifecycle = "2.5.1"
 activity = "1.9.3"
 hiltNavigationCompose = "1.2.0"
+gson = "2.8.8"
+retrofit = "2.9.0"
+okhttp = "4.11.0"
+converterGson = "2.9.0"
+kotlinx_serialization_core = "1.6.0"
+kotlinx-serialization-converter = "1.0.0"
+androidx-core = "1.9.0"
+appcompat = "1.6.1"
+activityCompose = "1.9.0"
+
+
+
+
+
 
 [libraries]
 # Kotlin 표준 라이브러리
@@ -25,12 +39,10 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx_appcompat" }
 # ConstraintLayout (레이아웃 제약을 지원하는 레이아웃 관리자)
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 # Hilt (의존성 주입 라이브러리)
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
-androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "preferenceKtx" }
-androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 # 안드로이드 컴포즈 라이브러리
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -50,8 +62,27 @@ androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-s
 androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 
+# 네트워크 라이브러리 (Retrofit 및 OkHttp)
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+
+# 코틀린 직렬화/역직렬화
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx_serialization_core" }
+kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "kotlinx-serialization-converter" }
+
+
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", name = "retrofit", version.ref = "retrofit" }
+okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", name = "okhttp", version.ref = "okhttp" }
+
+
+[bundles]
+# 네트워크 관련 의존성 번들
+network = ["retrofit", "okhttp-logging-interceptor", "gson","kotlinx-serialization-json","kotlinx-serialization-converter"]
+
+
 [plugins]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

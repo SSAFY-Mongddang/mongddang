@@ -1,11 +1,11 @@
-package com.mongddang.app.healthdata.data.local.dao
+package com.mongddang.app.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.mongddang.app.healthdata.data.local.entity.BloodGlucoseData
+import com.mongddang.app.data.local.entity.BloodGlucoseData
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 

@@ -1,4 +1,4 @@
-package com.mongddang.app.healthdata.utils
+package com.mongddang.app.utils
 
 import android.app.Activity
 import android.content.Context

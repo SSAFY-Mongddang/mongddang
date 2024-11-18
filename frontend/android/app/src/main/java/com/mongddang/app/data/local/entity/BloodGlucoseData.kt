@@ -1,4 +1,4 @@
-package com.mongddang.app.healthdata.data.local.entity
+package com.mongddang.app.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

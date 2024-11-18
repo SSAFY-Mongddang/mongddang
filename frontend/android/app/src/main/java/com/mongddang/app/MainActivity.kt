@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.getcapacitor.BridgeActivity
-import com.mongddang.app.healthdata.viewmodel.HealthMainViewModel
-import com.mongddang.app.healthdata.viewmodel.HealthViewModelFactory
-import com.mongddang.app.healthdata.SamsungHealthPlugin
-import com.mongddang.app.healthdata.data.local.database.AppDatabase
-import com.mongddang.app.healthdata.data.local.entity.BloodGlucoseData
-import com.mongddang.app.healthdata.viewmodel.BloodGlucoseViewModel
-import com.mongddang.app.healthdata.viewmodel.BloodGlucoseViewModelFactory
+import com.mongddang.app.viewmodel.HealthMainViewModel
+import com.mongddang.app.viewmodel.HealthViewModelFactory
+import com.mongddang.app.data.local.database.AppDatabase
+import com.mongddang.app.data.local.entity.BloodGlucoseData
+import com.mongddang.app.plugin.AccessTokenPlugin
+import com.mongddang.app.plugin.BloodGlucosePlugin
+import com.mongddang.app.plugin.ForegroundPlugin
+import com.mongddang.app.plugin.SamsungHealthPlugin
+import com.mongddang.app.viewmodel.BloodGlucoseViewModel
+import com.mongddang.app.viewmodel.BloodGlucoseViewModelFactory
 import com.samsung.android.sdk.health.data.HealthDataService
 import com.samsung.android.sdk.health.data.HealthDataStore
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,14 +29,13 @@ class MainActivity : BridgeActivity() {
     private lateinit var healthDataStore: HealthDataStore
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate")
-
         // ExamplePlugin 인스턴스 등록
         registerPlugin(ForegroundPlugin::class.java)
         registerPlugin(SamsungHealthPlugin::class.java)
         registerPlugin(BloodGlucosePlugin::class.java)
-
+        registerPlugin(AccessTokenPlugin::class.java)
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate")
         // HealthDataStore 초기화
         healthDataStore = HealthDataService.getStore(this)
 

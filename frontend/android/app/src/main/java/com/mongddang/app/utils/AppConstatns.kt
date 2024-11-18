@@ -1,4 +1,4 @@
-package com.mongddang.app.healthdata.utils
+package com.mongddang.app.utils
 
 import com.samsung.android.sdk.health.data.permission.AccessType
 import com.samsung.android.sdk.health.data.permission.Permission

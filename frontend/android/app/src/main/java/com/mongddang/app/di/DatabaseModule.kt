@@ -2,9 +2,9 @@ package com.mongddang.app.di
 
 import android.content.Context
 import androidx.room.Room
-import com.mongddang.app.healthdata.data.local.dao.BloodGlucoseDataDao
-import com.mongddang.app.healthdata.data.local.database.AppDatabase
-import com.mongddang.app.healthdata.viewmodel.BloodGlucoseViewModel
+import com.mongddang.app.data.local.dao.BloodGlucoseDataDao
+import com.mongddang.app.data.local.database.AppDatabase
+import com.mongddang.app.viewmodel.BloodGlucoseViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

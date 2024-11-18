@@ -9,6 +9,17 @@ import { Button } from '@/shared/ui/Button';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/entities/user/model';
 import {BloodGlucosePlugin} from './plugin/BloodGlucosePlugin';
+import { registerPlugin } from '@capacitor/core';
+
+export interface TokenPayload {
+  token: string; // 반드시 포함해야 하는 필드
+}
+
+export interface AccessTokenPlugin {
+  getAccessTokenPlugin(options: TokenPayload): Promise<{ message: string }>;
+}
+
+export const AccessTokenPlugin = registerPlugin<AccessTokenPlugin>('AccessTokenPlugin')
 
 
 export const CheckSamsungData = () => {
@@ -16,6 +27,19 @@ export const CheckSamsungData = () => {
   const getUserInfo = useUserStore((state) => state.getUserInfo);
 
   const user = getUserInfo().user;
+
+  //안드로이드에 토큰 넘기는 용 
+  const handleTokenSubmit = async (userToken: string | null) => {
+    const tokenPayload: TokenPayload = {token: userToken ?? ""}
+    try {
+      const result = await AccessTokenPlugin.getAccessTokenPlugin(tokenPayload);
+      console.log("Result:", result);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  handleTokenSubmit(getUserInfo().userAccessToken)
 
   const requestBloodGlucose = async () => {
     try{

@@ -1,4 +1,4 @@
-package com.mongddang.app.healthdata.viewmodel
+package com.mongddang.app.viewmodel
 
 import android.app.Activity
 import android.content.Context
@@ -6,8 +6,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mongddang.app.healthdata.utils.AppConstants
-import com.mongddang.app.healthdata.utils.PermissionStateManager
+import com.mongddang.app.utils.AppConstants
+import com.mongddang.app.utils.PermissionStateManager
 import com.samsung.android.sdk.health.data.HealthDataStore
 import com.samsung.android.sdk.health.data.permission.Permission
 import kotlinx.coroutines.CoroutineScope
