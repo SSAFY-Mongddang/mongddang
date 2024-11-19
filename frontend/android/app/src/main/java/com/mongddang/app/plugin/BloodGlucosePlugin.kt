@@ -104,6 +104,17 @@ class BloodGlucosePlugin : Plugin(){
         }
     }
 
+    @PluginMethod
+    fun checkUserBloodGlucosePerm(call: PluginCall){
+        CoroutineScope(Dispatchers.IO).launch {
+            val isGranted = checkBloodGlucosePermission()
+            if(isGranted){
+                call.resolve(JSObject().put("isGranted", true))
+            }
+            call.resolve(JSObject().put("isGranted", false))
+        }
+    }
+
     suspend fun checkBloodGlucosePermission(): Boolean {
         return try {
             val states = context.dataStore.data

@@ -29,6 +29,7 @@ export interface GetThisTimeBloodGlucoseResponse {
 // BloodGlucosePlugin 인터페이스 정의
 export interface BloodGlucosePlugin {
   getThisTimeBloodGlucose(options: { datetime: string }): Promise<{ datetime: string; status: string }>;
+  checkUserBloodGlucosePerm(): Promise<{isGranted: boolean}>;
 }
 
 // BloodGlucosePlugin을 Capacitor에 등록
