@@ -23,7 +23,6 @@ import SettingPage from './pages/settingPage/SettingPage';
 import { useEffect } from 'react';
 import { SocialLogin } from '@capgo/capacitor-social-login';
 import { PushNotification } from './shared/ui/PushNotification/PushNotification';
-import { SamsungSetting } from './pages/samsung-setting/index';
 import { CheckSamsungData } from './pages/check-samsung-data/index';
 import Medication from './pages/medication/Medication';
 import MedicationAdd from './pages/medicationAdd/MedicationAdd';
@@ -63,7 +62,6 @@ function App() {
           <Route path="/record/:date" element={<DayRecordPage />} />
           <Route path="/protector-main" element={<ProtectorMain />} />
           <Route path="/setting" element={<SettingPage />} />
-          <Route path="/samsungsetting" element={<SamsungSetting />} />
           <Route path="/checksamsungdata" element={<CheckSamsungData/>}/>
           <Route
             path="/medication"

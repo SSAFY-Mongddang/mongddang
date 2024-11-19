@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { TopBar } from '@/shared/ui/TopBar';
-import { base, containerCss} from './ui/styles';
+import { base, containerCss} from '../samsung-setting/ui/styles';
 import { Chip } from '@/shared/ui/Chip';
 import { imgCss } from '../Encyclopedia/ui/styles';
 import space from '../../assets/img/space.png';
