@@ -6,6 +6,7 @@
 interface ImportMetaEnv {
   readonly VITE_GOOGLE_WEB_CLIENT_ID: string;
   readonly VITE_TEST_USER_ACCESS_TOKEN: string;
+  readonly VITE_TEST_PROTECTOR_ACCESS_TOKEN: string;
 }
 
 interface ImportMeta {

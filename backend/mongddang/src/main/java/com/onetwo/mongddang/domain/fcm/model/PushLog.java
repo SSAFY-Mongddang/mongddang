@@ -39,7 +39,7 @@ public class PushLog {
     private Boolean isNew;
 
     public enum Category {
-        game,blood_sugar,medication
+        game,blood_sugar,medication,connect
     };
 
 

@@ -24,12 +24,11 @@ export const imgCss = css`
   z-index: -1;
 `;
 
-// 카드들을 감싸는 컨테이너 스타일
 export const cardsWrapperCss = css`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.8rem;
   padding: 0 1rem;
   justify-content: flex-start;
   align-items: flex-start;
@@ -38,7 +37,6 @@ export const cardsWrapperCss = css`
   overflow-wrap: break-word; 
 `;
 
-// 개별 카드 컨테이너 스타일
 export const cardContainerCss = css`
   flex: 0 0 auto;
   margin: 0.3rem 0;

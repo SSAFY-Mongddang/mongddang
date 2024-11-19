@@ -27,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Slf4j
@@ -100,7 +102,18 @@ public class MainService {
         Boolean UnreadNotification = pushLogRepository.existsByUserIdAndIsNewTrue(userId);
 
         // 수령하지 않은 미션 보상 있는지 확인
-        Boolean UnclaimedMissionReward = missionLogRepository.existsByChildIdAndStatus(userId, MissionDto.Status.rewardable);
+        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1).minusNanos(1); // 오늘의 끝
+
+        Boolean UnclaimedMissionReward = missionLogRepository.existsByChildAndStatusAndCreatedAtBetween(
+                user,
+                MissionDto.Status.rewardable,
+                startOfDay,
+                endOfDay
+        );
+
+
+
 
         // 수령하지 않은 업적 보상 있는지 확인
         Boolean UnclaimedAchivementReward = achievementUtils.getIsExistRewardableTitle(userId);

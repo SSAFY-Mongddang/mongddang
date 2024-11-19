@@ -47,12 +47,18 @@ export const Default = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState('김싸피');
 
+  const options = [
+    { name: '김싸피', nickname: '도르마무' },
+    { name: '김트롤', nickname: '우가우가' },
+    { name: '김후루룩', nickname: '짭짭' },
+  ];
+
   return (
     <div style={{ padding: '20px' }}>
       <Dropdown
-        options={['김싸피', '박싸피', '이싸피']}
+        options={options}
         onSelect={(value) => {
-          setSelected(value);
+          setSelected(value.name);
         }}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}

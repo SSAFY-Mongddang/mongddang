@@ -19,13 +19,18 @@ import { Variability } from './pages/report/ui/detail/variability';
 import { Mean } from './pages/report/ui/detail/mean';
 import { Tir } from './pages/report/ui/detail/tir/indesx';
 import { DayRecordPage } from './pages/day-record';
+import SettingPage from './pages/settingPage/SettingPage';
 import { useEffect } from 'react';
 import { SocialLogin } from '@capgo/capacitor-social-login';
-import {SamsungSetting} from './pages/samsung-setting/index';
-import {CheckSamsungData} from './pages/check-samsung-data/index';
+import { PushNotification } from './shared/ui/PushNotification/PushNotification';
+import { SamsungSetting } from './pages/samsung-setting/index';
+import { CheckSamsungData } from './pages/check-samsung-data/index';
+import Medication from './pages/medication/Medication';
+import MedicationAdd from './pages/medicationAdd/MedicationAdd';
 
 function App() {
   useLoadState();
+
   useEffect(() => {
     SocialLogin.initialize({
       google: {
@@ -33,15 +38,10 @@ function App() {
       },
     });
   }, []);
-  useEffect(() => {
-    SocialLogin.initialize({
-      google: {
-        webClientId: import.meta.env.VITE_GOOGLE_WEB_CLIENT_ID,
-      },
-    });
-  }, []);
+
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}>
+      <PushNotification />
       <Router>
         <Routes>
           <Route path="/" element={<KidsMainPage />} />
@@ -62,8 +62,17 @@ function App() {
           <Route path="/record" element={<RecordPage />} />
           <Route path="/record/:date" element={<DayRecordPage />} />
           <Route path="/protector-main" element={<ProtectorMain />} />
+          <Route path="/setting" element={<SettingPage />} />
           <Route path="/samsungsetting" element={<SamsungSetting />} />
           <Route path="/checksamsungdata" element={<CheckSamsungData/>}/>
+          <Route
+            path="/medication"
+            element={<Medication />}
+          />
+          <Route
+            path="/medication/add"
+            element={<MedicationAdd />}
+          />
         </Routes>
       </Router>
     </GoogleOAuthProvider>

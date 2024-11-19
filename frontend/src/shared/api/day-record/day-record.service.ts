@@ -10,5 +10,6 @@ export class DayRecordService {
     return config.params.nickname === 'test'
       ? axios.get('/public/dummy/day-record.json')
       : api.get('/api/record/day', config);
+    // return axios.get('/public/dummy/day-record.json');
   }
 }

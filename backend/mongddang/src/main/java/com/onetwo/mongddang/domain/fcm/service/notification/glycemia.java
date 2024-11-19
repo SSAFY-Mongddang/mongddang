@@ -24,18 +24,18 @@ public class glycemia {
     private final CtoPRepository ctoPRepository;
 
     // 어린이 : 최초 혈당 이상 시기부터 해결 될 때끼지 5분 간격으로
-    @Scheduled(fixedRate = 300000) // 5분마다 실행
+    @Scheduled(cron = "0 * * * * *") // 매 분마다 실행
     public void sendMedicationReminders() {
 
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime fiveMinutesAgo = now.minusMinutes(5); // 5분 전
+        LocalDateTime fiveMinutesAgo = now.minusMinutes(1); // 1분 전
         // 지난 5분간의 혈당 데이터 조회
         List<Vital> vitals = vitalRepository.findByMeasurementTimeBetween(fiveMinutesAgo, now);
 
         for (Vital vital : vitals) {
             if (vital.getStatus() == Vital.GlucoseStatusType.low || vital.getStatus() == Vital.GlucoseStatusType.high) {
                 User child = vital.getChild();
-                String message = (vital.getStatus() == Vital.GlucoseStatusType.low ? "저혈당" : "고혈당") + "이 관측되고 있습니다.";
+                String message = (vital.getStatus() == Vital.GlucoseStatusType.low ? "저혈당" : "고혈당") + "증상이 나타나고 있어요.";
                 Notification notification = Notification.builder()
                         .title("이상 혈당 알림")
                         .message(message)

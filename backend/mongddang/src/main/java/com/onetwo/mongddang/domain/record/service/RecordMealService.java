@@ -1,6 +1,7 @@
 package com.onetwo.mongddang.domain.record.service;
 
 
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.common.s3.S3ImageService;
@@ -24,7 +25,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -53,7 +58,7 @@ public class RecordMealService {
      * @return ResponseDto
      */
     @Transactional
-    public ResponseDto startMeal(Long childId, String contentJson, MultipartFile imageFile, String mealTime) {
+    public ResponseDto startMeal(Long childId, String contentJson, String imageFile, String mealTime) {
         log.info("startMeal childId: {}", childId);
 
         // JSON 형식이 리스트 형식임을 검사
@@ -62,15 +67,12 @@ public class RecordMealService {
         } catch (Exception e) {
             throw new RestApiException(CustomRecordErrorCode.BAD_INGREDIENT_INPUT);
         }
-
         // SON 문자열을 JsonNode 로 변환
         JsonNode content = jsonUtils.JsonStringToJsonNode(contentJson);
-
 
         User child = userRepository.findById(childId)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         log.info("child: {}", child.getEmail());
-
 
         // 진행 중인 활동 기록 조회
         log.info("이미 시작된 식사 기록 확인 (in english : Check if the meal record has already started)");
@@ -78,19 +80,19 @@ public class RecordMealService {
         if (existingMealRecord.isPresent()) {
             throw new RestApiException(CustomRecordErrorCode.EXISTING_ONGOING_RECORD);
         }
-        String imageUrl = null;
 
-        if (imageFile != null && !imageFile.isEmpty()) {
-            // 이미지 파일을 S3에 업로드
-            log.info("식사 이미지 파일을 S3에 업로드 시도 (in english : Try to upload meal image file to S3)");
-            try {
-                imageUrl = s3ImageService.upload(imageFile); // MultipartFile을 File로 변환 후 S3에 업로드
-            } catch (Exception e) {
-                throw new RestApiException(CustomS3ErrorCode.IMAGE_UPLOAD_FAILED);
-            }
-            log.info("식사 이미지 파일을 S3에 업로드 완료 (in english : Meal image file uploaded to S3)");
-        }
-        log.info("식사 이미지 파일 없음 (in english : No meal image file)");
+
+        String imageUrl = null;
+//        if (imageFile != null) {
+//            // 이미지 파일을 S3에 업로드
+//            log.info("식사 이미지 파일을 S3에 업로드 시도 (in english : Try to upload meal image file to S3)");
+//            try {
+//                imageUrl = s3ImageService.upload(imageFile); // MultipartFile을 File로 변환 후 S3에 업로드
+//            } catch (Exception e) {
+//                throw new RestApiException(CustomS3ErrorCode.IMAGE_UPLOAD_FAILED);
+//            }
+//            log.info("식사 이미지 파일을 S3에 업로드 완료 (in english : Meal image file uploaded to S3)");
+//        }
 
         log.info(content.toString());
 

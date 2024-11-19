@@ -10,6 +10,8 @@ import { getTitleAchievement, getTitleMain } from '../../api/api';
 import { ItitleData } from '../../model/types';
 import AchievementToast from '../Toast';
 import MainToast from '../Toast/main.tsx';
+import { Icon } from '@/shared/ui/Icon/index.tsx';
+import imagePath from '@/assets/img/icon/achievement_icon.png'
 
 interface TitleComponentProps {
   title: ItitleData;
@@ -65,7 +67,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
     const urlParams = new URLSearchParams(window.location.search);
     const shouldShowToast = urlParams.get('showToast');
     const shouldShowMainToast = urlParams.get('showMainToast');
-    
+
     if (shouldShowToast === 'true') {
       setIsToast(true);
       window.history.replaceState({}, '', window.location.pathname);
@@ -82,7 +84,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
       const timer = setTimeout(() => {
         setIsToast(false);
       }, 4000);
-  
+
       return () => clearTimeout(timer);
     }
   }, [isToast]);
@@ -92,7 +94,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
       const timer = setTimeout(() => {
         setIsMainToast(false);
       }, 4000);
-  
+
       return () => clearTimeout(timer);
     }
   }, [isMainToast]);
@@ -100,12 +102,26 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
   return (
     <div css={base}>
       <div css={containerCss}>
-        <div>
-          <Typography color="dark" size="1" weight={700}>
-            {title.titleName}
-          </Typography>
+        <div css={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+          <div css={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Typography 
+              color="dark" 
+              size="1" 
+              weight={700}
+            >
+              {title.titleName}
+            </Typography>
+            {title.isOwned && title.isMain && (
+              <Icon size={2} css={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img
+                  alt="메인 칭호"
+                  src={imagePath}
+                  css={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                />
+              </Icon>
+            )}
+          </div>
           <Typography
-            style={{ margin: '0.3rem 0 0' }}
             color="dark"
             scale="500"
             size="0.75"
@@ -133,16 +149,6 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
               handler={() => setIsModal(true)}
             >
               대표설정
-            </Button>
-          ) : title.count !== title.executionCount ? (
-            <Button
-              color="primary"
-              fontSize="1"
-              variant="contained"
-              handler={handleAchievementClick}
-              disabled={title.count !== title.executionCount}
-            >
-              획득
             </Button>
           ) : (
             <Button

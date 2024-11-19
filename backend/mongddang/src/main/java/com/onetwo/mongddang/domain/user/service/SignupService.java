@@ -78,7 +78,7 @@ public class SignupService {
             //초기 칭호
             myFirstTitle(newUser);
             // 첫 알림
-            addInitialNoti(newUser);
+            addInitialNotification(newUser);
         }
 
         // jwt token 생성
@@ -175,7 +175,7 @@ public class SignupService {
 
     // 최초 보상 지급 알림 알림함 추가
     @Transactional
-    public void addInitialNoti(User user){
+    public void addInitialNotification(User user){
         PushLog firstLog = PushLog.builder()
                 .user(user)
                 .content("회원가입을 축하합니다:) 첫 몽땅 친구와 별가루가 지급되었습니다!")

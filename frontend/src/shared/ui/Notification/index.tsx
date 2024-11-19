@@ -1,7 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { NotificationProps } from './Notification.types';
 import { Backdrop } from '../Backdrop';
-import { backdropCss, base, btnContainerCss, btnCss } from './Notification.styles';
+import {
+  backdropCss,
+  base,
+  btnContainerCss,
+  btnCss,
+} from './Notification.styles';
 import { Typography } from '../Typography';
 import { Button } from '../Button';
 
@@ -19,16 +24,14 @@ export const Notification = ({
   return (
     <Backdrop css={backdropCss}>
       <div css={base(type, width, height)} {...props}>
-        <div>
-          <Typography
-            style={{ display: 'flex', justifyContent: 'center' }}
-            color="dark"
-            size={'1'}
-            weight={500}
-          >
-            {ment}
-          </Typography>
-        </div>
+        <Typography
+          style={{ display: 'flex', justifyContent: 'center' }}
+          color="dark"
+          size={'1'}
+          weight={500}
+        >
+          {ment}
+        </Typography>
         {twoBtn ? (
           <div css={btnContainerCss}>
             <Button handler={redHandler} color={'danger'}>

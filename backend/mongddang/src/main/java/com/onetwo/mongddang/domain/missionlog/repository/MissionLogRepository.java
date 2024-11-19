@@ -24,4 +24,6 @@ public interface MissionLogRepository extends JpaRepository<MissionLog, Long> {
     Optional<MissionLog> findByIdAndCreatedAtBetween(Long missionId, LocalDateTime localDateTime, LocalDateTime localDateTime1);
 
     boolean existsByChildIdAndStatus(Long childId, MissionDto.Status status);
+
+    Boolean existsByChildAndStatusAndCreatedAtBetween(User user, MissionDto.Status status, LocalDateTime startOfDay, LocalDateTime endOfDay);
 }

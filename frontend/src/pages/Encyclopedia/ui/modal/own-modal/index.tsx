@@ -32,53 +32,23 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
   
   const mainMutation = useMutation<AxiosResponse<ICharacterData>, Error, number>({
     mutationFn: (characterId: number) => getMainInfo(characterId),
-    onSuccess: async (response, characterId) => {
-      // 실제 데이터 구조 확인을 위한 로그
-      console.log('API 응답 전체:', response);
-      console.log('API 응답 데이터:', response.data);
-      console.log('현재 캐시 데이터:', queryClient.getQueryData(['character']));
-      
-      try {
-        // 응답 구조에 따라 캐시 업데이트 로직 수정
-        queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
-          if (!oldData) {
-            console.log('기존 캐시 데이터가 없음');
-            return oldData;
-          }
-          
-          // 데이터 구조 검증
-          if (!oldData.data?.data) {
-            console.log('캐시 데이터 구조가 예상과 다름:', oldData);
-            return oldData;
-          }
-  
-          const updatedData = {
-            ...oldData,
-            data: {
-              ...oldData.data,
-              data: oldData.data.data.map((character) => ({
-                ...character,
-                isMain: character.id === characterId,
-              })),
-            },
-          };
-          
-          console.log('업데이트될 데이터:', updatedData);
-          return updatedData;
-        });
-  
-        await queryClient.invalidateQueries({ queryKey: ['character'] });
+    onSuccess: (_, characterId) => {
+      queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
+        if (!oldData) return oldData;
         
-        setIsParentModalOpen(false);
-        setIsModal(false);
-        setstate(false);
-      } catch (error) {
-        console.error('캐시 업데이트 실패의 원인:', error);
-        // 에러 상황에서도 모달은 닫아줌
-        setIsParentModalOpen(false);
-        setIsModal(false);
-        setstate(false);
-      }
+        return {
+          ...oldData,
+          data: {
+            ...oldData.data,
+            data: oldData.data.data.map((character) => ({
+              ...character,
+              isMain: character.id === characterId,
+            })),
+          },
+        };
+      });
+      
+      setstate(false);
     },
     onError: (error) => {
       console.error('대장 설정 실패:', error);

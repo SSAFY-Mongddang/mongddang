@@ -32,7 +32,7 @@ export interface User extends CreateUser {
   invitationCode: string | null;
   mainMongddangId: number | null;
   mainTitle: Title | null;
-  connected: ConnectedUser[];
+  connected: ConnectedUser[] | null;
 }
 
 export interface UserInfo {

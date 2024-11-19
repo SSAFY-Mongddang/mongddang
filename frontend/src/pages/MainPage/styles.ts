@@ -1,13 +1,13 @@
 import { css } from '@emotion/react';
-import MainBackground from '@/assets/img/잔디.png';
+import KidBackImg from '@/assets/img/page/background_kid.png';
 
 export const kidsMainBase = css`
   display: flex;
   min-width: 360px;
   height: 100vh;
   justify-content: center;
-  background-color: #aedbff;
-  background-image: url(${MainBackground});
+  background-color: #91d5ff;
+  background-image: url(${KidBackImg});
   background-size: cover;
   background-position: bottom;
   box-sizing: content-box;
@@ -65,4 +65,10 @@ export const iconVerticalCss = css`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+`;
+
+export const dotCss = css`
+  position: absolute;
+  top: 0;
+  right: 5%;
 `;

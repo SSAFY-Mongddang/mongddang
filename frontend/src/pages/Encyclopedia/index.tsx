@@ -22,6 +22,7 @@ import { Notowncharacter } from './ui/characterlist/notown-character';
 import { Newcharacter } from './ui/characterlist/new-character';
 import { Owncharacter } from './ui/characterlist/owncharacter';
 import { Description } from './ui/description';
+import Loading from '@/shared/ui/Loading';
 
 export const Encyclopedia = () => {
   const [isOwnModal, setIsOwnModal] = useState(false);
@@ -61,14 +62,14 @@ export const Encyclopedia = () => {
     isLoading,
     isError,
     error,
-  } = useQuery<ICharacterInfo>({  // CharacterResponse 대신 ICharacterInfo 사용
+  } = useQuery<ICharacterInfo>({ 
     queryKey: ['character'],
     queryFn: getCharacterInfo,
     refetchOnWindowFocus: true,
     staleTime: 0,
   });
 
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading) return <Loading/>;
   if (isError) return <div>에러 발생: {error.message}</div>;
   if (!characterData?.data) return <div>데이터가 없습니다.</div>; 
   return (
@@ -83,7 +84,7 @@ export const Encyclopedia = () => {
         <Notmodal data={selectedCharacter} setstate={setIsNotModal} />
       )}
 
-      <TopBar type="iconpage" iconHandler={() => nav('/')}>
+      <TopBar type="iconpage" iconHandler={() => nav(-1)}>
         캐릭터 도감
       </TopBar>
       <div css={containerCss}>

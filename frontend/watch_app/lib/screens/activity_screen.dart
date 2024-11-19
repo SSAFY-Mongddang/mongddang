@@ -62,18 +62,15 @@ class _ActivityScreenState extends State<ActivityScreen> {
     final minutes = _minutes.toString().padLeft(2, '0');
     final seconds = _seconds.toString().padLeft(2, '0');
 
-    return SafeArea(  // SafeArea 추가
-      child: Scaffold(  // Scaffold 추가
-        backgroundColor: Colors.black,  // 배경색 지정
-        body: Container(
-          width: 192,
-          height: 192,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.black,
-          ),
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
                 _activity.imagePath,
@@ -135,18 +132,15 @@ class _ActivityScreenState extends State<ActivityScreen> {
   }
 
   Widget _buildQuestionScreen() {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: Container(
-          width: 192,
-          height: 192,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.black,
-          ),
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
                 _activity.imagePath,
@@ -161,13 +155,16 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              Text(
-                _activity.question,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  _activity.question,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -205,6 +202,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
       ),
     );
   }
+
   Widget _buildAnswerButton({
     required String text,
     required Color color,

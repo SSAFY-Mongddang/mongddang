@@ -1,6 +1,8 @@
 package com.onetwo.mongddang.domain.user.service;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.domain.fcm.model.PushLog;
+import com.onetwo.mongddang.domain.fcm.repository.PushLogRepository;
 import com.onetwo.mongddang.domain.user.dto.ConnectCtoPDto;
 import com.onetwo.mongddang.domain.user.error.CustomCtoPErrorCode;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
@@ -9,10 +11,12 @@ import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.CtoPRepository;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import com.onetwo.mongddang.errors.exception.RestApiException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -22,7 +26,9 @@ import java.util.Optional;
 public class ConnectCtoPService {
     private final UserRepository userRepository;
     private final CtoPRepository ctoPRepository;
+    private final PushLogRepository pushLogRepository;
 
+    @Transactional
     public ResponseDto connectCtoP(ConnectCtoPDto connectCtoPDto, Long userId) {
 
         //사용자
@@ -70,9 +76,27 @@ public class ConnectCtoPService {
                 .build();
         ctoPRepository.save(newCtoP);
 
+        // 연결 알림 해당 어린이 알림함에 쌓아주기
+        String content = String.format("'%s'이(가) 보호자로 등록되었어요!", user.get().getNickname());
+        log.info(content);
+        addConnectNotification(child.get(), content);
+
         ResponseDto response = ResponseDto.builder()
                 .message("보호자-어린이 연결에 성공했습니다.")
                 .build();
         return response;
+    }
+
+    // 최초 보상 지급 알림 알림함 추가
+    @Transactional
+    public void addConnectNotification(User child, String content){
+        PushLog newPushLog = PushLog.builder()
+                .createdAt(LocalDateTime.now())
+                .category(PushLog.Category.connect)
+                .content(content)
+                .user(child)
+                .isNew(true)
+                .build();
+        pushLogRepository.save(newPushLog);
     }
 }

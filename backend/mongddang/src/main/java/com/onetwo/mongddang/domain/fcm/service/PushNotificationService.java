@@ -55,7 +55,7 @@ public class PushNotificationService {
         String fcmToken = token.get().getToken();
 
         // 메시지 만들기
-        String message = makeMessage(fcmToken,notification);
+        String message = makeMessage(fcmToken,notification,category);
 
         // HTTP 요청 엔티티 생성 : 본문과 헤더 함께 담아 요청에 사용
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -82,7 +82,7 @@ public class PushNotificationService {
         } else {
             // 성공 시 저장
             log.info("FCM 서버 응답: {}", response);
-            savePushNotification(user, notification.getMessage(), category);
+//            savePushNotification(user, notification.getMessage(), category);
         }
     }
 
@@ -99,13 +99,14 @@ public class PushNotificationService {
         pushLogRepository.save(pushLog);
     }
 
-    public String makeMessage(String targetToken, Notification notification) {
+    public String makeMessage(String targetToken, Notification notification, PushLog.Category category) {
         // data 설정
         FcmMessage.Data messageData = FcmMessage.Data.builder()
                 .receiverNickname(notification.getReceiver().getNickname())
                 .childNickname(notification.getChild().getNickname())
                 .title(notification.getTitle())
                 .message(notification.getMessage())
+                .category(category)
                 .build();
 
         // notification 설정

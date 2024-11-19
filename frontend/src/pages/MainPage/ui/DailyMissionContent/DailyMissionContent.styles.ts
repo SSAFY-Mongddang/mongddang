@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 
 export const container = css`
-  label: container;
   display: flex;
   flex-direction: column;
   justify-content: space-around;

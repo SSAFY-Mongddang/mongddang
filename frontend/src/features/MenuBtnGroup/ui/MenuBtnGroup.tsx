@@ -4,6 +4,7 @@ import { IconTypo } from '@/shared/ui/IconTypo';
 import { btn, btnGroup } from './MenuBtnGroup.styles';
 import { useNavigate } from 'react-router-dom';
 import { menuBtnData } from '../menuBtnData';
+import { useAudioStore } from '@/shared/model/useAudioStore';
 
 type MenuBtnGroupProps = {
   userRole: 'child' | 'protector';
@@ -11,14 +12,17 @@ type MenuBtnGroupProps = {
 
 const MenuBtnGroup = (props: MenuBtnGroupProps) => {
   const navigate = useNavigate();
+  const { bubble } = useAudioStore();
   return (
     <div css={btnGroup}>
       {menuBtnData.map((item, i) => {
         return (
           <div
-            css={btn}
+            css={btn(item.category === 'meal')}
             onClick={() => {
-              navigate(item.urlTo);
+              if (item.category === 'meal') return;
+              navigate(item.urlTo[props.userRole]);
+              bubble.play();
             }}
             key={`menuBtn-${i}`}
           >

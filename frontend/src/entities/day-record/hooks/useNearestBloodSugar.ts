@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 interface BloodSugarValues {
   startTime: number;
   endTime: number | null;
-  after2Hour: number | null;
+  after2Hour: number | string | null;
 }
 
 export const useNearestBloodSugar = <T extends RecordCategory>(
@@ -35,7 +35,7 @@ export const useNearestBloodSugar = <T extends RecordCategory>(
                 bloodSugarData,
                 dayjs(record.endTime).add(2, 'hour').toString()
               )
-            : null;
+            : '없음';
 
         return {
           ...acc,

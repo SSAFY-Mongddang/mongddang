@@ -1,6 +1,7 @@
 package com.onetwo.mongddang.domain.fcm.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.onetwo.mongddang.domain.fcm.model.PushLog;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class FcmMessage {
         private final String childNickname; // 알림 대상자의 닉네임(이상혈당 지속시)
         private final String title; // 제목 ("혈당 이상")
         private final String message; // 내용 ("고혈당입니다!")
+        private final PushLog.Category category; // 알림 종류
     }
 
     // 알림 메시지 설정을 위한 Notification 클래스

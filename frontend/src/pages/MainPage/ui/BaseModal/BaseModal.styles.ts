@@ -7,7 +7,10 @@ export const baseModalContainer = css`
   border-radius: 1.5rem;
   padding: 0;
   justify-content: flex-start;
-  overflow-y: auto;
+`;
+
+export const baseModalTopBar = css`
+  position: static;
 `;
 
 export const baseModalContent = css`

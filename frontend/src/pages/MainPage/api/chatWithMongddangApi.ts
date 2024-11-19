@@ -47,3 +47,26 @@ export const chatWithMongddang = (
       return err;
     });
 };
+export const talkWithMongddang = (
+  jsonData: object
+): Promise<AxiosResponse<string>> => {
+  const accessToken = import.meta.env.VITE_TEST_USER_ACCESS_TOKEN;
+
+  return api({
+    method: 'POST',
+    url: '/api/chat/mongddang/talk',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    data: jsonData,
+    // params: formData,
+  })
+    .then((res) => {
+      console.log('talkWithMongddang 응답', res.data);
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return err;
+    });
+};

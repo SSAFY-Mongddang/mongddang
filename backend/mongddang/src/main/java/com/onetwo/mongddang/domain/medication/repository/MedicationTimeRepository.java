@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -29,4 +30,10 @@ public interface MedicationTimeRepository extends JpaRepository<MedicationTime, 
 
 
     List<MedicationTime> findByMedicationManagementId(Long id);
+
+    @Query("SELECT mt FROM MedicationTime mt " +
+            "JOIN mt.medicationManagement mm " +
+            "WHERE :now BETWEEN mm.repeatStartTime AND mm.repeatEndTime " +
+            "AND FUNCTION('TIME_FORMAT', mt.medicationTime, '%H:%i') = FUNCTION('TIME_FORMAT', :now, '%H:%i')")
+    List<MedicationTime> findMedicationTimesByCurrentTime(@Param("now") LocalDateTime now);
 }

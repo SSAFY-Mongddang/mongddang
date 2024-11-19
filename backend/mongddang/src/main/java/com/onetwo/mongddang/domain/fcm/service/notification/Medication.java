@@ -3,6 +3,8 @@ package com.onetwo.mongddang.domain.fcm.service.notification;
 import com.onetwo.mongddang.domain.fcm.dto.Notification;
 import com.onetwo.mongddang.domain.fcm.model.PushLog;
 import com.onetwo.mongddang.domain.fcm.service.PushNotificationService;
+import com.onetwo.mongddang.domain.medication.model.MedicationTime;
+import com.onetwo.mongddang.domain.medication.repository.MedicationTimeRepository;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.record.model.Record;
@@ -19,16 +21,17 @@ public class Medication {
 
     private final RecordRepository recordRepository;
     private final PushNotificationService pushNotificationService;
+    private final MedicationTimeRepository medicationTimeRepository;
 
     @Scheduled(cron = "0 * * * * *") // 매 분마다 실행
     public void sendMedicationReminders() {
         LocalDateTime now = LocalDateTime.now().withSecond(0).withNano(0);
 
-        List<Record> records = recordRepository.findByCategoryAndStartTime(Record.RecordCategoryType.medication, now);
+        List<MedicationTime> medicationTimes = medicationTimeRepository.findMedicationTimesByCurrentTime(now);
 
-        for (Record record : records) {
-            User child = record.getChild();
-            String message = "복약 시간입니다.";
+        for (MedicationTime medicationTime : medicationTimes) {
+            User child = medicationTime.getMedicationManagement().getChild();
+            String message = "인슐린을 맞을 시간이에요.";
             Notification notification = Notification.builder()
                     .title("복약 알림")
                     .message(message)

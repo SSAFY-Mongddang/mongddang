@@ -1,19 +1,14 @@
 /** @jsxImportSource @emotion/react */
-// import { GoogleLogin } from '@react-oauth/google';
-// import axios, { AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { base, contentCss, googleCss } from './ui/styles';
-import { Icon } from '@/shared/ui/Icon';
-import { Typography } from '@/shared/ui/Typography';
+import { base, btn, btnImg, contentCss, pocket } from './ui/styles';
 import { useUserStore } from '@/entities/user/model';
-// import { UserService } from '@/shared/api/user/user.service';
-// import { LoginResponse } from './api/api';
 import { SocialLogin } from '@capgo/capacitor-social-login';
 import { api } from './api/api';
 import { AxiosResponse } from 'axios';
 import { LoginResponse } from '@/shared/api/user/user.type';
 import { useShallow } from 'zustand/shallow';
-import { AccessTokenPlugin, TokenPayload } from '../check-samsung-data/plugin/AccessTokenPlugin';
+import loginBtn from '@/assets/img/page/login/login_button.png';
+import { Button } from '@/shared/ui/Button';
 
 // interface IcredentialResponse {
 //   credential?: string;
@@ -29,14 +24,7 @@ const Login = () => {
       getUserInfo: state.getUserInfo,
     }))
   );
-  const tokenPayload: TokenPayload = {"token": getUserInfo().userAccessToken ?? "", "nickName":getUserInfo().user?.nickname??"어린이 서원"}
-  AccessTokenPlugin.getAccessTokenPlugin(tokenPayload)
-  .then((response) => {
-    console.log('Response from native:', response.message);
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
+
   // 유저 정보가 존재하면 로그인 안 하고 바로 각각의 메인 페이지로 이동
   // if (getUserInfo().user?.role === 'child') nav('/main');
   // if (getUserInfo().user?.role === 'protector') nav('/protector-main');
@@ -99,20 +87,19 @@ const Login = () => {
       },
     }).then(async (res) => {
       const idToken = res.result.idToken;
-      // const userAccessToken = res.result.accessToken?.token;
       const userIdToken = res.result.idToken;
 
       await updateUserInfo({ userIdToken });
-      
+
       await api
         .post('/api/auth/login', { idToken })
         .then(async (res: AxiosResponse<LoginResponse>) => {
-
           if (res.data.data.isRegistered) {
-            // TODO: Access Token 하드코딩 수정
-            // const userAccessToken = res.data.data.accessToken;
+            const userAccessToken = res.data.data.accessToken;
             const userInfo = res.data.data.userInfo;
-            await updateUserInfo({ user: userInfo });
+
+            await updateUserInfo({ userAccessToken, user: userInfo });
+            // await InitializePushListener(setPushNotification);
 
             const user = getUserInfo();
             console.log('****user rola****');
@@ -120,18 +107,15 @@ const Login = () => {
             console.log(user.user?.role);
             console.log('****user rola****');
             console.log('****user rola****');
-            // if(user.userAccessToken != null){
-            //   handleTokenSubmit(user.userAccessToken)
-            // }  
+
             if (user.user?.role === 'protector') {
               nav('/protector-main');
             }
+
             if (user.user?.role === 'child') {
               console.log(user.user.role);
-
-              nav('/menu');
+              nav('/main');
             }
-            // nav('/protector-main');
           } else {
             nav('/signup');
           }
@@ -151,27 +135,11 @@ const Login = () => {
     <div css={base}>
       <div css={contentCss}>
         <div>
-          <Icon size={14}>
-            <img alt="icon-0" src="/img/logo.png" />
-          </Icon>
-          <Typography
-            style={{ textAlign: 'center' }}
-            color="dark"
-            size="1.25"
-            weight={500}
-          >
-            몽땅과 함께하는
-            <br />
-            당뇨 관리!
-          </Typography>
+          <a css={pocket} href="/main"></a>
         </div>
-        <div css={googleCss}>
-          {/* <GoogleLogin
-            onSuccess={handleLoginSuccess}
-            onError={handleLoginError}
-          /> */}
-          <button onClick={googleLogin}>Google Login Btn</button>
-        </div>
+        <Button css={btn} handler={googleLogin}>
+          <img css={btnImg} src={loginBtn} alt="" />
+        </Button>
       </div>
     </div>
   );

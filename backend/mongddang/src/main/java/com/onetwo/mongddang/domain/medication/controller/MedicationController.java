@@ -3,6 +3,7 @@ package com.onetwo.mongddang.domain.medication.controller;
 import com.onetwo.mongddang.common.annotation.ChildRequired;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.medication.dto.RequestDeleteMedicationDto;
+import com.onetwo.mongddang.domain.medication.dto.RequestMedicationDto;
 import com.onetwo.mongddang.domain.medication.service.MedicationService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -30,14 +30,13 @@ public class MedicationController {
     @Tag(name = "Medication API", description = "약 api")
     @Operation(summary = "복약 등록하기", description = "약을 등록합니다.")
     public ResponseEntity<ResponseDto> registerMedication(
-            @RequestParam("medicationInfo") String requestDto,
-            @RequestParam(value = "image", required = false) MultipartFile imageFile,
+            @RequestBody RequestMedicationDto requestMedicationDto,
             HttpServletRequest request) {
         log.info("POST /api/medication/register");
 
         Long userId = jwtExtratService.jwtFindId(request);
 
-        ResponseDto responseDto = medicationService.registerMedication(userId, requestDto, imageFile);
+        ResponseDto responseDto = medicationService.registerMedication(userId, requestMedicationDto);
         return ResponseEntity.ok(responseDto);
     }
 

@@ -1,1 +1,1 @@
-export type { RecordFilter } from './model';
+export  { type RecordFilter, DayRecordError } from './model';
