@@ -12,6 +12,7 @@ import AchievementToast from '../Toast';
 import MainToast from '../Toast/main.tsx';
 import { Icon } from '@/shared/ui/Icon/index.tsx';
 import imagePath from '@/assets/img/icon/achievement_icon.png';
+import { useUserStore } from '@/entities/user/model/store.ts';
 // import { useUserStore } from '@/entities/user/model/store.ts';
 
 interface TitleComponentProps {
@@ -23,15 +24,16 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
   const [isToast, setIsToast] = useState(false);
   const [isMainToast, setIsMainToast] = useState(false);
   const queryClient = useQueryClient();
-  // const { userAccessToken } = useUserStore();
+  const { userAccessToken } = useUserStore();
 
   const { mutate: achievementMutate } = useMutation({
     mutationFn: async () => {
-      const accessToken = localStorage.getItem('accessToken') || '';
-      if (!accessToken) {
+      // const accessToken = localStorage.getItem('accessToken') || '';
+      
+      if (!userAccessToken) {
         throw new Error('AccessToken이 필요합니다.');
       }
-      return await getTitleAchievement(accessToken, title.titleId);
+      return await getTitleAchievement(userAccessToken, title.titleId);
     },
     onSuccess: () => {
       setIsModal(false);

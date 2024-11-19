@@ -39,6 +39,7 @@ import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
 import { registerPlugin } from '@capacitor/core';
 import Microphone from './ui/Microphone/Microphone';
+import dayjs from 'dayjs';
 
 export interface EchoPlugin {
   echo(options: { value: string }): Promise<{ value: string }>;
@@ -53,7 +54,7 @@ export const Foreground = registerPlugin<ForegroundPlugin>('Foreground');
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem('accessToken');
+  // const accessToken = localStorage.getItem('accessToken');
   const [mainInfo, setMainInfo] = useState({
     nickname: '',
     mainTitleName: '',
@@ -159,7 +160,7 @@ const KidsMainPage = () => {
     } else if (menu === 1) {
       navigate('/menu');
     } else if (menu === 2) {
-      navigate(`/record/${new Date()}`);
+      navigate(`/record/${dayjs().format('YYYY-MM-DD')}`);
     }
   };
   console.log('알림창 상태', alertStatus);
@@ -309,7 +310,6 @@ const KidsMainPage = () => {
       {/* 식단 등록 모달 */}
       {openDietModal && (
         <DietModal
-          accessToken={accessToken}
           closeDietModal={closeDietModal}
           changeRoutine={changeRoutine}
           handleAlert={handleAlert}
@@ -327,7 +327,6 @@ const KidsMainPage = () => {
         alertStatus === 'askStartRoutine' ? (
           <AskStartRoutineAlert
             currentRoutine={currentRoutine}
-            accessToken={accessToken}
             handleAlert={handleAlert}
             changeRoutine={changeRoutine}
             handleBloodSugar={handleBloodSugar}
@@ -343,7 +342,6 @@ const KidsMainPage = () => {
           // 루틴 종료 여부 질문 알림
           <AskEndRoutineAlert
             currentRoutine={currentRoutine}
-            accessToken={accessToken}
             handleAlert={handleAlert}
             changeRoutine={changeRoutine}
             handleBloodSugar={handleBloodSugar}

@@ -40,13 +40,10 @@
 import { api } from '@/shared/api/interceptors';
 
 // 식사 종료하기
-export const endEating = (accessToken: string | null) => {
+export const endEating = () => {
   return api({
     method: 'PATCH',
     url: '/api/record/meal/end',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
   })
     .then((res) => {
       console.log(res.data);
@@ -69,7 +66,6 @@ const convertToBase64 = (file: File) => {
 
 // 식단 저장 & 식사 시작하기
 export const saveDiet = async (
-  accessToken: string | null,
   mealTime: string,
   image: File | null,
   content: string
@@ -94,9 +90,6 @@ export const saveDiet = async (
   return api({
     method: 'POST',
     url: '/api/record/meal/start',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
     data,
   })
     .then((res) => {

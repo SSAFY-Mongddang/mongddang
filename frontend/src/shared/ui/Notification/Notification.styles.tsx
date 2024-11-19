@@ -41,6 +41,7 @@ export const btnContainerCss = css`
   bottom: 1.5rem;
   left: 0;
   right: 0;
+  box-sizing: content-box;
 `;
 
 export const backdropCss = css`

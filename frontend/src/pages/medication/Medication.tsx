@@ -13,14 +13,15 @@ import MedicationItem from './ui/MedicationItem/MedicationItem';
 import { useMedicationQuery } from './model/useMedicationQuery';
 import { useNavigate } from 'react-router-dom';
 import { MedicationItemType } from './types';
+import { useUserStore } from '@/entities/user/model';
 
 const Medication = () => {
-  // const userRole = useUserStore((state) => state.user?.role);
-  const userRole = 'child';
-  // const selfNickname = useUserStore((state) => state.user?.nickname);
+  const userRole = useUserStore((state) => state.user?.role);
+  // const userRole = 'child';
+  const selfNickname = useUserStore((state) => state.user?.nickname);
   // console.log(userRole, selfNickname);
   // console.log(useUserStore);
-  const selfNickname = '집에가고파';
+  // const selfNickname = '집에가고파';
   const kidNickname = '아이 닉네임';
   const { data: medicationList } = useMedicationQuery(
     userRole === 'child'

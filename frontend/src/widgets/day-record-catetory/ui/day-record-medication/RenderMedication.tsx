@@ -14,6 +14,8 @@ import {
 } from './style';
 import dayjs from 'dayjs';
 import { RecordErrorBoundary } from '../error-boundary/record-error-boundary';
+// import { DEFAULT_HAPPY_IMG_URL } from '@/shared/constants';
+import DEFAULT_HAPPY_IMG_URL from '@/assets/img/fox_and_capybara/mongddang6_sleep.png';
 
 interface RenderMedicationProps {
   nickname: string;
@@ -80,7 +82,7 @@ export const RenderMedication = ({
                 </div>
               </div>
               <div>
-                <img css={imgBox} src={`${item.imageUrl}`} />
+                <img css={imgBox} src={DEFAULT_HAPPY_IMG_URL} />
               </div>
             </div>
           ))}

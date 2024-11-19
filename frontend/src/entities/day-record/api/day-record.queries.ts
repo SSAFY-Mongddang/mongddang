@@ -94,7 +94,7 @@ export class DayRecordQueries {
     console.log(nickname, date);
     return this.filteredDayRecordsQuery({
       nickname,
-      date: '2024-11-11',
+      date,
       category: 'meal',
     });
   }
@@ -103,7 +103,7 @@ export class DayRecordQueries {
     console.log(nickname, date);
     return this.filteredDayRecordsQuery({
       nickname,
-      date: '2024-11-11',
+      date,
       category: 'exercise',
     });
   }
@@ -112,7 +112,7 @@ export class DayRecordQueries {
     console.log(nickname, date);
     return this.filteredDayRecordsQuery({
       nickname,
-      date: '2024-11-11',
+      date,
       category: 'sleep',
     });
   }
@@ -121,7 +121,7 @@ export class DayRecordQueries {
     console.log(nickname, date);
     return this.filteredDayRecordsQuery({
       nickname,
-      date: '2024-11-11',
+      date,
       category: 'medication',
     });
   }

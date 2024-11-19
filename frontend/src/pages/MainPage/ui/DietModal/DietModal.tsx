@@ -18,7 +18,6 @@ import { saveDiet } from '../../api/dietApi';
 import { useStopwatchStore } from '../../model/useStopwatchStore';
 
 type DietModalProps = {
-  accessToken: string | null;
   closeDietModal: () => void;
   changeRoutine: (currentRoutine: string) => void;
   handleAlert: (status: string) => void;
@@ -71,18 +70,12 @@ const DietModal = (props: DietModalProps) => {
 
   // 식단 저장
   const handleSaveDiet = async (
-    accessToken: string | null,
     selectedMealTime: string,
     dietImgFile: File | null,
     diet: string
   ) => {
     try {
-      const response = await saveDiet(
-        accessToken,
-        selectedMealTime,
-        dietImgFile,
-        diet
-      );
+      const response = await saveDiet(selectedMealTime, dietImgFile, diet);
       if (response.code === 200) {
         props.closeDietModal();
         props.changeRoutine('먹는 중');
@@ -142,12 +135,7 @@ const DietModal = (props: DietModalProps) => {
             scale="A200"
             variant="contained"
             handler={() => {
-              handleSaveDiet(
-                props.accessToken,
-                selectedMealTime,
-                dietImgFile,
-                diet
-              );
+              handleSaveDiet(selectedMealTime, dietImgFile, diet);
             }}
             disabled={isDisabled}
           >

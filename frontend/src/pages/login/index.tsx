@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useNavigate } from 'react-router-dom';
-import { base, btn, btnImg, contentCss, pocket } from './ui/styles';
+import { base, btn, btnImg, contentCss } from './ui/styles';
 import { useUserStore } from '@/entities/user/model';
 import { SocialLogin } from '@capgo/capacitor-social-login';
 import { api } from './api/api';
@@ -73,9 +73,6 @@ const Login = () => {
   return (
     <div css={base}>
       <div css={contentCss}>
-        <div>
-          <a css={pocket} href="/main"></a>
-        </div>
         <Button css={btn} handler={googleLogin}>
           <img css={btnImg} src={loginBtn} alt="" />
         </Button>
