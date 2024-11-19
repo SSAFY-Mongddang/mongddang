@@ -1,0 +1,334 @@
+pipeline {
+    agent any
+
+    tools {
+        gradle 'gradle-8.10.2'
+        jdk 'jdk21'
+    }
+
+    environment {
+        REPOSITRY =  'vaaastlake/mongddang_backend'
+        BACKEND_DIR = 'backend/mongddang'
+        BACKEND_IMG = 'mongddang_backend'
+        PROJECT_DIR = './S11P31D207'
+    }
+
+    triggers {
+        pollSCM 'H 12,5,23 * * 1-5'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checkout processing...'
+                script {
+                    // mongddang 디렉토리에서 변화가 있을 때만 빌드
+                    def changes = sh(script: "git diff --name-only HEAD HEAD~1", returnStdout: true).trim()
+                    if (changes.contains("${BACKEND_DIR}")) {
+                        echo "Changes in ${BACKEND_DIR} directory, proceeding with build."
+                    } else {
+                        echo "No changes in ${BACKEND_DIR} directory, skipping build."
+                        currentBuild.result = 'NOT_BUILT'
+                        error("No changes in ${BACKEND_DIR} directory. Halting pipeline.")
+                    }
+
+                    // 코드 체크아웃
+                    checkout scm
+                }
+                echo 'Checkout done'
+            }
+        }
+
+        stage('firebase json key download') {
+            steps {
+                dir("${BACKEND_DIR}") {
+                    withCredentials([file(credentialsId: 'fcm_certification', variable: 'certificationFile')]) {
+                        script {
+                            echo "download certification.json"
+                            sh 'cp -f $certificationFile ./src/main/resources/certification.json'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Builds Backend .JAR') {
+          steps {
+            dir("${BACKEND_DIR}") {
+              script {
+                def currentBranch = env.BRANCH_NAME ?: 'unknown'
+                def targetBranch = env.CHANGE_TARGET ?: 'N/A'
+
+                echo "Current Branch: ${currentBranch}"
+                if (targetBranch) {
+                    echo "Merge Target Branch: ${targetBranch}"
+                } else {
+                    echo "Not a merge request build"
+                }
+
+                echo 'mongddang server 입니다.'
+                sh 'pwd'
+                sh 'ls -al'
+
+                sh 'chmod +x ./gradlew'
+                sh './gradlew clean build -x test'
+              }
+            }
+          }
+        }
+        stage('Test') {
+            steps {
+                echo 'No test here.'
+            }
+        }
+        stage('Build Backend docker image and push') {
+          steps {
+            dir("${BACKEND_DIR}") {
+              script {
+                docker.withRegistry('', 'docker-cred') {
+                  def dockerImage = docker.build("${REPOSITRY}:${BUILD_NUMBER}", "--target prod -f ./Dockerfile ./")
+                  dockerImage.push()
+                  dockerImage.push('latest')
+                }
+              }
+            }
+          }
+        }
+        stage('Deploy to EC2') {
+            stages {
+                stage('Garbage Collect') {
+                    steps {
+                        echo 'Garbage Collecting....'
+                        sshPublisher(
+                          continueOnError: true, failOnError: false,
+                          publishers: [
+                            sshPublisherDesc(
+                              configName: "mongddang-ssh",
+                              verbose: true,
+                              transfers: [
+                                sshTransfer(
+                                  execCommand: """
+                                    cd S11P31D207
+                                    docker compose down backend
+                                    docker image prune -af
+                                    docker compose ps -a
+                                    docker ps -a
+                                  """),
+                              ]
+                            )
+                          ]
+                        )
+                        echo 'Garbage Collecting is done.'
+                    }
+                }
+                stage('Deploy') {
+                    steps {
+                        echo 'Start deploying....'
+                        sshPublisher(
+                          continueOnError: true, failOnError: false,
+                          publishers: [
+                            sshPublisherDesc(
+                              configName: "mongddang-ssh",
+                              verbose: true,
+                              transfers: [
+                                sshTransfer(
+                                  execCommand: """
+                                    cd S11P31D207
+                                    docker compose up -d backend
+                                    docker compose ps -a
+                                    docker ps -a
+                                  """),
+                              ]
+                            )
+                          ]
+                        )
+                        echo 'Deploying is done.'
+                    }
+                }
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Build Success.'
+            dir("${PROJECT_DIR}") {
+                script {
+                    def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                    def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                    def Commit_Hash = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                    def Commit_Message = sh(script: "git show -s --pretty=%B", returnStdout: true).trim()
+                    def Build_Duration = currentBuild.durationString
+                    
+                    def sourceBranch = 'N/A'
+                    def targetBranch = env.BRANCH_NAME
+                    def changeLog = ""
+
+                    // dev 브랜치의 머지 상황일 때만 머지 정보 수집
+                    if (env.BRANCH_NAME == 'dev' && Commit_Message.contains('Merge')) {
+                        try {
+                            // 머지된 브랜치 이름 추출 (소스 브랜치)
+                            sourceBranch = sh(
+                                script: """
+                                    git log -1 --merges --pretty=format:'%s' | grep -o "from .* into" | sed 's/from //' | sed 's/ into//'
+                                """,
+                                returnStdout: true
+                            ).trim()
+                            
+                            // 현재 머지 커밋과 이전 머지 커밋 찾기
+                            def currentMergeCommit = sh(
+                                script: "git log --merges -n 1 --pretty=format:'%H'",
+                                returnStdout: true
+                            ).trim()
+                            
+                            def previousMergeCommit = sh(
+                                script: "git log --merges -n 2 --pretty=format:'%H' | tail -n 1",
+                                returnStdout: true
+                            ).trim()
+                            
+                            // 두 머지 커밋 사이의 모든 커밋 가져오기
+                            def changes = sh(
+                                script: """
+                                    git log ${previousMergeCommit}..${currentMergeCommit} --pretty=format:'%h - %s [%an]' --no-merges
+                                """,
+                                returnStdout: true
+                            ).trim()
+                            
+                            if (changes) {
+                                changeLog = changes.split('\n').collect { "- ${it}" }.join('\n')
+                            } else {
+                                changeLog = "No changes in this merge"
+                            }
+                        } catch (Exception e) {
+                            echo "Failed to get merge info: ${e.getMessage()}"
+                            changeLog = "Unable to retrieve change log"
+                        }
+                    } else {
+                        // 일반 푸시의 경우 마지막 머지 이후 커밋 정보만 가져오기
+                        try {
+                            // 마지막 머지 커밋 해시 찾기
+                            def lastMergeCommit = sh(
+                                script: "git log --merges -n 1 --pretty=format:'%H'",
+                                returnStdout: true
+                            ).trim()
+                            
+                            // 마지막 머지 이후의 커밋들 가져오기
+                            def changes = sh(
+                                script: """
+                                    git log ${lastMergeCommit}..HEAD --pretty=format:'%h - %s [%an]'
+                                """,
+                                returnStdout: true
+                            ).trim()
+                            
+                            if (changes) {
+                                changeLog = changes.split('\n').collect { "- ${it}" }.join('\n')
+                            } else {
+                                changeLog = "No changes found since last merge"
+                            }
+                        } catch (Exception e) {
+                            changeLog = "Unable to retrieve change log"
+                            echo "Failed to get change log: ${e.getMessage()}"
+                        }
+                    }
+                    
+                    mattermostSend(color: 'good',
+                    message: """# Build Success :white_check_mark:
+
+---
+
+# Job: 
+- Job Name: ${env.JOB_NAME} 
+- Build Number: #${env.BUILD_NUMBER}
+
+---
+
+# Branch Info:
+- Source Branch: ${sourceBranch}
+- Target Branch: ${targetBranch}
+
+---
+
+# Build Info:
+- Author: ${Author_ID}(${Author_Name})
+- Commit: ${Commit_Hash}
+- Message: ${Commit_Message}
+- Duration: ${Build_Duration}
+
+---
+
+# Changes:
+${changeLog}
+
+---
+
+# Build URL: ${env.BUILD_URL}
+""",
+                    endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
+                    failOnError: true
+                    )
+                }
+            }
+            cleanWs()
+        }
+        failure {
+            echo 'Build Fail.'
+            dir("${PROJECT_DIR}") {
+                script {
+                    def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                    def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                    def Commit_Hash = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                    def Commit_Message = sh(script: "git show -s --pretty=%B", returnStdout: true).trim()
+                    def Build_Duration = currentBuild.durationString
+                    
+                    // 현재 브랜치 정보
+                    def Current_Branch = env.BRANCH_NAME ?: env.GIT_BRANCH
+                    // PR 타겟 브랜치
+                    def Target_Branch = env.CHANGE_TARGET ?: 'N/A'
+                    
+                    // 에러 로그 수집
+                    def errorLog = manager.build.getLog(1000).join('\n')
+                    def truncatedError = (errorLog.length() > 500) ? errorLog.substring(0, 500) + "..." : errorLog
+                    
+                    mattermostSend(color: 'danger',
+                        message: """# Build Failed :x:
+
+---
+
+# Job:
+- Job name: ${env.JOB_NAME} 
+- Build number: #${env.BUILD_NUMBER}
+
+---
+
+# Branch Info:
+- Current Branch: ${Current_Branch}
+- Target Branch: ${Target_Branch}
+
+---
+
+# Build Info:
+- Author: ${Author_ID}(${Author_Name})
+- Commit: ${Commit_Hash}
+- Message: ${Commit_Message}
+- Duration: ${Build_Duration}
+
+---
+
+# Error Log:
+${truncatedError}
+
+---
+
+# Build URL: ${env.BUILD_URL}
+""",
+                        endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
+                        failOnError: true
+                    )
+                }
+            }
+            cleanWs()
+        }
+        always {
+            echo 'everything is done'
+        }
+    }
+}

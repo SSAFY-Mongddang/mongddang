@@ -1,0 +1,1 @@
+export { RenderMedication } from './RenderMedication';

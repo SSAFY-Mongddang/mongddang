@@ -1,0 +1,114 @@
+# Version top-level element is obsolete
+# https://docs.docker.com/reference/compose-file/version-and-name/
+
+name: mongddang
+
+services:
+  db:
+    image: mysql:8.0.39
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - mysql_config:/etc/mysql/conf.d
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: Asia/Seoul
+      LANG: C.UTF-8
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    ports:
+      - "3306:3306"
+    networks:
+      - mongddang_net
+    container_name: mongddang_db
+
+  webserver:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    environment:
+      TZ: Asia/Seoul
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      - certbot_www:/var/www/certbot/:ro
+      - certbot_conf:/etc/nginx/ssl/:ro
+    networks:
+      - mongddang_net
+    container_name: nginx
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - certbot_www:/var/www/certbot:rw
+      - certbot_conf:/etc/letsencrypt/:rw
+    networks:
+      - mongddang_net
+    container_name: certbot
+
+  backend:
+    # build:
+    #   context: ./backend/mongddang
+    #   dockerfile: Dockerfile
+    image: vaaastlake/mongddang_backend
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      TZ: Asia/Seoul
+      CORS_URL: ${CORS_URL}
+      # MySql
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_DB: ${MYSQL_DB}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      DDL_AUTO: ${DDL_AUTO}
+      # JWT
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      CLIENT_ID: ${CLIENT_ID}
+      # Firebase
+      FIREBASE_CREDENTIALS_PATH: ${FIREBASE_CREDENTIALS_PATH}
+      # School
+      MEAL_KEY: ${MEAL_KEY} 
+      MEAL_URL: ${MEAL_URL} 
+      SCHOOL_KEY: ${SCHOOL_KEY} 
+      SCHOOL_URL: ${SCHOOL_URL}
+      # ChatGPT
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_URL: ${OPENAI_URL}
+      # FCM
+      FCM_URL_PREFIX: ${FCM_URL_PREFIX}
+      FCM_URL_POSTFIX: ${FCM_URL_POSTFIX}
+      FCM_PROJECT_ID: ${FCM_PROJECT_ID}
+    expose:
+      - "8080"
+    # volumes:
+    #   - ../firebase:/app/firebase
+    networks:
+      - mongddang_net
+    container_name: mongddang_backend
+
+volumes:
+  mysql_data:
+    name: mysql_data
+  mysql_config:
+    name: mysql_config
+  certbot_www:
+    name: certbot_www
+  certbot_conf:
+    name: certbot_conf
+
+networks:
+  mongddang_net:
+    driver: bridge

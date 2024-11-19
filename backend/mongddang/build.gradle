@@ -1,0 +1,79 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.4'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'onetwo'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    //lombok
+    annotationProcessor 'org.projectlombok:lombok'
+    //test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+//	// H2 Database
+//	runtimeOnly 'com.h2database:h2'
+    // Swagger 의존성
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
+    //mysql 의존성
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // Google Firebase Admin
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
+
+    //security 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    // JWT 의존성
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // verify Google IdToken 의존성 추가
+    implementation 'com.google.auth:google-auth-library-oauth2-http:1.13.0'
+    implementation 'com.google.api-client:google-api-client:1.32.1'
+
+    // jackson 의존성 추가
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.16.1'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1' // jackson이 Localdate 읽을 수 있게 함
+
+    // 유효성 검사
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    //s3 의존성
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    //webClient 의존성 (fcm)
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

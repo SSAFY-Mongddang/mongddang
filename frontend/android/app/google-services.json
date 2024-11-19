@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "884724383484",
+    "project_id": "mongddang-65473",
+    "storage_bucket": "mongddang-65473.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884724383484:android:d1e26c3d3d846451b7e179",
+        "android_client_info": {
+          "package_name": "com.mongddang.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoY9cZrfUzbQBn69piCqY-HROpaAaWHhE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884724383484:android:9b7a85a6e8ad85b5b7e179",
+        "android_client_info": {
+          "package_name": "com.mongddang.fcmtestapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoY9cZrfUzbQBn69piCqY-HROpaAaWHhE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

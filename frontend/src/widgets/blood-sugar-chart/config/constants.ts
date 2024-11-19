@@ -1,0 +1,8 @@
+export const CHART_CONFIG = {
+  MIN_WIDTH: 360,
+  MAX_WIDTH: 3500,
+  POINT_WIDTH: 100,
+  DEFAULT_HEIGHT: '18rem',
+  SCROLL_WIDTH: '100%',
+  SCROLL_HEIGHT: '22rem',
+} as const;

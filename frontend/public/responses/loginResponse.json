@@ -1,0 +1,53 @@
+{
+  "data": {
+    "success": "google oAuth 로그인에 성공하였습니다.",
+    "body": { "isRegistered": false, "accessToken": null }
+  },
+  "status": 200,
+  "statusText": "",
+  "headers": {
+    "access-control-expose-headers": "Authorization",
+    "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+    "connection": "keep-alive",
+    "content-length": "111",
+    "content-type": "application/json;charset=UTF-8",
+    "date": "Fri, 15 Nov 2024 03:38:48 GMT",
+    "expires": "0",
+    "pragma": "no-cache",
+    "server": "nginx/1.27.2",
+    "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+    "x-android-received-millis": "1731641928065",
+    "x-android-response-source": "NETWORK 200",
+    "x-android-selected-protocol": "http/1.1",
+    "x-android-sent-millis": "1731641927473",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-xss-protection": "0"
+  },
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": ["xhr", "http", "fetch"],
+    "transformRequest": [null],
+    "transformResponse": [null],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json"
+    },
+    "baseURL": "https://mijung.store",
+    "withCredentials": true,
+    "method": "post",
+    "url": "/api/auth/login",
+    "data": "{\"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjFkYzBmMTcyZThkNmVmMzgyZDZkM2EyMzFmNmMxOTdkZDY4Y2U1ZWYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIxMDIzNjA2MDAxMzM5LXVobGd1NmNibm1pbjZmdWJia3E3NmZydW9xMG5tbDI3LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiMTAyMzYwNjAwMTMzOS0ybXFmYmpjZnBpMzVyMzQ2a25nazVxZmRxaWFjaTI3YS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwODY2Nzc2ODYwNTA1NzIwNzIyNCIsImVtYWlsIjoia293bjk1MTJAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJiYWxsb29uVGVhcnMiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jS1lpYUJyeEN0TjhCTkhRUUNkODNCZFFtMXc3YWZxQ01OaGd1TV9xa3JRUHgwdnR3PXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6ImJhbGxvb25UZWFycyIsImlhdCI6MTczMTY0MTkyNiwiZXhwIjoxNzMxNjQ1NTI2fQ.3Qua8AP52c6QwxwDvDOCRORgNDXLGpKghWMwNNXajG_e3rJwG8UIiT6gcm8iJ1TH0gsLP12Sj7gPWGiBJjoSuV3hVeWoMAuxwKWp1zpiVennRnHrEOIh9k5ojsYP3buNuqy8gTUP4yDua6UyOjTiJkaTDMO8Vn2lVM4G8HGZWkQccE_3yjPFJwcOm4l2YM8tFTXtE8QFPU2sxci2deSDSgyRxJ0qO8mOmgR6WY-0MrDVwuKMudL4BUvIRYhAs78CmD0f315x81MlMq4tR1k8LyyOVq6b3S4XfNRDick_MFwDB_8mVbmz3VqIz-BNb5j9vcxnALC8VpFISBE6GOgKKQ\"}"
+  },
+  "request": { "_url": "https://mijung.store/api/auth/login", "_readyState": 4 }
+}

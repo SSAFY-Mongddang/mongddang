@@ -1,0 +1,428 @@
+{
+  "code": 200,
+  "message": "2024-10-31일 혈당 조회에 성공했습니다.",
+  "data": {
+    "bloodSugar": [
+      {
+        "id": 1,
+        "bloodSugarLevel": 92,
+        "measurementTime": "2024-11-11 06:00:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 2,
+        "bloodSugarLevel": 125,
+        "measurementTime": "2024-11-11 06:15:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 3,
+        "bloodSugarLevel": 48,
+        "measurementTime": "2024-11-11 06:30:00",
+        "status": "low_danger",
+        "notification": true
+      },
+      {
+        "id": 4,
+        "bloodSugarLevel": 95,
+        "measurementTime": "2024-11-11 06:45:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 5,
+        "bloodSugarLevel": 89,
+        "measurementTime": "2024-11-11 07:00:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 6,
+        "bloodSugarLevel": 91,
+        "measurementTime": "2024-11-11 07:15:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 7,
+        "bloodSugarLevel": 94,
+        "measurementTime": "2024-11-11 07:30:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 8,
+        "bloodSugarLevel": 88,
+        "measurementTime": "2024-11-11 07:45:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 9,
+        "bloodSugarLevel": 145,
+        "measurementTime": "2024-11-11 08:00:00",
+        "status": "high_danger",
+        "notification": true
+      },
+      {
+        "id": 10,
+        "bloodSugarLevel": 132,
+        "measurementTime": "2024-11-11 08:15:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 11,
+        "bloodSugarLevel": 128,
+        "measurementTime": "2024-11-11 08:30:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 12,
+        "bloodSugarLevel": 120,
+        "measurementTime": "2024-11-11 08:45:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 13,
+        "bloodSugarLevel": 115,
+        "measurementTime": "2024-11-11 09:00:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 14,
+        "bloodSugarLevel": 110,
+        "measurementTime": "2024-11-11 09:15:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 15,
+        "bloodSugarLevel": 105,
+        "measurementTime": "2024-11-11 09:30:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 16,
+        "bloodSugarLevel": 98,
+        "measurementTime": "2024-11-11 09:45:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 17,
+        "bloodSugarLevel": 95,
+        "measurementTime": "2024-11-11 10:00:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 18,
+        "bloodSugarLevel": 93,
+        "measurementTime": "2024-11-11 10:15:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 19,
+        "bloodSugarLevel": 90,
+        "measurementTime": "2024-11-11 10:30:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 20,
+        "bloodSugarLevel": 88,
+        "measurementTime": "2024-11-11 10:45:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 21,
+        "bloodSugarLevel": 89,
+        "measurementTime": "2024-11-11 11:00:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 22,
+        "bloodSugarLevel": 92,
+        "measurementTime": "2024-11-11 11:15:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 23,
+        "bloodSugarLevel": 45,
+        "measurementTime": "2024-11-11 11:30:00",
+        "status": "low_danger",
+        "notification": true
+      },
+      {
+        "id": 24,
+        "bloodSugarLevel": 88,
+        "measurementTime": "2024-11-11 11:45:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 25,
+        "bloodSugarLevel": 91,
+        "measurementTime": "2024-11-11 12:00:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 26,
+        "bloodSugarLevel": 94,
+        "measurementTime": "2024-11-11 12:15:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 27,
+        "bloodSugarLevel": 90,
+        "measurementTime": "2024-11-11 12:30:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 28,
+        "bloodSugarLevel": 93,
+        "measurementTime": "2024-11-11 12:45:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 29,
+        "bloodSugarLevel": 142,
+        "measurementTime": "2024-11-11 13:00:00",
+        "status": "high_danger",
+        "notification": true
+      },
+      {
+        "id": 30,
+        "bloodSugarLevel": 148,
+        "measurementTime": "2024-11-11 13:15:00",
+        "status": "high_danger",
+        "notification": true
+      },
+      {
+        "id": 31,
+        "bloodSugarLevel": 135,
+        "measurementTime": "2024-11-11 13:30:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 32,
+        "bloodSugarLevel": 128,
+        "measurementTime": "2024-11-11 13:45:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 33,
+        "bloodSugarLevel": 120,
+        "measurementTime": "2024-11-11 14:00:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 34,
+        "bloodSugarLevel": 115,
+        "measurementTime": "2024-11-11 14:15:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 35,
+        "bloodSugarLevel": 108,
+        "measurementTime": "2024-11-11 14:30:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 36,
+        "bloodSugarLevel": 102,
+        "measurementTime": "2024-11-11 14:45:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 37,
+        "bloodSugarLevel": 98,
+        "measurementTime": "2024-11-11 15:00:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 38,
+        "bloodSugarLevel": 95,
+        "measurementTime": "2024-11-11 15:15:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 39,
+        "bloodSugarLevel": 92,
+        "measurementTime": "2024-11-11 15:30:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 40,
+        "bloodSugarLevel": 90,
+        "measurementTime": "2024-11-11 15:45:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 41,
+        "bloodSugarLevel": 92,
+        "measurementTime": "2024-11-11 17:00:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 42,
+        "bloodSugarLevel": 95,
+        "measurementTime": "2024-11-11 17:15:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 43,
+        "bloodSugarLevel": 98,
+        "measurementTime": "2024-11-11 17:30:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 44,
+        "bloodSugarLevel": 47,
+        "measurementTime": "2024-11-11 17:45:00",
+        "status": "low_danger",
+        "notification": true
+      },
+      {
+        "id": 45,
+        "bloodSugarLevel": 88,
+        "measurementTime": "2024-11-11 18:00:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 46,
+        "bloodSugarLevel": 92,
+        "measurementTime": "2024-11-11 18:15:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 47,
+        "bloodSugarLevel": 95,
+        "measurementTime": "2024-11-11 18:30:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 48,
+        "bloodSugarLevel": 98,
+        "measurementTime": "2024-11-11 18:45:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 49,
+        "bloodSugarLevel": 145,
+        "measurementTime": "2024-11-11 19:00:00",
+        "status": "high_danger",
+        "notification": true
+      },
+      {
+        "id": 50,
+        "bloodSugarLevel": 152,
+        "measurementTime": "2024-11-11 19:15:00",
+        "status": "high_danger",
+        "notification": true
+      },
+      {
+        "id": 51,
+        "bloodSugarLevel": 138,
+        "measurementTime": "2024-11-11 19:30:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 52,
+        "bloodSugarLevel": 130,
+        "measurementTime": "2024-11-11 19:45:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 53,
+        "bloodSugarLevel": 125,
+        "measurementTime": "2024-11-11 20:00:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 54,
+        "bloodSugarLevel": 118,
+        "measurementTime": "2024-11-11 20:15:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 55,
+        "bloodSugarLevel": 112,
+        "measurementTime": "2024-11-11 20:30:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 56,
+        "bloodSugarLevel": 105,
+        "measurementTime": "2024-11-11 20:45:00",
+        "status": "high_warning",
+        "notification": true
+      },
+      {
+        "id": 57,
+        "bloodSugarLevel": 98,
+        "measurementTime": "2024-11-11 21:00:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 58,
+        "bloodSugarLevel": 95,
+        "measurementTime": "2024-11-11 21:15:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 59,
+        "bloodSugarLevel": 92,
+        "measurementTime": "2024-11-11 21:30:00",
+        "status": "normal",
+        "notification": false
+      },
+      {
+        "id": 60,
+        "bloodSugarLevel": 90,
+        "measurementTime": "2024-11-11 21:45:00",
+        "status": "normal",
+        "notification": false
+      }
+    ]
+  }
+}

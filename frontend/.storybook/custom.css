@@ -1,0 +1,57 @@
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 100;
+  src: url('/src/assets/fonts/Paperlogy-1Thin.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 200;
+  src: url('/src/assets/fonts/Paperlogy-2ExtraLight.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 300;
+  src: url('/src/assets/fonts/Paperlogy-3Light.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 400;
+  src: url('/src/assets/fonts/Paperlogy-4Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 500;
+  src: url('/src/assets/fonts/Paperlogy-5Medium.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 600;
+  src: url('/src/assets/fonts/Paperlogy-6SemiBold.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 700;
+  src: url('/src/assets/fonts/Paperlogy-7Bold.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 800;
+  src: url('/src/assets/fonts/Paperlogy-8ExtraBold.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 900;
+  src: url('/src/assets/fonts/Paperlogy-9Black.ttf');
+}
+
+* {
+  font-family: 'Paperlogy';
+}
