@@ -1,6 +1,6 @@
 import React from 'react';
 import Audio from '../Audio/Audio';
-import bgm from '@/assets/audios/bgm.mp3';
+import bgm from '@/assets/audios/bgm-low-decibel.mp3';
 import bubble from '@/assets/audios/bubble.mp3';
 
 const AudioCollectionComponent: React.FC = () => {
