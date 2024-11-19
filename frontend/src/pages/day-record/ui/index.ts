@@ -1,0 +1,1 @@
+export { DayRecordPage } from './DayRecord';

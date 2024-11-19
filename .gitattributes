@@ -1,0 +1,70 @@
+# Auto detect text files and perform LF normalization
+*        text=auto
+
+# Source code
+*.cs     text diff=csharp
+*.java   text diff=java
+*.html   text diff=html
+*.css    text
+*.js     text
+*.sql    text
+*.csproj text merge=union
+*.sln    text merge=union eol=crlf
+
+# Documents
+*.docx   diff=astextplain
+*.DOCX   diff=astextplain
+
+# Android specific
+*.gradle           text eol=lf
+*.properties      text eol=lf
+*.xml             text eol=lf
+*.pro             text eol=lf
+AndroidManifest.xml text eol=lf
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.zip binary
+*.jar binary
+*.aar binary
+
+# Scripts
+gradlew           text eol=lf
+*.bat             text eol=crlf
+*.cmd             text eol=crlf
+*.sh              text eol=lf
+
+# Serialization
+*.json            text
+*.yaml            text
+*.yml             text
+
+# RC files (like .babelrc or .eslintrc)
+*.*rc             text
+
+# Configs
+*.conf            text
+.editorconfig     text
+.gitattributes    text
+.gitconfig        text
+.gitignore        text
+
+# Git specific
+.gitignore        text eol=lf
+.gitattributes    text eol=lf
+
+# TypeScript
+*.ts              text eol=lf
+*.tsx             text eol=lf
+
+# Java
+*.java            text eol=lf
+ExampleInstrumentedTest.java    text eol=lf
+ExampleUnitTest.java            text eol=lf
+MainActivity.java               text eol=lf
+
+# Capacitor
+capacitor.config.ts            text eol=lf

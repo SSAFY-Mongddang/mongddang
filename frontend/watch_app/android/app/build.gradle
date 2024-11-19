@@ -1,0 +1,52 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+android {
+    namespace = "com.example.watch_app"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId = "com.example.watch_app"
+        minSdkVersion 26
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+
+        targetSdkVersion 33
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.debug
+        }
+    }
+}
+
+dependencies {
+    // 최신 Wear OS Complications API만 사용
+    implementation "androidx.wear.watchface:watchface-complications-data-source-ktx:1.1.1"
+    implementation "androidx.wear.watchface:watchface-complications-rendering:1.1.1"
+    implementation "androidx.wear.watchface:watchface-data:1.1.1"
+
+    // Play Services Wearable
+    implementation 'com.google.android.gms:play-services-wearable:18.0.0'
+}
+
+flutter {
+    source = "../.."
+}

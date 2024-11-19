@@ -1,0 +1,11 @@
+.idea/
+venv/
+.env
+*.tsbuildinfo
+*.jks
+*.keystore
+
+release-signing.properties
+keystore.properties
+
+capacitor.config.production.json

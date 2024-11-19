@@ -1,0 +1,78 @@
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 100;
+  src: url('./assets/fonts/Paperlogy-1Thin.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 200;
+  src: url('./assets/fonts/Paperlogy-2ExtraLight.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 300;
+  src: url('./assets/fonts/Paperlogy-3Light.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 400;
+  src: url('./assets/fonts/Paperlogy-4Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 500;
+  src: url('./assets/fonts/Paperlogy-5Medium.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 600;
+  src: url('./assets/fonts/Paperlogy-6SemiBold.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 700;
+  src: url('./assets/fonts/Paperlogy-7Bold.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 800;
+  src: url('./assets/fonts/Paperlogy-8ExtraBold.ttf');
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  font-weight: 900;
+  src: url('./assets/fonts/Paperlogy-9Black.ttf');
+}
+
+body,
+#root {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  font-family: 'Paperlogy';
+  /* background-color: #313131; */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  input, textarea, label {
+    font-family: 'Paperlogy';
+  }
+}
+
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

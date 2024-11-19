@@ -1,0 +1,32 @@
+{
+  "message": "Request failed with status code 401",
+  "name": "AxiosError",
+  "stack": "AxiosError: Request failed with status code 401\n    at settle (http://192.168.0.18:8100/node_modules/.vite/deps/axios.js?v=e0c9facf:1230:12)\n    at XMLHttpRequest.onloadend (http://192.168.0.18:8100/node_modules/.vite/deps/axios.js?v=e0c9facf:1593:7)\n    at <anonymous>:703:54\n    at Axios.request (http://192.168.0.18:8100/node_modules/.vite/deps/axios.js?v=e0c9facf:2145:41)\n    at async Object.mutationFn (http://192.168.0.18:8100/src/pages/Signup/invite-code/index.tsx?t=1731831764015:40:14)",
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": ["xhr", "http", "fetch"],
+    "transformRequest": [null],
+    "transformResponse": [null],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json"
+    },
+    "baseURL": "https://mijung.store",
+    "withCredentials": true,
+    "url": "/api/ctop/connect",
+    "method": "post",
+    "data": "{\"invitationCode\":\"ytneW2Ssw3Pd8GQNNALy\"}"
+  },
+  "code": "ERR_BAD_REQUEST",
+  "status": 401
+}
