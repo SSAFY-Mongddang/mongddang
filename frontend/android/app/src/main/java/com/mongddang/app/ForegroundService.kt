@@ -27,8 +27,8 @@ private const val TAG = "ForegroundService"
 
 @AndroidEntryPoint
 class ForegroundService @Inject constructor(
-    private val bloodGlucoseRepository: BloodGlucoseRepository,
-    private val dataStoreRepository: DataStoreRepository
+//    private val bloodGlucoseRepository: BloodGlucoseRepository,
+//    private val dataStoreRepository: DataStoreRepository
 ) : Service() {
 
     private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -93,15 +93,15 @@ class ForegroundService @Inject constructor(
         val currentTime = LocalDateTime.now()
         // 모니터링 로직 (예: 서버 상태 확인, 데이터 동기화 등)
         Log.i(TAG, "시스템 상태를 모니터링 중 현재시각:${currentTime}")
-        serviceScope.launch {
-            // 여기에 모니터링할 구체적인 로직을 추가할 수 있습니다.
-            val bloodGlucoseState =
-                PermissionStateManager.getCurrentPermissionState(this@ForegroundService, AppConstants.BLOOD_GLUCOSE)
-            Log.d(TAG, "monitorStatus: $bloodGlucoseState")
-            if(bloodGlucoseState != AppConstants.SUCCESS){
-                onDestroy()
-            }
-        }    
+//        serviceScope.launch {
+//            // 여기에 모니터링할 구체적인 로직을 추가할 수 있습니다.
+//            val bloodGlucoseState =
+//                PermissionStateManager.getCurrentPermissionState(this@ForegroundService, AppConstants.BLOOD_GLUCOSE)
+//            Log.d(TAG, "monitorStatus: $bloodGlucoseState")
+//            if(bloodGlucoseState != AppConstants.SUCCESS){
+//                onDestroy()
+//            }
+//        }
     }
 
     override fun onDestroy() {
@@ -113,15 +113,15 @@ class ForegroundService @Inject constructor(
 
     override fun onBind(intent: Intent): IBinder? = null
 
-    fun sendBloodGlucoseToServer(
-       bloodGlucoseRequest: BloodGlucoseRequest
-    ){
-        serviceScope.launch {
-            dataStoreRepository.getAccessToken()?.let{
-                nickName -> bloodGlucoseRepository
-                .sendSamsungBloodGlucose(bloodGlucoseRequest)
-            }
-        }
-    }
+//    fun sendBloodGlucoseToServer(
+//       bloodGlucoseRequest: BloodGlucoseRequest
+//    ){
+//        serviceScope.launch {
+//            dataStoreRepository.getAccessToken()?.let{
+//                nickName -> bloodGlucoseRepository
+//                .sendSamsungBloodGlucose(bloodGlucoseRequest)
+//            }
+//        }
+//    }
 
 }
