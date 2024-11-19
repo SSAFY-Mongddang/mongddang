@@ -5,7 +5,7 @@ import { Button } from '@/shared/ui/Button';
 // import { AxiosResponse } from 'axios';
 import {modalContentStyle, modalOverlay} from './styles';
 // import PermissionHandler from '../../plugin/PermissionHandler';
-// import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 interface SamsungModalProps {  

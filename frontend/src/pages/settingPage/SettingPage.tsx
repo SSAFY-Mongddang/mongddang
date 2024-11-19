@@ -92,6 +92,11 @@ const SettingPage = () => {
       }
     }
   };
+  
+  const onClickSearchBloodGlucose = ()=>{
+    navigate('/checksamsungdata')
+  }
+  
 
   return (
     <div css={container}>
@@ -103,6 +108,7 @@ const SettingPage = () => {
       >
         설정
       </TopBar>
+      <div>
       <ul css={settingContent}>
         <li css={li}>
           <Typography color="dark" size="1.25" weight={500}>
@@ -138,6 +144,16 @@ const SettingPage = () => {
           />
         </li>
       </ul>
+      <Button
+            handler={onClickSearchBloodGlucose}
+            color="primary" 
+            fontSize="1.25"
+            variant="contained"
+            fullwidth
+          >
+            삼성데이터조회
+      </Button>
+      </div>
       <SamsungModal isOpen={isModalOpen} onClose={closePermModel}>
             <h2>삼성헬스 권한</h2>
             <p>삼성 헬스 권한을 가져옵니다.</p> 
