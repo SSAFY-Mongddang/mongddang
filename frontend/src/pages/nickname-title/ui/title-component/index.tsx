@@ -11,7 +11,8 @@ import { ItitleData } from '../../model/types';
 import AchievementToast from '../Toast';
 import MainToast from '../Toast/main.tsx';
 import { Icon } from '@/shared/ui/Icon/index.tsx';
-import imagePath from '@/assets/img/icon/achievement_icon.png'
+import imagePath from '@/assets/img/icon/achievement_icon.png';
+// import { useUserStore } from '@/entities/user/model/store.ts';
 
 interface TitleComponentProps {
   title: ItitleData;
@@ -22,6 +23,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
   const [isToast, setIsToast] = useState(false);
   const [isMainToast, setIsMainToast] = useState(false);
   const queryClient = useQueryClient();
+  // const { userAccessToken } = useUserStore();
 
   const { mutate: achievementMutate } = useMutation({
     mutationFn: async () => {
@@ -43,8 +45,11 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
 
   const { mutate: mainMutate } = useMutation({
     mutationFn: async () => {
-      const accessToken = localStorage.getItem('accessToken') || '';
-      if (!accessToken) {
+      // const accessToken = localStorage.getItem('accessToken') || '';
+      //  const accessToken =
+
+      setIsModal(false);
+      if (!import.meta.env.VITE_TEST_USER_ACCESS_TOKEN) {
         throw new Error('AccessToken이 필요합니다.');
       }
       return await getTitleMain(title.titleId);
@@ -104,15 +109,18 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
       <div css={containerCss}>
         <div css={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
           <div css={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Typography 
-              color="dark" 
-              size="1" 
-              weight={700}
-            >
+            <Typography color="dark" size="1" weight={700}>
               {title.titleName}
             </Typography>
             {title.isOwned && title.isMain && (
-              <Icon size={2} css={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Icon
+                size={2}
+                css={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <img
                   alt="메인 칭호"
                   src={imagePath}
@@ -121,12 +129,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
               </Icon>
             )}
           </div>
-          <Typography
-            color="dark"
-            scale="500"
-            size="0.75"
-            weight={600}
-          >
+          <Typography color="dark" scale="500" size="0.75" weight={600}>
             {title.description}
           </Typography>
         </div>
