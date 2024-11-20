@@ -93,6 +93,11 @@ const Microphone = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
+  const cancelRecording = useCallback(() => {
+    VoiceRecorder.stopRecording();
+    setIsRecording(false);
+  }, []);
+
   useEffect(() => {
     const checkStatus = async () => {
       try {
@@ -104,6 +109,10 @@ const Microphone = ({ children }: PropsWithChildren) => {
     };
 
     checkStatus();
+
+    return () => {
+      VoiceRecorder.stopRecording();
+    };
   }, [isRecording]);
 
   return (
@@ -136,9 +145,19 @@ const Microphone = ({ children }: PropsWithChildren) => {
               fontSize="1"
               variant="outlined"
               handler={stopRecording}
+              style={{ marginBottom: '1rem' }}
             >
               대화 전송하기
             </Button>
+            <Typography
+              color="light"
+              size="1"
+              weight={300}
+              style={{ marginBottom: '0.5rem' }}
+              onClick={cancelRecording}
+            >
+              녹음 취소하기
+            </Typography>
           </div>
           <Backdrop />
         </div>
