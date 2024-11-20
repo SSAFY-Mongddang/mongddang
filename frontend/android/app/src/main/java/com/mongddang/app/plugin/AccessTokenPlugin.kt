@@ -39,12 +39,6 @@ class AccessTokenPlugin : Plugin() {
 
     @PluginMethod
     fun getAccessTokenPlugin(call: PluginCall) {
-        val token = call.getString("token")
-        if (token.isNullOrEmpty()) {
-            call.reject("Token is missing or invalid.")
-            return
-        }
-
         CoroutineScope(Dispatchers.IO).launch {
             handleAccessToken(call)
         }
@@ -53,19 +47,17 @@ class AccessTokenPlugin : Plugin() {
     private suspend fun handleAccessToken(call: PluginCall) {
         val token = call.getString("token")
         val nickName = call.getString("nickName")
-        if (!token.isNullOrBlank()) {
+        if (!token.isNullOrBlank() && !nickName.isNullOrEmpty()) {
             dataStoreRepositoryImpl.saveAccessToken(token)
+            dataStoreRepositoryImpl.saveUserNickName(nickName)
             val response = JSObject().apply {
-                put("message", "Token saved successfully: $token")
-            }
-            if(!nickName.isNullOrEmpty()){
-                dataStoreRepositoryImpl.saveUserNickName(nickName)
-                Log.d(TAG, "handleAccessToken:  $token $nickName")
+                put("message", "Token : $token, nickName: $nickName")
             }
             call.resolve(response)
-            Log.d(TAG, "Token saved successfully: $token")
+            Log.d(TAG, "handleAccessToken:  $token $nickName")
         } else {
             call.reject("Token is invalid.")
+            Log.d(TAG, "handleAccessToken:  fail")
         }
     }
 }

@@ -2,8 +2,8 @@ import { registerPlugin } from '@capacitor/core';
 
 // 요청 데이터 형식 정의
 export interface TokenPayload {
-  token: string; // 필수로 포함되어야 하는 토큰 값
-  nickName: string;
+  token: string| null; // 필수로 포함되어야 하는 토큰 값
+  nickName: String| null;
 }
 
 // 플러그인 결과 데이터 형식 정의

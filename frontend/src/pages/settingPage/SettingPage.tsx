@@ -48,19 +48,19 @@ const SettingPage = () => {
     checkMonitorStatus()
   },[])
 
-  const checkAllPermissions = async () => {
-    try {
-      const result = await SamsungHealth.checkPermissionStatusForHealthData();
+  // const checkAllPermissions = async () => {
+  //   try {
+  //     const result = await SamsungHealth.checkPermissionStatusForHealthData();
   
-      console.log('All Permissions:', result);
-      for (const [key, value] of Object.entries(result)) {
-        console.log(`${key}: ${value}`);
-      }
-      // Example: { bloodglucose: 'SUCCESS', steps: 'WAITING', ... }
-    } catch (error) {
-      console.error('Error checking permissions:', error);
-    }
-  }
+  //     console.log('All Permissions:', result);
+  //     for (const [key, value] of Object.entries(result)) {
+  //       console.log(`${key}: ${value}`);
+  //     }
+  //     // Example: { bloodglucose: 'SUCCESS', steps: 'WAITING', ... }
+  //   } catch (error) {
+  //     console.error('Error checking permissions:', error);
+  //   }
+  // }
 
   const requestPermission = async (healthDataType: string) => {
     try {

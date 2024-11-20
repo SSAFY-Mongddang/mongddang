@@ -9,6 +9,7 @@ import { LoginResponse } from '@/shared/api/user/user.type';
 import { useShallow } from 'zustand/shallow';
 import loginBtn from '@/assets/img/page/login/login_button.png';
 import { Button } from '@/shared/ui/Button';
+import { AccessTokenPlugin, TokenPayload } from '../check-samsung-data/plugin/AccessTokenPlugin';
 
 // interface IcredentialResponse {
 //   credential?: string;
@@ -107,7 +108,16 @@ const Login = () => {
             console.log(user.user?.role);
             console.log('****user rola****');
             console.log('****user rola****');
-
+            
+            // 안드로이드에 토큰 넘기는 용 
+            const tokenPayload: TokenPayload = {"token": getUserInfo().userAccessToken, "nickName": getUserInfo().user?.nickname??null}
+            AccessTokenPlugin.getAccessTokenPlugin(tokenPayload)
+            .then((response) => {
+              console.log('Response from native:', response.message);
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
             if (user.user?.role === 'protector') {
               nav('/protector-main');
             }
