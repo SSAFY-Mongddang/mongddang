@@ -175,19 +175,34 @@ public class VitalService {
                 int correctionValue;
                 if (curBloodSugarLevel > 300) {
                     // 수치가 매우 높은 경우 -15~5
-                    correctionValue = curBloodSugarLevel + random.nextInt(20) - 15;
-                } else if (curBloodSugarLevel > 200) {
+                    log.info("over 300");
+                    int randomValue = random.nextInt(21) - 15;
+                    correctionValue = curBloodSugarLevel + randomValue;
+                    log.info("randomValue: {}", randomValue);
+                } else if (curBloodSugarLevel > 300 && curBloodSugarLevel > 200) {
                     // 수치가 높은 경우 -10~5
+                    log.info("over 200");
+                    int randomValue = random.nextInt(16) - 10;
                     correctionValue = curBloodSugarLevel + random.nextInt(16) - 10;
-                } else if (curBloodSugarLevel < 90) {
+                    log.info("randomValue: {}", randomValue);
+                } else if (curBloodSugarLevel > 200 && curBloodSugarLevel < 90) {
                     // 수치가 낮은 경우 -5~15
+                    log.info("under 90");
+                    int randomValue = random.nextInt(21) - 5;
                     correctionValue = curBloodSugarLevel + random.nextInt(21) - 5;
+                    log.info("randomValue: {}", randomValue);
                 } else if (curBloodSugarLevel < 60) {
                     // 수치가 극도로 낮은 경우 5~20
-                    correctionValue = curBloodSugarLevel + random.nextInt(15) + 5;
+                    log.info("under 60");
+                    int randomValue = random.nextInt(16) + 5;
+                    correctionValue = curBloodSugarLevel + random.nextInt(16) + 5;
+                    log.info("randomValue: {}", randomValue);
                 } else {
                     // 일반적인 상황에서는 +-10 범위의 랜덤 수치 생성
+                    log.info("normal");
+                    int randomValue = random.nextInt(21) - 10;
                     correctionValue = curBloodSugarLevel + random.nextInt(21) - 10;
+                    log.info("randomValue: {}", randomValue);
                 }
 
                 // 반환할 상태값 설정
@@ -201,6 +216,7 @@ public class VitalService {
                 }
 
                 log.info("bloodSugarLevel: {}", vital.getBloodSugarLevel());
+                log.info("correctionValue: {}, weight: {}", correctionValue, weight);
                 vital = Vital.builder()
                         .child(child)
                         .bloodSugarLevel(correctionValue + weight)
