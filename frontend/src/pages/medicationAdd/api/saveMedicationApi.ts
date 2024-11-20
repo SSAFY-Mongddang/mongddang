@@ -13,6 +13,7 @@ export const saveMedication = async (medicationData: MedicationItemType) => {
     },
   })
     .then((res) => {
+      console.log('saveMedication response data');
       console.log(res.data);
     })
     .catch((err) => {

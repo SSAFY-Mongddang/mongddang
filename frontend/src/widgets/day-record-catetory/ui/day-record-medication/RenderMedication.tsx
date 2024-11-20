@@ -45,26 +45,29 @@ export const RenderMedication = ({
     >
       <section>
         {data &&
-          data.map((item, index) => (
-            <div key={index} css={medicineItem}>
-              <div css={leftContainer}>
-                <div css={itemName}>{item.content.name}</div>
-                <div>
-                  {nearestTimeBloodSugar[item.startTime].startTime} mg/dl
+          data.map((item, index) => {
+            if (!item.content) return null;
+            return (
+              <div key={index} css={medicineItem}>
+                <div css={leftContainer}>
+                  <div css={itemName}>{item.content.name}</div>
+                  <div>
+                    {nearestTimeBloodSugar[item.startTime].startTime} mg/dl
+                  </div>
+                  <div>
+                    {item.content.volume}단위(U) |{' '}
+                    {item.content.route === 'injection' ? '주사' : '경구약'}
+                  </div>
+                  <div css={timeText}>
+                    {dayjs(item.startTime).format('HH:mm')}
+                  </div>
                 </div>
                 <div>
-                  {item.content.volume}단위(U) |{' '}
-                  {item.content.route === 'injection' ? '주사' : '경구약'}
-                </div>
-                <div css={timeText}>
-                  {dayjs(item.startTime).format('HH:mm')}
+                  <img css={imgBox} src={SLEEP_DEFAULT_IMG} />
                 </div>
               </div>
-              <div>
-                <img css={imgBox} src={SLEEP_DEFAULT_IMG} />
-              </div>
-            </div>
-          ))}
+            );
+          })}
       </section>
     </RecordErrorBoundary>
   );

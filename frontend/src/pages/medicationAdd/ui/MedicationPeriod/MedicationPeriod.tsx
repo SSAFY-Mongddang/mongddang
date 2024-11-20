@@ -42,7 +42,7 @@ const MedicationPeriod = () => {
   };
 
   return (
-    <div css={inputPeriodCss}>
+    <div css={inputPeriodCss} className='medication-period'>
       <Typography color="dark" size="1" weight={600}>
         약 먹는 기간
       </Typography>

@@ -56,7 +56,7 @@ const MedicationStandard = () => {
   };
 
   return (
-    <div css={amountGroup}>
+    <div css={amountGroup} className='medication-standard'>
       <div css={amountCss}>
         <Typography color="dark" size="1" weight={600}>
           약 용량

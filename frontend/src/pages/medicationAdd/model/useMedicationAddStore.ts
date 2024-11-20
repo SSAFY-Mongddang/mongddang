@@ -103,8 +103,9 @@ export const useMedicationAddStore = create<MedicationAddItem>((set) => ({
 
   // 스토어 초기화
   initializeAdd: () => {
-    set({
-      nickname: '',
+    set((state) => ({
+      // FIXME: nickname도 초기화 시키면 다음 저장이 불가
+      nickname: state.nickname,
       name: '',
       image: null,
       repeatStartTime: null,
@@ -118,6 +119,6 @@ export const useMedicationAddStore = create<MedicationAddItem>((set) => ({
           maxGlucose: 0,
         },
       ],
-    });
+    }));
   },
 }));

@@ -20,6 +20,8 @@ const MedicationTime = () => {
   const { setMedicationTime } = useMedicationAddStore();
 
   useEffect(() => {
+    console.log();
+    
     debounceMedTimeInput([...timeFields]);
   }, [timeFields]);
 
@@ -54,7 +56,7 @@ const MedicationTime = () => {
   };
 
   return (
-    <div css={amountGroup}>
+    <div css={amountGroup} className='medication-time'>
       <div css={amountCss}>
         <Typography color="dark" size="1" weight={600}>
           약 먹는 시간

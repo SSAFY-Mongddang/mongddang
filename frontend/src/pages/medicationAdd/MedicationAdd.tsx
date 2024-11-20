@@ -79,13 +79,15 @@ const MedicationAdd = () => {
       repeatTimes,
       standards,
     };
+    console.log("handleSaveMed's medicationData");
+    console.log(medicationData);
     await saveMedication(medicationData);
     queryClient.invalidateQueries({
       queryKey: ['medicationList', nickname ?? ''],
     });
   };
   return (
-    <div css={container}>
+    <div css={container} className='medication-add'>
       <TopBar
         type="iconpage"
         css={topbarCss}
@@ -96,7 +98,7 @@ const MedicationAdd = () => {
         약 등록
       </TopBar>
       <div css={content}>
-        <div css={medicationTypeGroupCss}>
+        <div css={medicationTypeGroupCss} className='medication-type'>
           <div css={titieCss}>
             <Typography color="dark" size="1" weight={600}>
               약 종류
@@ -115,8 +117,8 @@ const MedicationAdd = () => {
             </Typography>
           </div>
         </div>
-        <div css={inputContentCss}>
-          <div css={inputContentItemCss}>
+        <div css={inputContentCss} className='medication-input'>
+          <div css={inputContentItemCss} className='medication-input-items'>
             <Typography color="dark" size="1" weight={600}>
               약 이름
             </Typography>

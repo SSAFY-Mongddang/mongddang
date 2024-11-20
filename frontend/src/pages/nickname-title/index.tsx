@@ -9,7 +9,7 @@ import { TitleComponent } from './ui/title-component';
 import { toggleContainerCss } from './ui/styles';
 import { useQuery } from '@tanstack/react-query';
 import { getTitleInfo } from './api/api';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ItitleData } from './model/types';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,28 +17,20 @@ export const NicknameTitle = () => {
   const [isOn, setIsOn] = useState(false);
   const nav = useNavigate();
 
-  useEffect(() => {
-    // TODO: localStorage -> Preferences로 저장소 수정
-    const savedToggleState = localStorage.getItem('titleToggle');
-    if (savedToggleState) {
-      setIsOn(JSON.parse(savedToggleState));
-    }
-  }, []);
-
   const handleToggle = () => {
-    const newToggleState = !isOn;
-    setIsOn(newToggleState);
-    // TODO: localStorage -> Preferences로 저장소 수정
-    localStorage.setItem('titleToggle', JSON.stringify(newToggleState));
+    setIsOn(!isOn);
   };
 
   const TitleQuery = useQuery({
-    queryKey: ['title'],
+    queryKey: ['titles'],
     queryFn: async () => {
       return await getTitleInfo();
     },
   });
+
+  console.log('TitleQuery data');
   console.log(TitleQuery.data?.data?.data)
+
   return (
     <div className='mongddang-title'>
       <TopBar type="iconpage" iconHandler={() => nav('/main')}>

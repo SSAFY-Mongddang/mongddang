@@ -9,7 +9,7 @@ import { useMedicationAddStore } from '../../model/useMedicationAddStore';
 const MedicationOnce = () => {
   const { setStandard } = useMedicationAddStore();
   return (
-    <div css={amountOnce}>
+    <div css={amountOnce} className='medication-once'>
       <Typography color="dark" size="1" weight={600}>
         약 용량
       </Typography>
