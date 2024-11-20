@@ -6,13 +6,14 @@ import { useNavigate } from 'react-router-dom';
 import { Toggle } from '@/shared/ui/Toggle';
 import { Typography } from '@/shared/ui/Typography';
 import { useAudioStore } from '@/shared/model/useAudioStore';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {Foreground} from '../../pages/samsung-setting/plugin/ForegroundPlugin';
 // import { flatMap } from 'lodash';
 import { BloodGlucosePlugin } from '../check-samsung-data/plugin/BloodGlucosePlugin';
 import { SamsungModal } from '../samsung-setting/ui/modal';
 import { Button } from '@/shared/ui/Button'; 
 import SamsungHealth from '../samsung-setting/plugin/SamsungHealthPlugin';
+import PermissionToggles from '../samsung-setting/ui/modal/PermissionToggles';
 
 const SettingPage = () => {
   const navigate = useNavigate();
@@ -26,6 +27,40 @@ const SettingPage = () => {
   const [isMonitoring, setIsMonitoring] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [permissionResult, setPermissionResult] = useState<null | boolean>(null);
+  console.log(permissionResult)
+  
+  const checkMonitorStatus =async ()=>{
+    try{
+      const isRunnigMonitor = await Foreground.getCurrentMonitoringStauts();
+      console.log(`is Running: ${isRunnigMonitor}`)
+      if(isRunnigMonitor){
+        setIsMonitoring(true)
+      } else{
+        setIsMonitoring(false)
+      }
+
+    }catch(e){
+      console.log(`checkMonitorStatus: ${e}`)
+    }
+  }
+
+  useEffect(() => {
+    checkMonitorStatus()
+  },[])
+
+  const checkAllPermissions = async () => {
+    try {
+      const result = await SamsungHealth.checkPermissionStatusForHealthData();
+  
+      console.log('All Permissions:', result);
+      for (const [key, value] of Object.entries(result)) {
+        console.log(`${key}: ${value}`);
+      }
+      // Example: { bloodglucose: 'SUCCESS', steps: 'WAITING', ... }
+    } catch (error) {
+      console.error('Error checking permissions:', error);
+    }
+  }
 
   const requestPermission = async (healthDataType: string) => {
     try {
@@ -134,7 +169,7 @@ const SettingPage = () => {
         </li>
         <li css={li}>
           <Typography color="dark" size="1.25" weight={500}>
-            혈당 모니터링
+            혈당 모니터링aa
           </Typography>
           <Toggle
             color="primary"
@@ -144,6 +179,7 @@ const SettingPage = () => {
           />
         </li>
       </ul>
+      <PermissionToggles/>
       <Button
             handler={onClickSearchBloodGlucose}
             color="primary" 

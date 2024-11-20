@@ -89,4 +89,13 @@ class ForegroundPlugin : Plugin() {
             call.resolve(JSObject().put("message", "Foreground service is not working now"))
         }
     }
+
+    @PluginMethod
+    fun getCurrentMonitoringStauts(call: PluginCall): Boolean{
+        if(ForegroundService.isRunning){
+            return true
+        } else{
+            return false
+        }
+    }
 }
