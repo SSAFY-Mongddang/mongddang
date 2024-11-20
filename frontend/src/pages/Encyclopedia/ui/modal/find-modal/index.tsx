@@ -10,7 +10,10 @@ import { Chip } from '@/shared/ui/Chip';
 import { base, modalCss, xiconCss } from '../main-modal/styles';
 import { useQueryClient } from '@tanstack/react-query';
 import { ICharacterData } from '@/pages/Encyclopedia/model/types';
-import { characterImages, formatId } from '@/pages/Encyclopedia/model/mongddang-img';
+import {
+  characterImages,
+  formatId,
+} from '@/pages/Encyclopedia/model/mongddang-img';
 import animation from '../../../../../assets/img/Animation.gif';
 
 const containerStyle = css`
@@ -63,14 +66,16 @@ export const FindModal = ({ setstate, data }: OwnModalProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowAnimation(false);
-    }, 1000); 
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
 
   const closeAllModals = () => {
     queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
-      window.location.reload()
+      console.log('FindModal mutation query oldData');
+      console.log(JSON.stringify(oldData));
+
       if (!oldData) return oldData;
 
       return {
@@ -107,19 +112,15 @@ export const FindModal = ({ setstate, data }: OwnModalProps) => {
             </Chip>
             <div css={containerStyle}>
               <Icon size={5} css={characterStyle}>
-                <img 
-                  alt={`${data.name} 캐릭터 이미지`} 
+                <img
+                  alt={`${data.name} 캐릭터 이미지`}
                   src={imagePath}
                   css={imageStyle}
                 />
               </Icon>
               {showAnimation && (
                 <div css={animationContainerStyle}>
-                  <img 
-                    src={animation} 
-                    alt="애니메이션 효과" 
-                    css={imageStyle}
-                  />
+                  <img src={animation} alt="애니메이션 효과" css={imageStyle} />
                 </div>
               )}
             </div>
@@ -131,7 +132,7 @@ export const FindModal = ({ setstate, data }: OwnModalProps) => {
               color="primary"
               fontSize="1"
               variant="contained"
-              style={{zIndex:'3'}}
+              style={{ zIndex: '3' }}
             >
               안녕!
             </Button>

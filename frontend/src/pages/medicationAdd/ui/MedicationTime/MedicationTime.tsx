@@ -25,6 +25,9 @@ const MedicationTime = () => {
 
   const debounceMedTimeInput = useCallback(
     debounce((fields) => {
+      console.log("debounceMedTimeInput's fields");
+      console.log(fields);
+
       setMedicationTime(fields);
     }, 500),
     []

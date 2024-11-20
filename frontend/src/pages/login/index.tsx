@@ -11,6 +11,7 @@ import loginBtn from '@/assets/img/page/login/login_button.png';
 import { Button } from '@/shared/ui/Button';
 import { usePushNotificationStore } from '@/shared/model/usePushNotificationStore';
 import { InitializePushListener } from '@/shared/api/push-notification/initPushListener';
+import { useMedicationAddStore } from '../medicationAdd/model/useMedicationAddStore';
 
 const Login = () => {
   const nav = useNavigate();
@@ -23,6 +24,7 @@ const Login = () => {
   const setPushNotification = usePushNotificationStore(
     (state) => state.setPushNotification
   );
+  const { setUserInfo } = useMedicationAddStore();
 
   const googleLogin = async () => {
     await SocialLogin.login({
@@ -45,6 +47,8 @@ const Login = () => {
 
             await updateUserInfo({ userAccessToken, user: userInfo });
             await InitializePushListener(setPushNotification);
+            // FIXME: useMedicationAddStore로 nickname 값을 활용하기 위한 초기화
+            setUserInfo(userInfo.nickname);
 
             const user = getUserInfo();
             if (user.user?.role === 'protector') {

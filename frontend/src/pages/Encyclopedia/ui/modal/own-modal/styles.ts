@@ -23,6 +23,7 @@ export const modalCss = css`
 
 export const xiconCss = css`
   position: absolute;
+  z-index: 1;
   top: 1rem;
   right: 1rem;
 `;

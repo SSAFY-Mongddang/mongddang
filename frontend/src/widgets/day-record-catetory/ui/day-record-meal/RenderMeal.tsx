@@ -21,6 +21,8 @@ import { MealRecord } from '@/shared/api/day-record';
 import { Bloodsugar } from '@/shared/api/blood-sugar';
 import { useNearestBloodSugar } from '@/entities/day-record';
 import { RecordErrorBoundary } from '../error-boundary/record-error-boundary';
+import dayjs from 'dayjs';
+import { MEAL_DEFAULT_IMG } from '@/shared/constans';
 
 interface RenderMealProps {
   nickname: string;
@@ -39,20 +41,14 @@ export const RenderMeal = ({
     isLoading,
     isError,
     error,
-  } = useQuery<MealRecord[]>(DayRecordQueries.mealRecordsQuery(nickname, date));
+  } = useQuery<MealRecord[]>(
+    DayRecordQueries.mealRecordsQuery(
+      nickname,
+      dayjs(date).format('YYYY-MM-DD')
+    )
+  );
 
   const nearestTimeBloodSugar = useNearestBloodSugar(mealData, bloodSugarData);
-
-  // if (isError) {
-  // console.log('Error in RenderMeal');
-  // console.log('Error in RenderMeal');
-  // console.log(JSON.stringify(error.message));
-  // console.log('Error in RenderMeal');
-  // console.log('Error in RenderMeal');
-  // throw new Error('Error in RenderMeal');
-  // }
-
-  // if (isLoading) return <Loading />;
 
   return (
     <RecordErrorBoundary
@@ -70,7 +66,7 @@ export const RenderMeal = ({
                 setIsTap((prev) => ({ ...prev, [index]: !prev[index] }))
               }
             >
-              <img css={mealImg} src={`${item.imageUrl}`} />
+              <img css={mealImg} src={MEAL_DEFAULT_IMG} />
               <div css={[mealImgCover, isTap[index] && visibleCover]}>
                 <span>{item.content.join(', ')}</span>
               </div>

@@ -18,6 +18,7 @@ export const NicknameTitle = () => {
   const nav = useNavigate();
 
   useEffect(() => {
+    // TODO: localStorage -> Preferences로 저장소 수정
     const savedToggleState = localStorage.getItem('titleToggle');
     if (savedToggleState) {
       setIsOn(JSON.parse(savedToggleState));
@@ -27,6 +28,7 @@ export const NicknameTitle = () => {
   const handleToggle = () => {
     const newToggleState = !isOn;
     setIsOn(newToggleState);
+    // TODO: localStorage -> Preferences로 저장소 수정
     localStorage.setItem('titleToggle', JSON.stringify(newToggleState));
   };
 
@@ -38,7 +40,7 @@ export const NicknameTitle = () => {
   });
   console.log(TitleQuery.data?.data?.data)
   return (
-    <div>
+    <div className='mongddang-title'>
       <TopBar type="iconpage" iconHandler={() => nav('/main')}>
         칭호 도감
       </TopBar>

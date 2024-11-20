@@ -34,6 +34,7 @@ import { useQueryClient } from '@tanstack/react-query';
 const MedicationAdd = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  // FIXME: login 시 setUserInfo로 닉네임을 할당해야 이곳에서 활용 가능하다.
   const {
     name,
     nickname,
@@ -70,7 +71,7 @@ const MedicationAdd = () => {
   const handleSaveMed = async () => {
     const medicationData = {
       name,
-      nickname: '집에가고파',
+      nickname,
       image,
       repeatStartTime,
       repeatEndTime,

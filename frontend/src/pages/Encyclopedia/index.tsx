@@ -62,7 +62,7 @@ export const Encyclopedia = () => {
     isLoading,
     isError,
     error,
-  } = useQuery<ICharacterInfo>({ 
+  } = useQuery<AxiosResponse<ICharacterInfo>>({ 
     queryKey: ['character'],
     queryFn: getCharacterInfo,
     refetchOnWindowFocus: true,
@@ -73,7 +73,7 @@ export const Encyclopedia = () => {
   if (isError) return <div>에러 발생: {error.message}</div>;
   if (!characterData?.data) return <div>데이터가 없습니다.</div>; 
   return (
-    <div css={base}>
+    <div css={base} className='Encyclopedia'>
       {isOwnModal && selectedCharacter && (
         <OwnModal data={selectedCharacter} setstate={setIsOwnModal} />
       )}
@@ -95,7 +95,7 @@ export const Encyclopedia = () => {
         </Description>
 
         <div css={cardsWrapperCss}>
-        {characterData.data.map((data: ICharacterData) => (  // data.data.data 대신 data.data로 수정
+        {characterData.data.data.map((data: ICharacterData) => (  // data.data.data 대신 data.data로 수정
           <div key={data.id} css={cardContainerCss}>
             {!data.isOwned ? (
               <div onClick={() => openModal(data, 'not')}>

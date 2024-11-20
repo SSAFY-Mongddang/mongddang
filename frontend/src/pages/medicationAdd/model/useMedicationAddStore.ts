@@ -24,7 +24,7 @@ type MedicationAddItem = {
 };
 
 export const useMedicationAddStore = create<MedicationAddItem>((set) => ({
-  nickname: '집에가고파',
+  nickname: '',
   name: '',
   image: null,
   repeatStartTime: null,

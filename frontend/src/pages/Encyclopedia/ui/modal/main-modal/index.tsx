@@ -54,10 +54,15 @@ export const MainModal = ({ setstate, data }: OwnModalProps) => {
       return getMainInfo(characterId);
     },
     onSuccess: (response, characterId) => {
+      console.log('on Success from mutation');
+      
       queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
-        console.log(response);
+        console.log('response of useMutation success from encyclopedia main modal: ', response);
         if (!oldData) return oldData;
 
+        console.log('oldData of useMutation from encyclopedia main modal');
+        console.log('oldData: ', JSON.stringify(oldData));
+        
         return {
           ...oldData,
           data: {

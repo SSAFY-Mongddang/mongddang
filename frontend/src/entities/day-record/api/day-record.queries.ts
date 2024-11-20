@@ -18,11 +18,13 @@ export class DayRecordQueries {
 
   private static validateBaseResponse(data: BaseApiResponse<DayRecords[]>) {
     if (!data.data || data.data.length === 0) {
+      console.log('return data\n', data.data);
       throw new DayRecordError('No records found', 'NO_RECORDS');
     }
 
     const firstRecord = data.data[0];
     if (!firstRecord || !firstRecord.records) {
+      console.log('return record data\n', firstRecord);
       throw new DayRecordError('Invalid record structure', 'INVALID_STRUCTURE');
     }
 
@@ -60,6 +62,11 @@ export class DayRecordQueries {
           },
         });
 
+        console.log(
+          'data from dayRecordQuery in filteredDayRecordsQuery, queryOptions'
+        );
+        console.log(data);
+
         // const baseData = data.data.dates[0].records[filters.category];
         // return baseData.map((item) => ({
         //   ...item,
@@ -91,37 +98,41 @@ export class DayRecordQueries {
 
   // 각 카테고리별 편의 메서드 // TODO: 하드코딩 수정
   static mealRecordsQuery(nickname: string, date: string) {
-    console.log(nickname, date);
+    console.log('mealRecordQuery nickname and date');
+    console.log('nickname: ', nickname, '\ndate: ', date);
     return this.filteredDayRecordsQuery({
       nickname,
-      date: '2024-11-11',
+      date,
       category: 'meal',
     });
   }
 
   static exerciseRecordsQuery(nickname: string, date: string) {
-    console.log(nickname, date);
+    console.log('exerciseRecordsQuery nickname and date');
+    console.log('nickname: ', nickname, '\ndate: ', date);
     return this.filteredDayRecordsQuery({
       nickname,
-      date: '2024-11-11',
+      date,
       category: 'exercise',
     });
   }
 
   static sleepRecordsQuery(nickname: string, date: string) {
-    console.log(nickname, date);
+    console.log('sleepRecordsQuery nickname and date');
+    console.log('nickname: ', nickname, '\ndate: ', date);
     return this.filteredDayRecordsQuery({
       nickname,
-      date: '2024-11-11',
+      date,
       category: 'sleep',
     });
   }
 
   static medicationRecordsQuery(nickname: string, date: string) {
-    console.log(nickname, date);
+    console.log('medicationRecordsQuery nickname and date');
+    console.log('nickname: ', nickname, '\ndate: ', date);
     return this.filteredDayRecordsQuery({
       nickname,
-      date: '2024-11-11',
+      date,
       category: 'medication',
     });
   }

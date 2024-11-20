@@ -5,13 +5,13 @@ import { ICharacterData, ICharacterInfo, INewInfoResponse } from '../model/types
 
 
 // 회원정보 조회
-export const getCharacterInfo = async (): Promise<ICharacterInfo> => {
+export const getCharacterInfo = async (): Promise<AxiosResponse<ICharacterInfo>> => {
   const response = await api({
     method: 'GET',
     url: '/api/game/collection/mongddang'
   });
   console.log('캐릭터 정보 조회 성공', response.data);
-  return response.data;
+  return response;
 };
 
 // 보유 코인 조회
@@ -70,11 +70,13 @@ export const getMainInfo = (mongddangId: number): Promise<AxiosResponse<ICharact
     data: { mongddangId }
   })
   .then((res) => {
-    console.log(res.data);
+    console.log('getMainInfo success response');
+    console.log('response: ', res);
     return res;
   })
   .catch((err) => {
-    console.log(err);
+    console.log('getMainInfo error response');
+    console.log('err: ', err);
     throw err;
   });
 };
