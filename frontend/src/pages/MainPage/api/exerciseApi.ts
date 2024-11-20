@@ -1,12 +1,12 @@
 import { api } from '@/shared/api/interceptors';
 
-export const startExercise = () => {
-  return api({
+export const startExercise = async () => {
+  return await api({
     method: 'POST',
     url: '/api/record/exercise/start',
   })
     .then((res) => {
-      console.log(res);
+      console.log('운동 시작', res);
       return res.data;
     })
     .catch((err) => {
@@ -15,8 +15,8 @@ export const startExercise = () => {
     });
 };
 
-export const endExercise = () => {
-  return api({
+export const endExercise = async () => {
+  return await api({
     method: 'PATCH',
     url: '/api/record/exercise/end',
   })

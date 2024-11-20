@@ -13,7 +13,6 @@ import { endSleep, startSleep } from '../../api/sleepApi';
 import { useStopwatchStore } from '../../model/useStopwatchStore';
 
 type AskRoutineAlertProps = {
-  accessToken: string | null;
   handleAlert: (status: string) => void;
   currentRoutine: string;
   changeRoutine: (currentRoutine: string) => void;
@@ -120,7 +119,7 @@ export const StartRoutineAlert = (props: BloodSugarProps) => {
 export const AskEndRoutineAlert = (props: AskRoutineAlertProps) => {
   const handleEndRoutine = async () => {
     if (props.currentRoutine === '먹는 중') {
-      const response = await endEating(props.accessToken);
+      const response = await endEating();
       if (response.code === 200) {
         props.handleBloodSugar(response.data.bloodSugarLevel);
       }

@@ -16,6 +16,13 @@ import mongddang15 from '../../../assets/img/mongddang/mongddang15.png';
 import mongddang16 from '../../../assets/img/mongddang/mongddang16.png';
 import mongddang17 from '../../../assets/img/mongddang/mongddang17.png';
 import mongddang18 from '../../../assets/img/mongddang/mongddang18.png';
+import mongddang1_meal from '@/assets/img/main_mongddang/meal_mongddang.png';
+import mongddang1_exercise from '@/assets/img/main_mongddang/exercise_mongddang.png';
+import mongddang1_sleep from '@/assets/img/main_mongddang/sleep_mongddang.png';
+import mongddang6_meal from '@/assets/img/fox_and_capybara/mongddang6_meal.png';
+import mongddang6_exercise from '@/assets/img/fox_and_capybara/mongddang6_exercise.png';
+import mongddang6_sleep from '@/assets/img/fox_and_capybara/mongddang6_sleep.png';
+import mongddang6_happy from '@/assets/img/fox_and_capybara/mongddang6_happy.png';
 
 export const characterImages: { [key: string]: string } = {
   '01': mongddang1,
@@ -36,6 +43,13 @@ export const characterImages: { [key: string]: string } = {
   '16': mongddang16,
   '17': mongddang17,
   '18': mongddang18,
+  '01_meal': mongddang1_meal,
+  '01_exercise': mongddang1_exercise,
+  '01_sleep': mongddang1_sleep,
+  '06_meal': mongddang6_meal,
+  '06_exercise': mongddang6_exercise,
+  '06_sleep': mongddang6_sleep,
+  '06_happy': mongddang6_happy,
 };
 
 export const formatId = (id: number): string => {

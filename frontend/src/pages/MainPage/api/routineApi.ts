@@ -1,7 +1,7 @@
 import { api } from '@/shared/api/interceptors';
 
-export const getInitialRoutine = () => {
-  return api({
+export const getInitialRoutine = async () => {
+  return await api({
     method: 'GET',
     url: '/api/record/ongoing',
   })

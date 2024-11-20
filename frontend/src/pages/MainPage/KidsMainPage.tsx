@@ -11,7 +11,9 @@ import {
   iconVerticalCss,
   kidsMainBase,
   kidsMainContent,
+  mainCharacterClickedCss,
   mainCharacterCss,
+  mainCharacterMovingCss,
   topContainer,
 } from './styles';
 import ProfileStatus from './ui/ProfileStatus/ProfileStatus';
@@ -34,12 +36,12 @@ import { getInitialRoutine } from './api/routineApi';
 import { useStopwatchStore } from './model/useStopwatchStore';
 import { setExitTime, setStopwatch } from './hooks/useStopwatchStatus';
 import { mainIcons } from './constants/iconsData';
-import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
 import { registerPlugin } from '@capacitor/core';
 import Microphone from './ui/Microphone/Microphone';
 import dayjs from 'dayjs';
+import { useMainInfoQuery, useRefreshMainInfo } from './model/useMainIfoQuery';
 
 export interface EchoPlugin {
   echo(options: { value: string }): Promise<{ value: string }>;
@@ -54,31 +56,19 @@ export const Foreground = registerPlugin<ForegroundPlugin>('Foreground');
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem('accessToken');
-  const [mainInfo, setMainInfo] = useState({
-    nickname: '',
-    mainTitleName: '',
-    mainMongddangId: 0,
-    coin: 0,
-    unreadNotification: false,
-    unclaimedMissionReward: false,
-    unclaimedAchivementReward: false,
-  });
+  const { data: mainInfo, isLoading } = useMainInfoQuery();
+  const refreshMainInfo = useRefreshMainInfo();
+
   const [openDietModal, setOpenDietModal] = useState(false);
   const [openBaseModal, setOpenBaseModal] = useState(false);
   const [contentType, setContentType] = useState('');
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isMongClicked, setIsMongClicked] = useState(false);
 
   // 초기 루틴 상태 조회
   useEffect(() => {
-    const fetchMainInfo = async () => {
-      const mainInfo = await getMainInfo();
-      setMainInfo(mainInfo);
-      setIsLoading(false);
-    };
     const fetchRoutine = async () => {
       const routineValue = await getInitialRoutine();
       if (routineValue.data === undefined) {
@@ -116,13 +106,16 @@ const KidsMainPage = () => {
       }
     });
 
-    fetchMainInfo();
     fetchRoutine();
 
     return () => {
       App.removeAllListeners();
     };
   }, []);
+
+  if (isLoading || !mainInfo) {
+    return <Loading />;
+  }
 
   const handleDietModal = () => {
     setOpenDietModal(true);
@@ -133,6 +126,7 @@ const KidsMainPage = () => {
   };
 
   const closeBaseModal = () => {
+    refreshMainInfo();
     setOpenBaseModal(false);
   };
 
@@ -146,11 +140,19 @@ const KidsMainPage = () => {
   // 알림창 상태 관리
   const handleAlert = (status: string) => {
     setAlertStatus(status);
+    if (status === 'endRoutine') {
+      refreshMainInfo();
+    }
   };
 
   // 알림창 혈당 관리
   const handleBloodSugar = (bloodSugar: number) => {
     setAlertBloodSugar(bloodSugar);
+  };
+
+  // 몽땅 움직임
+  const handleMong = () => {
+    setIsMongClicked(!isMongClicked);
   };
 
   // 바텀바 url 이동
@@ -163,10 +165,11 @@ const KidsMainPage = () => {
       navigate(`/record/${dayjs().format('YYYY-MM-DD')}`);
     }
   };
+
   console.log('알림창 상태', alertStatus);
   console.log('루틴 상태', currentRoutine);
 
-  return !isLoading ? (
+  return (
     <div css={kidsMainBase}>
       <div css={kidsMainContent}>
         {/* 상단 컴포넌트들 */}
@@ -281,12 +284,46 @@ const KidsMainPage = () => {
 
         <div css={bottomContainer}>
           {/* 메인캐릭터 + 말풍선 */}
-          <div css={CharacterContainer}>
+          <div
+            css={CharacterContainer}
+            onClick={() => {
+              handleMong();
+            }}
+          >
             <ChatBubble status={currentRoutine} />
             <img
-              src={characterImages[formatId(mainInfo.mainMongddangId)]}
-              alt=""
-              css={mainCharacterCss}
+              // src={
+              //   currentRoutine === '먹는 중'
+              //     ? characterImages[
+              //         `${formatId(mainInfo.mainMongddangId)}_meal`
+              //       ]
+              //     : currentRoutine === '운동 중'
+              //       ? characterImages[
+              //           `${formatId(mainInfo.mainMongddangId)}_exercise`
+              //         ]
+              //       : currentRoutine === '자는 중'
+              //         ? characterImages[
+              //             `${formatId(mainInfo.mainMongddangId)}_sleep`
+              //           ]
+              //         : characterImages[formatId(mainInfo.mainMongddangId)]
+              // }
+              src={
+                currentRoutine === '먹는 중'
+                  ? characterImages[`01_meal`]
+                  : currentRoutine === '운동 중'
+                    ? characterImages[`01_exercise`]
+                    : currentRoutine === '자는 중'
+                      ? characterImages[`01_sleep`]
+                      : characterImages[formatId(mainInfo.mainMongddangId)]
+              }
+              alt="mainMong"
+              css={
+                currentRoutine === '운동 중' && !isMongClicked
+                  ? mainCharacterMovingCss
+                  : currentRoutine !== '운동 중' && isMongClicked
+                    ? mainCharacterClickedCss
+                    : mainCharacterCss
+              }
             />
           </div>
 
@@ -310,7 +347,6 @@ const KidsMainPage = () => {
       {/* 식단 등록 모달 */}
       {openDietModal && (
         <DietModal
-          accessToken={accessToken}
           closeDietModal={closeDietModal}
           changeRoutine={changeRoutine}
           handleAlert={handleAlert}
@@ -328,7 +364,6 @@ const KidsMainPage = () => {
         alertStatus === 'askStartRoutine' ? (
           <AskStartRoutineAlert
             currentRoutine={currentRoutine}
-            accessToken={accessToken}
             handleAlert={handleAlert}
             changeRoutine={changeRoutine}
             handleBloodSugar={handleBloodSugar}
@@ -344,7 +379,6 @@ const KidsMainPage = () => {
           // 루틴 종료 여부 질문 알림
           <AskEndRoutineAlert
             currentRoutine={currentRoutine}
-            accessToken={accessToken}
             handleAlert={handleAlert}
             changeRoutine={changeRoutine}
             handleBloodSugar={handleBloodSugar}
@@ -361,8 +395,6 @@ const KidsMainPage = () => {
         )
       }
     </div>
-  ) : (
-    <Loading />
   );
 };
 

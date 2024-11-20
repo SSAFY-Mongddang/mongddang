@@ -2,12 +2,12 @@ import { css } from '@emotion/react';
 
 export const endEatAlertCss = css`
   width: 85%;
-  height: 22%;
+  height: 15%;
 `;
 
 export const bloodSugarAlertCss = css`
   width: 85%;
-  height: 25%;
+  height: 15%;
 `;
 
 export const bloodSugarTextCss = css`

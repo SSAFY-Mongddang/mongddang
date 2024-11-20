@@ -1,7 +1,7 @@
 import { api } from '@/shared/api/interceptors';
 
-export const startSleep = () => {
-  return api({
+export const startSleep = async () => {
+  return await api({
     method: 'POST',
     url: '/api/record/sleep/start',
   })
@@ -15,8 +15,8 @@ export const startSleep = () => {
     });
 };
 
-export const endSleep = () => {
-  return api({
+export const endSleep = async () => {
+  return await api({
     method: 'PATCH',
     url: '/api/record/sleep/end',
   })

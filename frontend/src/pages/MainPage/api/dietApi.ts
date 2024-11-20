@@ -1,52 +1,10 @@
-// 식단 저장 & 식사 시작하기
-// export const saveDiet = (
-//   accessToken: string | null,
-//   mealTime: string,
-//   image: File | null,
-//   content: string
-// ) => {
-//   const diet = JSON.stringify(content.split(','));
-//   const formData = new FormData();
-//   formData.append('mealTime', mealTime);
-//   if (image) {
-//     formData.append('image', image);
-//   } else {
-//     formData.append('image', '');
-//   }
-//   formData.append('content', diet);
-//   console.log('폼 데이터', formData);
-
-//   if (formData) {
-//     return api({
-//       method: 'POST',
-//       url: '/api/record/meal/start',
-//       headers: {
-//         'Content-Type': 'multipart/form-data',
-//         Authorization: `Bearer ${accessToken}`,
-//       },
-//       data: formData,
-//     })
-//       .then((res) => {
-//         console.log('식사시작됨', res.data);
-//         return res.data;
-//       })
-//       .catch((err) => {
-//         console.log('식사실패함', err);
-//       });
-//   }
-//   return;
-// };
-
 import { api } from '@/shared/api/interceptors';
 
 // 식사 종료하기
-export const endEating = (accessToken: string | null) => {
-  return api({
+export const endEating = async () => {
+  return await api({
     method: 'PATCH',
     url: '/api/record/meal/end',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
   })
     .then((res) => {
       console.log(res.data);
@@ -69,7 +27,6 @@ const convertToBase64 = (file: File) => {
 
 // 식단 저장 & 식사 시작하기
 export const saveDiet = async (
-  accessToken: string | null,
   mealTime: string,
   image: File | null,
   content: string
@@ -94,9 +51,6 @@ export const saveDiet = async (
   return api({
     method: 'POST',
     url: '/api/record/meal/start',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
     data,
   })
     .then((res) => {
