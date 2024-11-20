@@ -21,14 +21,17 @@ import { Backdrop } from '@/shared/ui/Backdrop';
 import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon';
+import { Spinner } from '@/shared/ui/Spinner';
 
 const Microphone = ({ children }: PropsWithChildren) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [isRecording, setIsRecording] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const startRecording = useCallback(async () => {
     try {
+      setIsLoading(false);
       await VoiceRecorder.requestAudioRecordingPermission(); // 권한 요청
       await VoiceRecorder.hasAudioRecordingPermission(); // 권한 확인
       await VoiceRecorder.startRecording(); // 녹음 시작
@@ -98,10 +101,16 @@ const Microphone = ({ children }: PropsWithChildren) => {
     setIsRecording(false);
   }, []);
 
+  const handleClickSendRecordButton = () => {
+    setIsLoading(true);
+    stopRecording();
+  };
+
   useEffect(() => {
     const checkStatus = async () => {
       try {
         const result = await VoiceRecorder.getCurrentStatus();
+        console.log(result);
         console.log('-------record--------현재 상태', result.status);
       } catch (error) {
         console.log(error);
@@ -109,55 +118,70 @@ const Microphone = ({ children }: PropsWithChildren) => {
     };
 
     checkStatus();
-
-    return () => {
-      VoiceRecorder.stopRecording();
-    };
   }, [isRecording]);
 
   return (
     <button css={buttonNoneStyle}>
       {children}
-      <button css={buttonNoneStyle} onClick={startRecording}>
+      <div css={buttonNoneStyle} onClick={startRecording}>
         <IconTypo
           icon={mainIcons.mic}
           fontSize="0.75"
           menu={<div>대화하기</div>}
         />
-      </button>
+      </div>
 
       {isRecording && (
         <div css={recordingBackDrop}>
           <div css={recordingSign}>
-            <Icon css={waveMic} size={14}>
-              <img src={mainIcons.mic} alt="mic" />
-            </Icon>
-            <Typography
-              color="light"
-              size="1.75"
-              weight={300}
-              style={{ marginBottom: '0.5rem' }}
-            >
-              녹음 중입니다
-            </Typography>
-            <Button
-              color="secondary"
-              fontSize="1"
-              variant="outlined"
-              handler={stopRecording}
-              style={{ marginBottom: '1rem' }}
-            >
-              대화 전송하기
-            </Button>
-            <Typography
-              color="light"
-              size="1"
-              weight={300}
-              style={{ marginBottom: '0.5rem' }}
-              onClick={cancelRecording}
-            >
-              녹음 취소하기
-            </Typography>
+            {isLoading ? (
+              <>
+                <Spinner
+                  size="xl"
+                  style={{ marginBottom: '1rem', justifySelf: 'center' }}
+                />
+                <Typography
+                  color="light"
+                  size="1.75"
+                  weight={300}
+                  style={{ marginBottom: '0.5rem' }}
+                >
+                  조금만 기다려 주세요.
+                </Typography>
+              </>
+            ) : (
+              <>
+                <Icon css={waveMic} size={14}>
+                  <img src={mainIcons.mic} alt="mic" />
+                </Icon>
+                <Typography
+                  color="light"
+                  size="1.75"
+                  weight={300}
+                  style={{ marginBottom: '0.5rem' }}
+                >
+                  녹음 중입니다
+                </Typography>
+                <Button
+                  color="secondary"
+                  fontSize="1"
+                  variant="outlined"
+                  handler={handleClickSendRecordButton}
+                  style={{ marginBottom: '1rem' }}
+                >
+                  대화 전송하기
+                </Button>
+                <Typography
+                  color="light"
+                  size="1"
+                  weight={300}
+                  style={{ marginBottom: '0.5rem' }}
+                  onClick={cancelRecording}
+                >
+                  녹음 취소하기
+                </Typography>
+              </>
+            )}
           </div>
           <Backdrop />
         </div>
