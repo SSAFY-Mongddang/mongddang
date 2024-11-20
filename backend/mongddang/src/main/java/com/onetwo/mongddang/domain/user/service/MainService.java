@@ -113,8 +113,6 @@ public class MainService {
         );
 
 
-
-
         // 수령하지 않은 업적 보상 있는지 확인
         Boolean UnclaimedAchivementReward = achievementUtils.getIsExistRewardableTitle(userId);
 

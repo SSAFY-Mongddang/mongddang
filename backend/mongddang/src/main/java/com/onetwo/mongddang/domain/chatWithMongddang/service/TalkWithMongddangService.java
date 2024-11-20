@@ -10,6 +10,7 @@ import com.onetwo.mongddang.domain.chatWithMongddang.prompt.PromptConstants;
 import com.onetwo.mongddang.domain.game.mongddang.repository.MyMongddangRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -29,26 +30,38 @@ public class TalkWithMongddangService {
     private final ChatWithMongddangService chatWithMongddangService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Value("${clova.speeach.url}")
+    private String clovaSpeechUrl;
+    @Value("${clova.speeach.api.key}")
+    private String clovaSpeechApiKey;
+    @Value("${clova.voice.url}")
+    private String clovaVoiceUrl;
+    @Value("${clova.voice.client.id}")
+    private String clovaVoiceClientId;
+    @Value("${clova.voice.client.secret}")
+    private String clovaVoiceClinetSecret;
+
 
     public ResponseDto talkWithMongddang(Long userId, byte[] audioBytes) throws JsonProcessingException {
-        log.info("userId: {}", userId);
+        log.info("talkWithMongddang userId: {}", userId);
 
         // ====================== CLOVA Speech =======================
-        // CLOVA Speech API URL
-        String speechUrl = "https://clovaspeech-gw.ncloud.com/recog/v1/stt?lang=Kor";
-
+        log.info("set API headers for speech");
         // 요청 헤더 설정
         HttpHeaders speechHeaders = new HttpHeaders();
         speechHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        speechHeaders.set("X-CLOVASPEECH-API-KEY", "a989a52d23e847efb02bf7ee1d41a8d9");
+        speechHeaders.set("X-CLOVASPEECH-API-KEY", clovaSpeechApiKey);
 
+        log.info("set request entity");
         // 요청 본문 설정
         HttpEntity<byte[]> requestEntity = new HttpEntity<>(audioBytes, speechHeaders);
         RestTemplate restTemplate = new RestTemplate();
 
+        log.info("send request to CLOVA Speech API");
         // API 요청
-        ResponseEntity<String> responseEntity = restTemplate.exchange(speechUrl, HttpMethod.POST, requestEntity, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(clovaSpeechUrl + "?lang=Kor", HttpMethod.POST, requestEntity, String.class);
 
+        log.info("API response: {}", responseEntity);
         // API 응답 파싱
         String responseString = responseEntity.getBody();
         JsonNode rootNode = objectMapper.readTree(responseString);
@@ -58,24 +71,21 @@ public class TalkWithMongddangService {
         // ====================== CLOVA Speech =======================
 
 
+        log.info("start chat with Mongddang");
         ResponseDto responseDto = chatWithMongddangService.startChatWithMongddang(userId, message);
         Map<String, Object> responseData = (Map<String, Object>) responseDto.getData(); // data를 Map으로 캐스팅
-        String mongddangQuote = (String) responseData.get("message"); // message 추출
-//        log.info("mongddang's answer 몽땅의 대답: {}", mongddangQuote);
+        String mongddangQuote = (String) responseData.get("message");
 
 
-        // ====================== CLOVA Voice =======================
-        // CLOVA Voice API URL
-        String voiceUrl = "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts";
-
+        // ======================= CLOVA Voice =======================
         // 요청 헤더 설정
         log.info("set API headers for voice");
         HttpHeaders voiceHeaders = new HttpHeaders();
 
         // 필수 헤더 추가
         log.info("add required headers");
-        voiceHeaders.set("x-ncp-apigw-api-key-id", "prp58mss1v");
-        voiceHeaders.set("x-ncp-apigw-api-key", "d2l3IER8DNYGj3CRSsPi5uuwjEMkBPa9ucNdDCfl");
+        voiceHeaders.set("x-ncp-apigw-api-key-id", clovaVoiceClientId);
+        voiceHeaders.set("x-ncp-apigw-api-key", clovaVoiceClinetSecret);
         voiceHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         // 요청 데이터 설정
@@ -91,7 +101,7 @@ public class TalkWithMongddangService {
 
         // API 요청
         log.info("send request to CLOVA Voice API");
-        ResponseEntity<byte[]> responseEntity2 = restTemplate2.exchange(voiceUrl, HttpMethod.POST, voiceRequestEntity, byte[].class);
+        ResponseEntity<byte[]> responseEntity2 = restTemplate2.exchange(clovaVoiceUrl, HttpMethod.POST, voiceRequestEntity, byte[].class);
 
         // API 응답 파싱
         log.info("API response: {}", responseEntity2);
