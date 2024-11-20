@@ -15,6 +15,7 @@ import { signUp } from '../../api/api';
 import { useUserStore } from '@/entities/user/model';
 import { useShallow } from 'zustand/shallow';
 import { SignupResponse } from '@/shared/api/user/user.type';
+import { useMedicationAddStore } from '@/pages/medicationAdd/model/useMedicationAddStore';
 
 export const DataForm = ({ role }: { role: UserRole }) => {
   const [gender, setGender] = useState<'male' | 'female' | undefined>(
@@ -36,6 +37,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
       getUserInfo: state.getUserInfo,
     }))
   );
+  const { setUserInfo } = useMedicationAddStore();
 
   const handleDateChangeWrapper =
     (type: 'year' | 'month' | 'day') =>
@@ -94,13 +96,20 @@ export const DataForm = ({ role }: { role: UserRole }) => {
       //TODO: capa 토스트 고려해보기
       alert('회원가입이 완료되었습니다.');
       // preference에 user 정보 저장
-      
+
       // TODO: Access Token 하드코딩 수정
-      // const userAccessToken = data.data.data.accessToken;
+      const userAccessToken = data.data.data.accessToken;
       const user = data.data.data.userInfo;
-      await updateUserInfo({ user });
-      if (user.role === 'child') nav('/main');
-      if (user.role === 'protector') nav('/protector-main');
+      await updateUserInfo({ userAccessToken, user });
+      // FIXME: 회원가입도 동일하게 약 등록을 위한 닉네임 할당 필요
+      setUserInfo(user.nickname);
+
+      // 회원가입 후 유저 롤과 관계없이 바로 로그인 페이지로 이동하도록 수정
+      // 유저 정보가 각기 다른 스토어에서 관리되다 보니, 로그인 시 한 번에 처리
+      // 해 주는 게 편하다.
+      // if (user.role === 'child') nav('/main');
+      // if (user.role === 'protector') nav('/protector-main');
+      nav('/');
     },
     onError: (error) => {
       console.error('회원가입 실패:', error);

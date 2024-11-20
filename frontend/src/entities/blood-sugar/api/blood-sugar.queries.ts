@@ -1,5 +1,6 @@
 import { Bloodsugar, BloodsugarService } from '@/shared/api/blood-sugar';
 import { queryOptions } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 // import { BloodsugarFilter } from '../model';
 // import dayjs from 'dayjs';
 import { sample } from 'lodash';
@@ -48,7 +49,14 @@ export class BloodsugarQueries {
         //   measurementTime: dayjs(item.measurementTime).format('HH:mm'),
         // }));
         // return formattedData;
-        return data.data;
+
+        const filteredData = data.data.filter((item) => {
+          const itemHour = dayjs(item.measurementTime).format('HH:mm');
+          const currentHour = dayjs().subtract(10, 'hour').format('HH:mm');
+          return itemHour < currentHour;
+        });
+
+        return filteredData;
       },
       enabled: !!nickname,
     });
