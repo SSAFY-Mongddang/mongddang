@@ -100,13 +100,19 @@ public class VitalService {
         Vital vital = vitalRepository.findTopByChildOrderByIdDesc(child).orElse(null);
 
         // 측정 시간과 현재 시간의 차이를 계산, 1분 이내에 조회한 경우라면 동일한 결과 반환
-        LocalDateTime measurementTime = vital.getMeasurementTime();
-        LocalDateTime currentTime = LocalDateTime.now();
-        Duration duration = Duration.between(measurementTime, currentTime);
-        log.info("measurementTime: {}", measurementTime);
-        log.info("currentTime: {}", currentTime);
-        log.info("duration: {}", duration.toMinutes());
-        if (duration.toMinutes() < 1) {
+        Duration duration = null;
+        // vital 기록 확인
+        if (vital != null) {
+            LocalDateTime measurementTime = vital.getMeasurementTime();
+            LocalDateTime currentTime = LocalDateTime.now();
+            duration = Duration.between(measurementTime, currentTime);
+            log.info("measurementTime: {}", measurementTime);
+            log.info("currentTime: {}", currentTime);
+            log.info("duration: {}", duration.toMinutes());
+        }
+
+        // 1분 이내의 기록이 있는 경우
+        if (duration != null && duration.toMinutes() < 1) {
             log.info("동일한 결과 반환 (There's a vital that passed time is less than 1min.");
             // 1분이내 => 동일한 결과 반환
             ResponseDailyGlucoseDto responseDailyGlucoseDto = ResponseDailyGlucoseDto.builder()

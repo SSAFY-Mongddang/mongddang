@@ -5,13 +5,14 @@ import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
 import com.onetwo.mongddang.domain.missionlog.application.MissionLogUtils;
 import com.onetwo.mongddang.domain.missionlog.dto.MissionDto;
-import com.onetwo.mongddang.domain.record.dto.record.ResponseBloodSugarDto;
 import com.onetwo.mongddang.domain.record.errors.CustomRecordErrorCode;
 import com.onetwo.mongddang.domain.record.model.Record;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import com.onetwo.mongddang.domain.vital.dto.ResponseDailyGlucoseDto;
+import com.onetwo.mongddang.domain.vital.service.VitalService;
 import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ public class RecordExerciseService {
     private final UserRepository userRepository;
     private final MissionLogUtils missionLogUtils;
     private final GameLogUtils gameLogUtils;
+    private final VitalService vitalService;
 
 
     /**
@@ -77,11 +79,12 @@ public class RecordExerciseService {
         log.info("미션 업데이트 완료");
         // 게임 로그 업데이트
         gameLogUtils.addGameLog(child, GameLog.GameLogCategory.exercise_count);
-
         log.info("게임 로그 업데이트 완료");
-        ResponseBloodSugarDto bloodSugarLevel = ResponseBloodSugarDto.builder()
-                .bloodSugarLevel(100L)
-                .build();
+        
+        // 현재 혈당 조회
+        ResponseDto currentBloodSugarDto = vitalService.getCurrentBloodSugar(child.getId(), child.getNickname());
+        ResponseDailyGlucoseDto responseDailyGlucoseDto = (ResponseDailyGlucoseDto) currentBloodSugarDto.getData();
+        Integer bloodSugarLevel = responseDailyGlucoseDto.getBloodSugarLevel();
 
         log.info("운동 시작 완료");
         return ResponseDto.builder()
@@ -123,13 +126,13 @@ public class RecordExerciseService {
         recordRepository.save(exerciseRecord);
         log.info("운동 종료 기록 완료. 종료시간 : {}", exerciseRecord.getEndTime());
 
-        ResponseBloodSugarDto bloodSugarLevel = ResponseBloodSugarDto.builder()
-                .bloodSugarLevel(100L)
-                .build();
+        // 현재 혈당 조회
+        ResponseDto currentBloodSugarDto = vitalService.getCurrentBloodSugar(child.getId(), child.getNickname());
+        ResponseDailyGlucoseDto responseDailyGlucoseDto = (ResponseDailyGlucoseDto) currentBloodSugarDto.getData();
 
         return ResponseDto.builder()
                 .message("운동을 종료합니다.")
-                .data(bloodSugarLevel)
+                .data(responseDailyGlucoseDto.getBloodSugarLevel())
                 .build();
     }
 

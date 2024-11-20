@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseBloodSugarDto {
 
-    Long bloodSugarLevel;
+    Integer bloodSugarLevel;
 }

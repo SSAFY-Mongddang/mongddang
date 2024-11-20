@@ -5,12 +5,13 @@ import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
 import com.onetwo.mongddang.domain.missionlog.application.MissionLogUtils;
 import com.onetwo.mongddang.domain.missionlog.dto.MissionDto;
-import com.onetwo.mongddang.domain.record.dto.record.ResponseBloodSugarDto;
 import com.onetwo.mongddang.domain.record.model.Record;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import com.onetwo.mongddang.domain.vital.dto.ResponseDailyGlucoseDto;
+import com.onetwo.mongddang.domain.vital.service.VitalService;
 import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class RecordMedicationService {
     private final UserRepository userRepository;
     private final MissionLogUtils missionLogUtils;
     private final GameLogUtils gameLogUtils;
+    private final VitalService vitalService;
 
 
     /**
@@ -66,9 +68,10 @@ public class RecordMedicationService {
         // 게임 로그 업데이트
         gameLogUtils.addGameLog(child, GameLog.GameLogCategory.medication_count);
 
-        ResponseBloodSugarDto bloodSugarLevel = ResponseBloodSugarDto.builder()
-                .bloodSugarLevel(100L)
-                .build();
+        // 현재 혈당 조회
+        ResponseDto currentBloodSugarDto = vitalService.getCurrentBloodSugar(child.getId(), child.getNickname());
+        ResponseDailyGlucoseDto responseDailyGlucoseDto = (ResponseDailyGlucoseDto) currentBloodSugarDto.getData();
+        Integer bloodSugarLevel = responseDailyGlucoseDto.getBloodSugarLevel();
 
         return ResponseDto.builder()
                 .message("복약을 확인합니다.")

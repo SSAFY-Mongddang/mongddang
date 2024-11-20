@@ -1,7 +1,6 @@
 package com.onetwo.mongddang.domain.record.service;
 
 
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.common.s3.S3ImageService;
@@ -11,13 +10,15 @@ import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
 import com.onetwo.mongddang.domain.missionlog.application.MissionLogUtils;
 import com.onetwo.mongddang.domain.missionlog.dto.MissionDto;
-import com.onetwo.mongddang.domain.record.dto.record.ResponseBloodSugarDto;
 import com.onetwo.mongddang.domain.record.errors.CustomRecordErrorCode;
 import com.onetwo.mongddang.domain.record.model.Record;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import com.onetwo.mongddang.domain.vital.application.VitalUtils;
+import com.onetwo.mongddang.domain.vital.dto.ResponseDailyGlucoseDto;
+import com.onetwo.mongddang.domain.vital.service.VitalService;
 import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -46,6 +43,8 @@ public class RecordMealService {
     private final JsonUtils jsonUtils;
     private final MissionLogUtils missionLogUtils;
     private final GameLogUtils gameLogUtils;
+    private final VitalUtils vitalUtils;
+    private final VitalService vitalService;
 
 
     /**
@@ -127,9 +126,11 @@ public class RecordMealService {
                 break;
         }
 
-        ResponseBloodSugarDto bloodSugarLevel = ResponseBloodSugarDto.builder()
-                .bloodSugarLevel(100L)
-                .build();
+        // 현재 혈당 조회
+        ResponseDto currentBloodSugarDto = vitalService.getCurrentBloodSugar(child.getId(), child.getNickname());
+        ResponseDailyGlucoseDto responseDailyGlucoseDto = (ResponseDailyGlucoseDto) currentBloodSugarDto.getData();
+        Integer bloodSugarLevel = responseDailyGlucoseDto.getBloodSugarLevel();
+
 
         return ResponseDto.builder()
                 .message("식사를 시작합니다.")
@@ -167,9 +168,10 @@ public class RecordMealService {
         recordRepository.save(mealRecord);
         log.info("식사 종료 기록 완료. 종료시간 : {}", mealRecord.getEndTime());
 
-        ResponseBloodSugarDto bloodSugarLevel = ResponseBloodSugarDto.builder()
-                .bloodSugarLevel(100L)
-                .build();
+        // 현재 혈당 조회
+        ResponseDto currentBloodSugarDto = vitalService.getCurrentBloodSugar(child.getId(), child.getNickname());
+        ResponseDailyGlucoseDto responseDailyGlucoseDto = (ResponseDailyGlucoseDto) currentBloodSugarDto.getData();
+        Integer bloodSugarLevel = responseDailyGlucoseDto.getBloodSugarLevel();
 
         return ResponseDto.builder()
                 .message("식사를 종료합니다.")

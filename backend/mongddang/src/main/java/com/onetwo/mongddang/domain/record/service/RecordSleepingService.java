@@ -3,13 +3,14 @@ package com.onetwo.mongddang.domain.record.service;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
-import com.onetwo.mongddang.domain.record.dto.record.ResponseBloodSugarDto;
 import com.onetwo.mongddang.domain.record.errors.CustomRecordErrorCode;
 import com.onetwo.mongddang.domain.record.model.Record;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import com.onetwo.mongddang.domain.vital.dto.ResponseDailyGlucoseDto;
+import com.onetwo.mongddang.domain.vital.service.VitalService;
 import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class RecordSleepingService {
     private final RecordRepository recordRepository;
     private final UserRepository userRepository;
     private final GameLogUtils gameLogUtils;
+    private final VitalService vitalService;
 
 
     /**
@@ -71,9 +73,10 @@ public class RecordSleepingService {
         // 게임 로그 업데이트
         gameLogUtils.addGameLog(child, GameLog.GameLogCategory.sleeping_count);
 
-        ResponseBloodSugarDto bloodSugarLevel = ResponseBloodSugarDto.builder()
-                .bloodSugarLevel(100L)
-                .build();
+        // 현재 혈당 조회
+        ResponseDto currentBloodSugarDto = vitalService.getCurrentBloodSugar(child.getId(), child.getNickname());
+        ResponseDailyGlucoseDto responseDailyGlucoseDto = (ResponseDailyGlucoseDto) currentBloodSugarDto.getData();
+        Integer bloodSugarLevel = responseDailyGlucoseDto.getBloodSugarLevel();
 
         return ResponseDto.builder()
                 .message("수면을 시작합니다.")
@@ -108,9 +111,10 @@ public class RecordSleepingService {
         lastedSleepRecord.get().setIsDone(true);
         log.info("수면 종료 기록 완료. 종료시간 : {}", lastedSleepRecord.get().getEndTime());
 
-        ResponseBloodSugarDto bloodSugarLevel = ResponseBloodSugarDto.builder()
-                .bloodSugarLevel(100L)
-                .build();
+        // 현재 혈당 조회
+        ResponseDto currentBloodSugarDto = vitalService.getCurrentBloodSugar(child.getId(), child.getNickname());
+        ResponseDailyGlucoseDto responseDailyGlucoseDto = (ResponseDailyGlucoseDto) currentBloodSugarDto.getData();
+        Integer bloodSugarLevel = responseDailyGlucoseDto.getBloodSugarLevel();
 
         return ResponseDto.builder()
                 .message("수면을 종료합니다.")
