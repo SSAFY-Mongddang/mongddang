@@ -107,6 +107,7 @@ public class PushNotificationService {
                 .title(notification.getTitle())
                 .message(notification.getMessage())
                 .category(category)
+                .medicationId(notification.getMedicationId())
                 .build();
 
         // notification 설정

@@ -1,5 +1,6 @@
 package com.onetwo.mongddang.domain.fcm.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.onetwo.mongddang.domain.fcm.model.PushLog;
 import lombok.Builder;
@@ -28,6 +29,7 @@ public class FcmMessage {
     @RequiredArgsConstructor
     @Getter
     @Builder
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Data {
 
         private final String receiverNickname; // 알림 수신인의 닉네임
@@ -35,6 +37,7 @@ public class FcmMessage {
         private final String title; // 제목 ("혈당 이상")
         private final String message; // 내용 ("고혈당입니다!")
         private final PushLog.Category category; // 알림 종류
+        private final Long medicationId;
     }
 
     // 알림 메시지 설정을 위한 Notification 클래스
