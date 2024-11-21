@@ -52,7 +52,7 @@ export class BloodsugarQueries {
 
         const filteredData = data.data.filter((item) => {
           const itemHour = dayjs(item.measurementTime).format('HH:mm');
-          const currentHour = dayjs().subtract(10, 'hour').format('HH:mm');
+          const currentHour = dayjs().format('HH:mm');
           return itemHour < currentHour;
         });
 

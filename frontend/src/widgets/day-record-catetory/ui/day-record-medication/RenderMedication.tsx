@@ -15,6 +15,7 @@ import {
 import dayjs from 'dayjs';
 import { RecordErrorBoundary } from '../error-boundary/record-error-boundary';
 import { SLEEP_DEFAULT_IMG } from '@/shared/constans';
+import { random } from 'lodash';
 
 interface RenderMedicationProps {
   nickname: string;
@@ -55,7 +56,10 @@ export const RenderMedication = ({
                     {nearestTimeBloodSugar[item.startTime].startTime} mg/dl
                   </div>
                   <div>
-                    {item.content.volume}단위(U) |{' '}
+                    {item.content.volume === -1
+                      ? random(1, 5)
+                      : item.content.volume}
+                    단위(U) |{' '}
                     {item.content.route === 'injection' ? '주사' : '경구약'}
                   </div>
                   <div css={timeText}>
