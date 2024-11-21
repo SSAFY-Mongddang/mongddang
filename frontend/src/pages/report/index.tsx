@@ -11,6 +11,7 @@ import { getreport } from './api/api';
 import useBloodSugarStore from './store/bloodSugarStore';
 import { useEffect } from 'react';
 import Loading from '@/shared/ui/Loading';
+import { useUserStore } from '@/entities/user/model';
 
 export const Report = () => {
   const nav = useNavigate();
@@ -19,6 +20,7 @@ export const Report = () => {
     queryKey: ['bloodSugarReport'],
     queryFn: getreport,
   });
+  const getUserInfo = useUserStore((state) => state.getUserInfo);
 
   useEffect(() => {
     console.log(
@@ -51,9 +53,16 @@ export const Report = () => {
   const measurementList = data?.data?.data?.glucoseMeasurementItmeList || [];
   console.log('Final measurement list:', measurementList);
 
+  
+  const userInfo = getUserInfo();
+  const navHandler = () => {
+    if (userInfo.user?.role === 'child') nav('/menu');
+    if (userInfo.user?.role === 'protector') nav('/protector-main');
+  };
+
   return (
     <div>
-      <TopBar type="iconpage" iconHandler={() => nav(-1)}>
+      <TopBar type="iconpage" iconHandler={navHandler}>
         주간 리포트
       </TopBar>
       <WeekChart data={measurementList} />

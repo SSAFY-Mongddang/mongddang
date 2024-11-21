@@ -44,6 +44,11 @@ export const DayRecordPage = () => {
 
   const showLoading = useMinimumLoading(isBloodSugarLoading);
 
+  const navHandler = () => {
+    if (userInfo.user?.role === 'child') nav('/record');
+    if (userInfo.user?.role === 'protector') nav('/record');
+  };
+
   if (isBloodSugarErr) {
     console.log(JSON.stringify(error));
     throw new Error('Blood data error');
@@ -67,7 +72,7 @@ export const DayRecordPage = () => {
   return (
     <>
       <header>
-        <TopBar type="iconpage" iconHandler={() => nav(-1)}>
+        <TopBar type="iconpage" iconHandler={navHandler}>
           내 기록
         </TopBar>
       </header>

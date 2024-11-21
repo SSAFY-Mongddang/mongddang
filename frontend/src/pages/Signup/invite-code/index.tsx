@@ -11,6 +11,7 @@ import { ChangeEvent } from 'react';
 import { UserInfo, useUserStore } from '@/entities/user/model';
 import { useShallow } from 'zustand/shallow';
 import { UserService } from '@/shared/api/user/user.service';
+import { TopBar } from '@/shared/ui/TopBar';
 
 export const InviteCode = () => {
   const nav = useNavigate();
@@ -65,31 +66,34 @@ export const InviteCode = () => {
   };
 
   return (
-    <div css={containerCss}>
-      <Typography color="dark" size="1.5" weight={700}>
-        아이의 초대코드를
-        <br />
-        입력해주세요.
-      </Typography>
-      <TextField
-        label=""
-        defaultValue=""
-        maxRows={10}
-        type="text"
-        variant="standard"
-        value={code}
-        onChange={handleCodeChange}
-      />
-      <Button
-        style={{ width: '8rem' }}
-        handler={handleSubmit}
-        fullwidth
-        color="primary"
-        fontSize="1"
-        variant="contained"
-      >
-        확인
-      </Button>
-    </div>
+    <>
+      <TopBar type='iconpage' iconHandler={() => nav('/protector-main')}></TopBar>
+      <div css={containerCss}>
+        <Typography color="dark" size="1.5" weight={700}>
+          아이의 초대코드를
+          <br />
+          입력해주세요.
+        </Typography>
+        <TextField
+          label=""
+          defaultValue=""
+          maxRows={10}
+          type="text"
+          variant="standard"
+          value={code}
+          onChange={handleCodeChange}
+        />
+        <Button
+          style={{ width: '8rem' }}
+          handler={handleSubmit}
+          fullwidth
+          color="primary"
+          fontSize="1"
+          variant="contained"
+        >
+          확인
+        </Button>
+      </div>
+    </>
   );
 };

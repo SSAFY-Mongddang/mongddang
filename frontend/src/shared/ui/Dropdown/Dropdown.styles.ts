@@ -6,6 +6,7 @@ export const styles = {
     position: 'relative',
     width: '12.5rem',
     height: '2.5rem',
+    WebkitTapHighlightColor: 'transparent',
   }),
   button: css({
     backgroundColor: Colors['primary']['200'],

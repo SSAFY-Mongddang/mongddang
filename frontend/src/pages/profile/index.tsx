@@ -56,6 +56,11 @@ export const Profile = () => {
   };
   // console.log(ProfileQuery);
 
+  const navHandler = () => {
+    if (user?.role === 'child') nav('/menu');
+    if (user?.role === 'protector') nav('/protector-main');
+  };
+
   return (
     <div>
       <div css={toastCss(showToast)}>
@@ -63,7 +68,7 @@ export const Profile = () => {
           초대 코드가 복사되었습니다.
         </Toast>
       </div>
-      <TopBar type="iconpage" iconHandler={() => nav(-1)}>
+      <TopBar type="iconpage" iconHandler={navHandler}>
         프로필
       </TopBar>
       <div css={base}>
