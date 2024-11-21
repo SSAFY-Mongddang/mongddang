@@ -12,11 +12,14 @@ import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { ICharacterData } from '@/pages/Encyclopedia/model/types';
 import { getMainInfo } from '@/pages/Encyclopedia/api/api';
-import { characterImages, formatId } from '@/pages/Encyclopedia/model/mongddang-img';
+import {
+  characterImages,
+  formatId,
+} from '@/pages/Encyclopedia/model/mongddang-img';
 
 interface OwnModalProps {
-  setstate: (value: boolean) => void; 
-  data: ICharacterData | null; 
+  setstate: (value: boolean) => void;
+  data: ICharacterData | null;
 }
 
 interface CharacterResponse {
@@ -24,7 +27,6 @@ interface CharacterResponse {
     data: ICharacterData[];
   };
 }
-
 
 export const MainModal = ({ setstate, data }: OwnModalProps) => {
   const [isModal, setIsModal] = useState(false);
@@ -42,7 +44,7 @@ export const MainModal = ({ setstate, data }: OwnModalProps) => {
 
   const handleUpdateCharacterClose = () => {
     setIsModal(false);
-    setIsParentModalOpen(true); 
+    setIsParentModalOpen(true);
   };
   const queryClient = useQueryClient();
   const mainMutation = useMutation<
@@ -55,22 +57,30 @@ export const MainModal = ({ setstate, data }: OwnModalProps) => {
     },
     onSuccess: (response, characterId) => {
       console.log('on Success from mutation');
-      
+
       queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
-        console.log('response of useMutation success from encyclopedia main modal: ', response);
+        console.log(
+          'response of useMutation success from encyclopedia main modal: ',
+          response
+        );
         if (!oldData) return oldData;
 
         console.log('oldData of useMutation from encyclopedia main modal');
         console.log('oldData: ', JSON.stringify(oldData));
-        
+
         return {
           ...oldData,
           data: {
             ...oldData.data,
-            data: oldData.data.data.map((character) => ({
-              ...character,
-              isMain: character.id === characterId,
-            })),
+            data: oldData.data.data.map((character) => {
+              if (character.id === characterId) {
+                return {
+                  ...character,
+                  isMain: character.id === characterId,
+                };
+              }
+              return character;
+            }),
           },
         };
       });
@@ -129,7 +139,7 @@ export const MainModal = ({ setstate, data }: OwnModalProps) => {
 
       {isModal && (
         <UpdateCharacter
-        bluehandler={handleSetMain}
+          bluehandler={handleSetMain}
           redhandler={handleUpdateCharacterClose}
         />
       )}

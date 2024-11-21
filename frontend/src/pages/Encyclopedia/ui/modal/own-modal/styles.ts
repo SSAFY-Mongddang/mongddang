@@ -10,6 +10,7 @@ export const base = css`
   position: relative;
   word-break: keep-all;
   overflow-wrap: break-word;
+  z-index: 1;
 `;
 
 export const modalCss = css`
@@ -23,7 +24,7 @@ export const modalCss = css`
 
 export const xiconCss = css`
   position: absolute;
-  z-index: 1;
+  z-index: 3;
   top: 1rem;
   right: 1rem;
 `;

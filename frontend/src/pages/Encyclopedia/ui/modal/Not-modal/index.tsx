@@ -14,7 +14,10 @@ import {
   storyTypographyCss,
   xiconCss,
 } from './styles';
-import { ICharacterData } from '@/pages/Encyclopedia/model/types';
+import {
+  ICharacterData,
+  ICharacterInfo,
+} from '@/pages/Encyclopedia/model/types';
 import { getCoinInfo, postRecruitment } from '@/pages/Encyclopedia/api/api';
 import { BuyModal } from '../buy-modal';
 import { FindModal } from '../find-modal';
@@ -25,6 +28,8 @@ import {
 import coin from '@/assets/img/icon/star_coin.png';
 import { css } from '@emotion/react';
 import coinbag from '@/assets/img/icon/star_coin_bag.png';
+import { queryClient } from '@/shared/lib/queryClient';
+import { AxiosResponse } from 'axios';
 
 interface OwnModalProps {
   setstate: (value: boolean) => void;
@@ -42,7 +47,39 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
     mutationFn: async () => {
       return await postRecruitment(data.id);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      // await queryClient.invalidateQueries({ queryKey: ['character'] });
+      queryClient.setQueryData<AxiosResponse<ICharacterInfo>>(
+        ['character'],
+        (oldData) => {
+          if (!oldData) return oldData;
+          console.log('olddata');
+          console.log(oldData);
+
+          const newData = {
+            ...oldData,
+            data: {
+              ...oldData.data,
+              data: oldData.data.data.map((character) => {
+                if (character.id === data.id) {
+                  return {
+                    ...character,
+                    isNew: true,
+                    isOwned: true,
+                  };
+                }
+
+                return character;
+              }),
+            },
+          };
+
+          console.log('newData');
+          console.log(newData);
+
+          return newData;
+        }
+      );
       setFindModal(true);
     },
     onError: (error) => {

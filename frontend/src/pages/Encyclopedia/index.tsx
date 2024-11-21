@@ -1,11 +1,15 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { TopBar } from '@/shared/ui/TopBar';
 import space from '../../assets/img/space.png';
 
 import { getCharacterInfo, getNewInfo } from './api/api';
-import { ICharacterData, ICharacterInfo, INewInfoResponse } from './model/types';
+import {
+  ICharacterData,
+  ICharacterInfo,
+  INewInfoResponse,
+} from './model/types';
 
 import { AxiosResponse } from 'axios';
 import {
@@ -23,6 +27,7 @@ import { Newcharacter } from './ui/characterlist/new-character';
 import { Owncharacter } from './ui/characterlist/owncharacter';
 import { Description } from './ui/description';
 import Loading from '@/shared/ui/Loading';
+import { MainModal } from './ui/modal/main-modal';
 
 export const Encyclopedia = () => {
   const [isOwnModal, setIsOwnModal] = useState(false);
@@ -43,7 +48,7 @@ export const Encyclopedia = () => {
       console.error('상태 변경 실패:', error);
       alert('상태 변경에 실패했습니다. 다시 시도해주세요.');
     },
-});
+  });
   const openModal = (
     character: ICharacterData,
     modalType: 'own' | 'main' | 'not'
@@ -62,23 +67,28 @@ export const Encyclopedia = () => {
     isLoading,
     isError,
     error,
-  } = useQuery<AxiosResponse<ICharacterInfo>>({ 
+  } = useQuery<AxiosResponse<ICharacterInfo>>({
     queryKey: ['character'],
     queryFn: getCharacterInfo,
-    refetchOnWindowFocus: true,
+    // refetchOnWindowFocus: true,
     staleTime: 0,
   });
 
-  if (isLoading) return <Loading/>;
+  useEffect(() => {
+    console.log('characterData in Encyclopidia');
+    console.log(characterData);
+  }, [characterData]);
+
+  if (isLoading) return <Loading />;
   if (isError) return <div>에러 발생: {error.message}</div>;
-  if (!characterData?.data) return <div>데이터가 없습니다.</div>; 
+  if (!characterData?.data) return <div>데이터가 없습니다.</div>;
   return (
-    <div css={base} className='Encyclopedia'>
+    <div css={base} className="Encyclopedia">
       {isOwnModal && selectedCharacter && (
         <OwnModal data={selectedCharacter} setstate={setIsOwnModal} />
       )}
       {isMainModal && selectedCharacter && (
-        <OwnModal data={selectedCharacter} setstate={setIsOwnModal} />
+        <MainModal data={selectedCharacter} setstate={setIsMainModal} />
       )}
       {isNotModal && selectedCharacter && (
         <Notmodal data={selectedCharacter} setstate={setIsNotModal} />
@@ -95,24 +105,28 @@ export const Encyclopedia = () => {
         </Description>
 
         <div css={cardsWrapperCss}>
-        {characterData.data.data.map((data: ICharacterData) => (  // data.data.data 대신 data.data로 수정
-          <div key={data.id} css={cardContainerCss}>
-            {!data.isOwned ? (
-              <div onClick={() => openModal(data, 'not')}>
-                <Notowncharacter data={data} />
+          {characterData.data.data.map(
+            (
+              data: ICharacterData // data.data.data 대신 data.data로 수정
+            ) => (
+              <div key={data.id} css={cardContainerCss}>
+                {!data.isOwned ? (
+                  <div onClick={() => openModal(data, 'not')}>
+                    <Notowncharacter data={data} />
+                  </div>
+                ) : data.isOwned && data.isNew ? (
+                  <div onClick={() => openModal(data, 'main')}>
+                    <Newcharacter data={data} />
+                  </div>
+                ) : (
+                  <div onClick={() => openModal(data, 'own')}>
+                    <Owncharacter data={data} />
+                  </div>
+                )}
               </div>
-            ) : data.isOwned && data.isNew ? (
-              <div onClick={() => openModal(data, 'main')}>
-                <Newcharacter data={data} />
-              </div>
-            ) : (
-              <div onClick={() => openModal(data, 'own')}>
-                <Owncharacter data={data} />
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+            )
+          )}
+        </div>
       </div>
 
       <img css={imgCss} src={space} alt="배경 이미지" />

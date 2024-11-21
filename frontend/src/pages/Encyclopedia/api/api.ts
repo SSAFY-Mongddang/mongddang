@@ -54,6 +54,8 @@ export const postRecruitment = ( mongddangId: number) => {
     data: {mongddangId}
   })
   .then((res)=>{
+    console.log('postRecruitment response data');
+    console.log(res)
     console.log(res.data)
     return res
   })

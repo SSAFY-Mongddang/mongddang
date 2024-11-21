@@ -55,7 +55,7 @@ interface OwnModalProps {
   setstate: (value: boolean) => void;
   setIsNew: (value: boolean) => void;
   characterId?: number;
-  data: ICharacterData | null;
+  data: ICharacterData;
 }
 
 export const FindModal = ({ setstate, data }: OwnModalProps) => {
@@ -73,8 +73,8 @@ export const FindModal = ({ setstate, data }: OwnModalProps) => {
 
   const closeAllModals = () => {
     queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
-      console.log('FindModal mutation query oldData');
-      console.log(JSON.stringify(oldData));
+      // console.log('FindModal mutation query oldData');
+      // console.log(JSON.stringify(oldData));
 
       if (!oldData) return oldData;
 
@@ -82,10 +82,15 @@ export const FindModal = ({ setstate, data }: OwnModalProps) => {
         ...oldData,
         data: {
           ...oldData.data,
-          data: oldData.data.data.map((character) => ({
-            ...character,
-            isNew: false,
-          })),
+          data: oldData.data.data.map((character) => {
+            if (character.id === data.id) {
+              return {
+                ...character,
+                isNew: true,
+              };
+            }
+            return character;
+          }),
         },
       };
     });

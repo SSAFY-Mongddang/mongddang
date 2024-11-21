@@ -1,0 +1,221 @@
+{
+  "data": {
+    "code": 200,
+    "message": "몽땅 목록 조회에 성공했습니다.",
+    "data": [
+      {
+        "id": 1,
+        "name": "몽몽",
+        "story": "몽땅족을 이끄는 리더 강아지. 믿음직스럽고, 성실하다. 모든 용맹함과 정의로움까지 두루 갖추어 모든 몽땅족들이 믿고 따른다.",
+        "price": 0,
+        "isOwned": true,
+        "isNew": false,
+        "isMain": true
+      },
+      {
+        "id": 2,
+        "name": "말랑이",
+        "story": "어쩐지 문해력과 점령게임에 진심인 푸딩고양이. 에셋 제작자의 공통 프로젝트를 떠올리게 한다. 빨간 넥타이를 매고 있는 걸 보니 말팀인 모양.",
+        "price": 1500,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 3,
+        "name": "라이옹",
+        "story": "푸근한 인상을 가진 사자. 풍성하고 결 좋은 갈기 덕분에 자주 어른 사자로 오해받지만, 사실은 무리에서 가장 어리다.",
+        "price": 500,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 4,
+        "name": "키키",
+        "story": "항상 사색에 빠져있는 원숭이. 이름을 부르면 앉은 자세 그대로 고개만 빼꼼 돌려 쳐다본다.. 관심받는 건 좋지만, 관심이 과도하면 부담스러워하는 편이다.",
+        "price": 500,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 5,
+        "name": "모모링",
+        "story": "네모네모한 네모 곰. 몽땅족 중에서 가장 힘이 세다. 다른 친구들이 가끔 걸어 다니는 벽으로 착각한다.",
+        "price": 500,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 6,
+        "name": "피니",
+        "story": "모두가 좋아하는 사막여우. 고민도 문제도 싸움도 모두 해결해 준다. 정작 본인은 고민 따위 없는 듯한 표정으로 웃고 있다.",
+        "price": 700,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 7,
+        "name": "카이",
+        "story": "입은 웃지만, 눈은 웃지 않는 호랑이. 누군가 덤비기만을 기다리고 있다. 몽땅족 중 자신이 제일 강하다고 믿는다.",
+        "price": 500,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 8,
+        "name": "포포",
+        "story": "복슬복슬한 레서판다. 껴안는 걸 좋아해서 항상 안아달라고 보챈다. 귀찮아서 거절하던 몽땅 친구들도 어느새인가 그 부드러운 털의 매력에 빠져들어 있다.",
+        "price": 700,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 9,
+        "name": "미루",
+        "story": "입이 큰 하마. 기분이 좋으면 입이 크게 벌리고 웃는다. 반질반질한 피부가 매력적이다.",
+        "price": 700,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 10,
+        "name": "밤바",
+        "story": "부끄러움 많은 판다. 항상 애착 대나무를 안고 다닌다. 집에 있는 걸 좋아하고, 집 안에서는 대체로 굴러다닌다.",
+        "price": 700,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 11,
+        "name": "피코",
+        "story": "한가로운 앵무새. 부리로 뭔가 물고 있는 걸 좋아하지만 그게 뭐든 상관이 없는 것 같다. 가끔 다른 몽땅 친구의 꼬리를 물어버릴 때도 있다. 성대모사 달인.",
+        "price": 500,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 12,
+        "name": "삐삐",
+        "story": "까칠한 뱁새. 몽땅족 중에 가장 작을 몸집 때문에 이리저리 채이며 살더니, 어느새 가장 까칠한 몽땅족이 되었다. 사실은 정이 많은 편.",
+        "price": 700,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 13,
+        "name": "플라미",
+        "story": "한쪽 다리로 서 있는 플라밍고. 친구가 한쪽 다리로 서 있는 것을 보고 따라 하다가 인생 자세를 찾았다. 부리의 광택이 자존감의 근원이다.",
+        "price": 500,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 14,
+        "name": "포더",
+        "story": "최강 느긋한 카피바라. 천천히 마을을 돌아다니다 보니 다른 몽땅들이 등에 올라타기 시작해서, 어느새 버스 기사가 되어있다. 본인은 전혀 신경 쓰지 않는 듯.",
+        "price": 500,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 15,
+        "name": "니키",
+        "story": "목이 짧은 아기 기린. 몽땅 기린족 중에서도 특히 짧다. 아직 덜 자라서 그렇다고 우기고 다니지만, 더 자랄 것 같지는 않다. 귀여우니까 괜찮아!",
+        "price": 700,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 16,
+        "name": "루미아",
+        "story": "몽땅족의 연예인인 유니콘. 지나는 길목마다 별가루가 뿌려지고(매니저가 뿌려준다고), 웃음 지을 때마다 꽃잎이 흩날린다(매니저가 날려준다). 본인은 집이 가장 좋은 듯.",
+        "price": 2000,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 17,
+        "name": "루루토",
+        "story": "뿔이 얼굴보다 큰 아기 코뿔소. 수줍음도 많고 성격도 온순해서 아기처럼 돌봐줘야 할 것 같은 기분이 들게 한다.",
+        "price": 300,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      },
+      {
+        "id": 18,
+        "name": "코비",
+        "story": "멋진 비색 꼬리를 가진 공작새. 꽁지깃을 접고 있을 때 간혹 파랑새로 오해받는다. 꽁지깃을 펼치면 모두의 시선을 끄는데, 몹시 아름답기 때문이기도 하지만 공간을 많이 차지하기 때문이기도 하다.",
+        "price": 700,
+        "isOwned": false,
+        "isNew": false,
+        "isMain": false
+      }
+    ]
+  },
+  "status": 200,
+  "statusText": "OK",
+  "headers": {
+    "access-control-expose-headers": "Authorization",
+    "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+    "client-via": "shouldInterceptRequest",
+    "connection": "keep-alive",
+    "content-length": "0",
+    "content-type": "application/json",
+    "date": "Thu, 21 Nov 2024 05:58:37 GMT",
+    "expires": "0",
+    "pragma": "no-cache",
+    "server": "nginx/1.27.2",
+    "transfer-encoding": "chunked",
+    "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+    "x-android-received-millis": "1732168717783",
+    "x-android-response-source": "NETWORK 200",
+    "x-android-selected-protocol": "http/1.1",
+    "x-android-sent-millis": "1732168717742",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-xss-protection": "0"
+  },
+  "config": {
+    "transitional": {
+      "silentJSONParsing": true,
+      "forcedJSONParsing": true,
+      "clarifyTimeoutError": false
+    },
+    "adapter": ["xhr", "http", "fetch"],
+    "transformRequest": [null],
+    "transformResponse": [null],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1,
+    "env": {},
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InZhYWFzdGxha2VAZ21haWwuY29tIiwicm9sZSI6ImNoaWxkIiwiaWQiOjI2LCJpYXQiOjE3MzIxNjg3MTIsImV4cCI6NDg4NTc2ODcxMn0.tepfpgvJfNlBdpUzVH3ACjUxRj-BaAu6x38QRuJjdKc"
+    },
+    "baseURL": "https://mijung.store",
+    "withCredentials": true,
+    "method": "get",
+    "url": "/api/game/collection/mongddang"
+  },
+  "request": {
+    "_url": "http://192.168.100.178:8100/_capacitor_http_interceptor_?u=https%3A%2F%2Fmijung.store%2Fapi%2Fgame%2Fcollection%2Fmongddang"
+  }
+}

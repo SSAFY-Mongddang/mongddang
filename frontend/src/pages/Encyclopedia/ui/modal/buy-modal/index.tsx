@@ -7,12 +7,11 @@ interface OwnModalProps {
   redhandler: () => void;
 }
 
-
-export const BuyModal = ({bluehandler, redhandler}:OwnModalProps) => {
+export const BuyModal = ({ bluehandler, redhandler }: OwnModalProps) => {
   return (
     <div>
       <Notification
-        style={{boxSizing:'content-box'}}
+        style={{ boxSizing: 'content-box' }}
         redHandler={redhandler}
         bluehandler={bluehandler}
         ment={

@@ -11,7 +11,7 @@ export const Chip = ({
   ...props
 }: ChipProps) => {
   return (
-    <span css={base(color, border, fontSize, fontWeight)} {...props}>
+    <span css={base(color, border, fontSize, fontWeight)} {...props} className='chip'>
       {children}
     </span>
   );
