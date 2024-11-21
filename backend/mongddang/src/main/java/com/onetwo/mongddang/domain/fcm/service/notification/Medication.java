@@ -11,6 +11,7 @@ import com.onetwo.mongddang.domain.record.repository.RecordRepository;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.record.model.Record;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class Medication {
 
     private final RecordRepository recordRepository;
@@ -35,6 +37,8 @@ public class Medication {
         for (MedicationTime medicationTime : medicationTimes) {
             User child = medicationTime.getMedicationManagement().getChild();
             Long medicationId = medicationTime.getMedicationManagement().getId();
+            log.info("medi : " + medicationId.toString());
+
             String message = "인슐린을 맞을 시간이에요.";
             Notification notification = Notification.builder()
                     .title("복약 알림")

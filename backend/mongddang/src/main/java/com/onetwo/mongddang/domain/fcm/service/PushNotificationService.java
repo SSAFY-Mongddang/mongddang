@@ -107,9 +107,9 @@ public class PushNotificationService {
                 .title(notification.getTitle())
                 .message(notification.getMessage())
                 .category(category)
-                .medicationId(notification.getMedicationId())
+                .medicationId(notification.getMedicationId().toString())
                 .build();
-
+        log.info("data 설정 : " + notification.getMedicationId().toString());
         // notification 설정
         FcmMessage.Notification messageNotification = FcmMessage.Notification.builder()
                 .title(notification.getTitle()) // 알림 제목 설정

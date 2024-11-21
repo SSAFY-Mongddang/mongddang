@@ -37,7 +37,7 @@ public class FcmMessage {
         private final String title; // 제목 ("혈당 이상")
         private final String message; // 내용 ("고혈당입니다!")
         private final PushLog.Category category; // 알림 종류
-        private final Long medicationId;
+        private final String medicationId;
     }
 
     // 알림 메시지 설정을 위한 Notification 클래스
