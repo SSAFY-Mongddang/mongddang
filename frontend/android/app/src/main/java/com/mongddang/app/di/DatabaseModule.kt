@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.room.Room
 import com.capacitorjs.plugins.preferences.Preferences
+import com.mongddang.app.data.local.converters.Converters
 import com.mongddang.app.data.local.dao.BloodGlucoseDataDao
 import com.mongddang.app.data.local.database.AppDatabase
 import com.mongddang.app.data.local.repository.DataStoreRepositoryImpl
@@ -30,6 +31,7 @@ object DatabaseModule {
             AppDatabase::class.java,
             "app_database"
         )
+            .addTypeConverter(Converters) // Room에 Converters 등록
             .fallbackToDestructiveMigration() // 개발 중에는 사용할 수 있음, 실제 환경에서는 마이그레이션 구현 권장
             .build()
     }

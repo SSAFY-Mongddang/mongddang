@@ -3,6 +3,7 @@ package com.mongddang.app.di
 import com.mongddang.app.BuildConfig
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.mongddang.app.data.local.network.AccessTokenInterceptor
+import com.mongddang.app.data.local.repository.remote.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,7 +33,7 @@ object NetworkModule {
         return Retrofit
             .Builder()
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-            .baseUrl(BuildConfig.API_BASE_URL + "1.0")
+            .baseUrl("https://backmal.ngrok.app/")
             .client(okHttpClient)
             .build()
     }
@@ -48,4 +49,9 @@ object NetworkModule {
             writeTimeout(20, TimeUnit.SECONDS)
             build()
         }
+
+    @Singleton
+    @Provides
+    fun provideApiService(retrofit: Retrofit): ApiService =
+        retrofit.create(ApiService::class.java)
 }

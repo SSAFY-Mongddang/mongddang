@@ -3,16 +3,20 @@ package com.onetwo.mongddang.domain.vital.model;
 import com.onetwo.mongddang.domain.user.model.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "blood_glucose")
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Vital {
+public class BloodGlucose {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,14 +42,12 @@ public class Vital {
     private GlucoseStatusType status;
 
     @Column(nullable = false, name = "is_notification")
-    @NotNull
     private Boolean isNotification;
 
+    @Column(name="package_name")
+    @NotNull
     private String packageName;
-
     public enum GlucoseStatusType {
         low, normal, high
     }
-
-
 }

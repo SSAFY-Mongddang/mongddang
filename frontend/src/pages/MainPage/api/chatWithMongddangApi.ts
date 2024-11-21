@@ -1,5 +1,6 @@
 import { api } from '@/shared/api/interceptors';
 import { AxiosResponse } from 'axios';
+import { PreferencesUser } from '@/shared/api/user';
 
 const START_GREETING = '안녕 반가워!';
 
@@ -47,10 +48,11 @@ export const chatWithMongddang = (
       return err;
     });
 };
-export const talkWithMongddang = (
+export const talkWithMongddang = async(
   jsonData: object
 ): Promise<AxiosResponse<string>> => {
-  const accessToken = import.meta.env.VITE_TEST_USER_ACCESS_TOKEN;
+  //const accessToken = import.meta.env.VITE_TEST_USER_ACCESS_TOKEN;
+  const accessToken = (await PreferencesUser.getUser()).userAccessToken;
 
   return api({
     method: 'POST',

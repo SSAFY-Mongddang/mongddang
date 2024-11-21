@@ -8,10 +8,16 @@ import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.mongddang.app.BloodGlucoseActivity
+import com.mongddang.app.MainActivity
+import com.mongddang.app.data.local.dao.api.ApiResponse
+import com.mongddang.app.data.local.dao.api.BloodGlucoseRequest
+import com.mongddang.app.data.local.repository.remote.BloodGlucoseRepository
+import com.mongddang.app.data.local.repository.remote.BloodGlucoseRepositoryImpl
+import com.mongddang.app.data.local.repository.remote.RepositoryEntryPoint
 import com.mongddang.app.utils.AppConstants
 import com.mongddang.app.utils.PermissionStateManager
 import com.mongddang.app.utils.dataStore
-import com.mongddang.app.viewmodel.HealthMainViewModel
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -23,99 +29,157 @@ import java.time.format.DateTimeParseException
 
 private const val TAG = "BloodGlucosePlugin"
 
-@CapacitorPlugin(name="BloodGlucosePlugin")
-class BloodGlucosePlugin : Plugin(){
+private val pluginScope = CoroutineScope(Dispatchers.IO)
 
-    private lateinit var healthMainViewModel: HealthMainViewModel
+@CapacitorPlugin(name = "BloodGlucosePlugin")
+class BloodGlucosePlugin : Plugin() {
+
+    private val bloodGlucoseRepository: BloodGlucoseRepositoryImpl?
+        get() {
+            val activity = getActivity()
+            return if (activity is MainActivity) {
+                activity.bloodGlucoseRepositoryImpl
+            } else {
+                null
+            }
+        }
+
+//    private var mainActivity: MainActivity? = null
+      private lateinit var mainActivity: MainActivity
+
+//    fun initialize(activity: MainActivity) {
+//        this.mainActivity = activity
+//    }
+
+
+
 
     @PluginMethod
     fun getThisTimeBloodGlucose(call: PluginCall) {
-        CoroutineScope(Dispatchers.IO).launch {
-            // 혈당 권한 확인
-            val isBloodGlucoseAllowed = checkBloodGlucosePermission()
-            if (!isBloodGlucoseAllowed) {
-                val errorMessage = "혈당 권한이 없습니다."
-                Log.e(TAG, errorMessage)
-                call.reject(errorMessage)
-                return@launch
-            }
-
-            // 요청된 날짜 문자열 가져오기
-            val requestDateTimeString = call.getString("datetime")
-            if (requestDateTimeString == null) {
-                val errorMessage = "datetime 값이 누락되었습니다."
-                Log.e(TAG, errorMessage)
-                call.reject(errorMessage)
-                return@launch
-            }
-
-            // LocalDateTime 변환
-            val requestLocalDateTime = try {
-                LocalDateTime.parse(requestDateTimeString, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-            } catch (e: DateTimeParseException) {
-                val errorMessage = "잘못된 날짜 형식입니다. ISO_LOCAL_DATE_TIME 형식이어야 합니다: $requestDateTimeString"
-                Log.e(TAG, errorMessage, e)
-                call.reject(errorMessage)
-                return@launch
-            }
-
-            // 최소 및 현재 날짜 설정
-            val minimumDate = AppConstants.minimumDate
-            val currentDate = AppConstants.currentDate
-
-            // 날짜 유효성 검사
-            if (requestLocalDateTime.isBefore(minimumDate) || requestLocalDateTime.isAfter(currentDate)) {
-                val errorMessage = "유효하지 않은 날짜입니다: $requestLocalDateTime"
-                Log.e(TAG, errorMessage)
-                call.reject(errorMessage)
-                return@launch
-            }
-
-            // 유효한 날짜일 경우 처리
-            val response = JSObject().apply {
-                put("datetime", requestLocalDateTime.toString())
-                put("status", "valid")
-            }
-            Log.d(TAG, "getThisTimeBloodGlucose: $requestLocalDateTime 는 유효한 날짜입니다.")
-
-            // Intent를 통한 새로운 Activity 시작
-            val context = getActivity()
-            if (context == null) {
-                val errorMessage = "Context를 가져올 수 없습니다."
-                Log.e(TAG, errorMessage)
-                call.reject(errorMessage)
-                return@launch
-            }
-
+        pluginScope.launch {
             try {
+                // 권한 확인
+                if (!checkBloodGlucosePermission()) {
+                    call.reject("Blood glucose permission is not granted.")
+                    return@launch
+                }
+
+                // 요청 날짜 검증
+                val requestDateTime = validateRequestDate(call) ?: return@launch
+
+                // Activity Context 확인
+                val context = getActivity()
+                if (context == null) {
+                    call.reject("Activity context is null.")
+                    return@launch
+                }
+
+                // Intent 생성 및 시작
                 val intent = Intent(context, BloodGlucoseActivity::class.java).apply {
-                    putExtra("dateTime", requestLocalDateTime.toString()) // 전달할 dateTime 값
+                    putExtra("dateTime", requestDateTime.toString())
                 }
                 context.startActivity(intent)
-            } catch (e: Exception) {
-                val errorMessage = "Failed to start activity: ${e.message}"
-                Log.e(TAG, errorMessage, e)
-                call.reject(errorMessage)
-                return@launch
-            }
 
-            // 성공적으로 날짜가 유효하고 처리 완료된 경우 응답
-            call.resolve(response)
+                // 성공 응답
+                val response = JSObject().apply {
+                    put("datetime", requestDateTime.toString())
+                    put("status", "valid")
+                }
+                call.resolve(response)
+                Log.d(TAG, "getThisTimeBloodGlucose: Valid date - $requestDateTime")
+            } catch (e: Exception) {
+                Log.e(TAG, "Unexpected error in getThisTimeBloodGlucose: ${e.message}", e)
+                call.reject("An unexpected error occurred: ${e.message}")
+            }
         }
+    }
+
+    // 날짜 검증 로직 분리
+    private fun validateRequestDate(call: PluginCall): LocalDateTime? {
+        val requestDateTimeString = call.getString("datetime")
+        if (requestDateTimeString == null) {
+            val errorMessage = "Missing 'datetime' parameter."
+            Log.e(TAG, errorMessage)
+            call.reject(errorMessage)
+            return null
+        }
+
+        val requestLocalDateTime = try {
+            LocalDateTime.parse(requestDateTimeString, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        } catch (e: DateTimeParseException) {
+            val errorMessage = "Invalid date format. Use ISO_LOCAL_DATE_TIME: $requestDateTimeString"
+            Log.e(TAG, errorMessage, e)
+            call.reject(errorMessage)
+            return null
+        }
+
+        val minimumDate = AppConstants.minimumDate
+        val currentDate = AppConstants.currentDate
+        if (requestLocalDateTime.isBefore(minimumDate) || requestLocalDateTime.isAfter(currentDate)) {
+            val errorMessage = "Invalid date range: $requestLocalDateTime"
+            Log.e(TAG, errorMessage)
+            call.reject(errorMessage)
+            return null
+        }
+
+        return requestLocalDateTime
     }
 
     @PluginMethod
-    fun checkUserBloodGlucosePerm(call: PluginCall){
-        CoroutineScope(Dispatchers.IO).launch {
-            val isGranted = checkBloodGlucosePermission()
-            if(isGranted){
-                call.resolve(JSObject().put("isGranted", true))
+    fun checkUserBloodGlucosePerm(call: PluginCall) {
+        pluginScope.launch {
+            try {
+                val isGranted = checkBloodGlucosePermission()
+                call.resolve(JSObject().put("isGranted", isGranted))
+            } catch (e: Exception) {
+                val errorMessage = "Failed to check blood glucose permission: ${e.message}"
+                Log.e(TAG, errorMessage, e)
+                call.reject(errorMessage)
             }
-            call.resolve(JSObject().put("isGranted", false))
         }
     }
 
-    suspend fun checkBloodGlucosePermission(): Boolean {
+        private fun ensureRepositoryInitialized() {
+        if (!::mainActivity.isInitialized) {
+            try {
+                Log.d(TAG, "BloodGlucoseRepository initialized successfully.")
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to initialize BloodGlucoseRepository: ${e.message}", e)
+            }
+        }
+    }
+
+
+//    private fun ensureRepositoryInitialized() {
+//        if (!::bloodGlucoseRepositoryImpl.isInitialized) {
+//            try {
+//                val entryPoint = EntryPointAccessors.fromApplication(
+//                    context,
+//                    RepositoryEntryPoint::class.java
+//                )
+//                bloodGlucoseRepositoryImpl = entryPoint.provideBloodGlucoseRepository()
+//                Log.d(TAG, "BloodGlucoseRepository initialized successfully.")
+//            } catch (e: Exception) {
+//                Log.e(TAG, "Failed to initialize BloodGlucoseRepository: ${e.message}", e)
+//            }
+//        }
+//    }
+    @PluginMethod
+    fun getTestApi(call: PluginCall) {
+        pluginScope.launch {
+            CoroutineScope(Dispatchers.IO).launch {
+                val activity = getActivity()
+                if (activity is MainActivity) {
+                    // MainActivity에 접근하여 필요한 작업 수행
+                    activity.callApi()
+                } else {
+                    call.reject("MainActivity is not available.")
+                }
+            }
+        }
+    }
+
+    private suspend fun checkBloodGlucosePermission(): Boolean {
         return try {
             val states = context.dataStore.data
                 .map { preferences ->
@@ -123,12 +187,33 @@ class BloodGlucosePlugin : Plugin(){
                         preferences[PermissionStateManager.getKey(key)] ?: AppConstants.WAITING
                     }
                 }
-                .first() // 모든 상태를 첫 번째 값으로 가져옴
+                .first()
+
             states[AppConstants.BLOOD_GLUCOSE] == AppConstants.SUCCESS
         } catch (e: Exception) {
-            Log.e(TAG, "checkBloodGlucosePermission 혈당 권한 상태는: ${e.message}")
+            Log.e(TAG, "Error checking blood glucose permission: ${e.message}", e)
             false
         }
     }
 
+    @PluginMethod
+        fun sendBloodGlucoseApi(call: PluginCall) {
+        pluginScope.launch {
+            CoroutineScope(Dispatchers.IO).launch {
+                val activity = getActivity()
+                if (activity is MainActivity) {
+                    // MainActivity에 접근하여 필요한 작업 수행
+                    val bloodGlucoseRequest = BloodGlucoseRequest(
+                        bloodSugarLevel = 120,
+                        measurementTime = LocalDateTime.now(),
+                        packageName = "com.samsung.app"
+
+                    )
+                    activity.sendBloodGlucoseData(bloodGlucoseRequest)
+                } else {
+                    call.reject("MainActivity is not available.")
+                }
+            }
+        }
+    }
 }

@@ -9,7 +9,6 @@ import { Button } from '@/shared/ui/Button';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/entities/user/model';
 import {BloodGlucosePlugin} from './plugin/BloodGlucosePlugin';
-import { AccessTokenPlugin, TokenPayload } from './plugin/AccessTokenPlugin';
 
 export const CheckSamsungData = () => {
   const nav = useNavigate();
@@ -17,15 +16,6 @@ export const CheckSamsungData = () => {
 
   const user = getUserInfo().user;
 
-  // //안드로이드에 토큰 넘기는 용 
-  const tokenPayload: TokenPayload = {"token": getUserInfo().userAccessToken, "nickName": getUserInfo().user?.nickname??null}
-  AccessTokenPlugin.getAccessTokenPlugin(tokenPayload)
-  .then((response) => {
-    console.log('Response from native:', response.message);
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
   const requestBloodGlucose = async () => {
     try{
       const result = await BloodGlucosePlugin.getThisTimeBloodGlucose({ datetime: "2024-11-04T00:00:00"})

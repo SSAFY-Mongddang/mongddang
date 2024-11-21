@@ -1,5 +1,8 @@
 package com.mongddang.app.data.local.dao.api
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 sealed class ApiResponse<out T : Any?> {
     data class Success<out T : Any?>(
         val code: Int = 200,

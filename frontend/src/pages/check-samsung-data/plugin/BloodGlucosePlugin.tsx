@@ -26,10 +26,22 @@ export interface GetThisTimeBloodGlucoseResponse {
   [key: string]: any; // 추가적인 응답 속성 허용 (필요에 따라 제거 가능)
 }
 
+export interface BloodGlucoseResult {
+  id: number;
+  bloodSugarLevel: number;
+  measurementTime: string;
+  status: 'low' | 'normal' | 'high';
+  notification: boolean;
+  code?: string; // Optional status code
+  message?: string; // Optional response message
+}
+
 // BloodGlucosePlugin 인터페이스 정의
 export interface BloodGlucosePlugin {
   getThisTimeBloodGlucose(options: { datetime: string }): Promise<{ datetime: string; status: string }>;
   checkUserBloodGlucosePerm(): Promise<{isGranted: boolean}>;
+  getTestApi(): Promise<{result: string}>;
+  sendBloodGlucoseApi(): Promise<BloodGlucoseResult>
 }
 
 // BloodGlucosePlugin을 Capacitor에 등록

@@ -3,29 +3,24 @@ package com.mongddang.app
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mongddang.app.data.local.database.AppDatabase
 import com.mongddang.app.utils.showToast
 import com.mongddang.app.viewmodel.BloodGlucoseViewModel
 import com.mongddang.app.viewmodel.BloodGlucoseViewModelFactory
-import com.mongddang.app.viewmodel.HealthMainViewModel
-import com.mongddang.app.viewmodel.HealthViewModelFactory
 import com.samsung.android.sdk.health.data.HealthDataService
-import com.samsung.android.sdk.health.data.HealthDataStore
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import javax.inject.Inject
 
 private const val TAG = "BloodGlucoseActivity"
 
 
+@AndroidEntryPoint
 class BloodGlucoseActivity : AppCompatActivity() {
 
     private lateinit var bloodGlucoseViewModel: BloodGlucoseViewModel
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,8 +70,4 @@ class BloodGlucoseActivity : AppCompatActivity() {
             showToast(this, message)
         }
     }
-
-
-
-
 }

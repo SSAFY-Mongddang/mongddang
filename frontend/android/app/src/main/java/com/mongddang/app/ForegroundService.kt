@@ -7,11 +7,6 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import com.mongddang.app.data.local.entity.BloodGlucoseRequest
-import com.mongddang.app.data.local.repository.DataStoreRepository
-import com.mongddang.app.data.local.repository.remote.BloodGlucoseRepository
-import com.mongddang.app.utils.AppConstants
-import com.mongddang.app.utils.PermissionStateManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

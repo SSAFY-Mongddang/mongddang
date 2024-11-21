@@ -4,6 +4,7 @@ import com.mongddang.app.data.local.repository.remote.BloodGlucoseRepository
 import com.mongddang.app.data.local.repository.remote.BloodGlucoseRepositoryImpl
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -13,5 +14,8 @@ import javax.inject.Singleton
 interface RepositoryModule {
     @Binds
     @Singleton
-    fun provideBloodGlucoseRepository(bloodGlucoseRepositoryImpl: BloodGlucoseRepositoryImpl): BloodGlucoseRepository
+    fun provideBloodGlucoseRepository(
+        bloodGlucoseRepositoryImpl: BloodGlucoseRepositoryImpl
+    ): BloodGlucoseRepository
+
 }

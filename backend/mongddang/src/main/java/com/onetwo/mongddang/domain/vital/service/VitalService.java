@@ -9,11 +9,11 @@ import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import com.onetwo.mongddang.domain.vital.application.VitalUtils;
-import com.onetwo.mongddang.domain.vital.dto.GlucoseMeasurementTimeDto;
-import com.onetwo.mongddang.domain.vital.dto.ResponseBloodSugarReportDto;
-import com.onetwo.mongddang.domain.vital.dto.ResponseDailyGlucoseDto;
+import com.onetwo.mongddang.domain.vital.dto.*;
 import com.onetwo.mongddang.domain.vital.errors.CustomVitalErrorCode;
+import com.onetwo.mongddang.domain.vital.model.BloodGlucose;
 import com.onetwo.mongddang.domain.vital.model.Vital;
+import com.onetwo.mongddang.domain.vital.repository.BloodGlucoseRepository;
 import com.onetwo.mongddang.domain.vital.repository.VitalRepository;
 import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +39,7 @@ public class VitalService {
     private final CtoPUtils ctoPUtils;
     private final VitalUtils vitalUtils;
     private final GptUtils gptUtils;
+    private final BloodGlucoseRepository bloodGlucoseRepository;
 
 
     /**
@@ -307,6 +308,81 @@ public class VitalService {
         } catch (Exception e) {
             log.error("Error occurred while getting GPT summary", e);
             throw new RestApiException(CustomVitalErrorCode.VITAL_GENERATE_GPT_FAILED);
+        }
+    }
+
+    public ResponseDto getSamsung(Long userId, BloodGlucoseRequest dto) {
+        try {
+            // 사용자 조회
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+            log.info("Existing User : {}", userId);
+            Vital.GlucoseStatusType bloodStatus = Vital.GlucoseStatusType.normal; // 기본값 설정
+
+            if (dto.getBloodSugarLevel() != null) {
+                // 상태 계산 로직
+                if (dto.getBloodSugarLevel() < 70) {
+                    System.out.println("Status: Low");
+                    bloodStatus = Vital.GlucoseStatusType.normal;
+                } else if (dto.getBloodSugarLevel() > 140) {
+                    System.out.println("Status: High");
+                    bloodStatus = Vital.GlucoseStatusType.high;
+                } else {
+                    System.out.println("Status: Normal");
+                    bloodStatus = Vital.GlucoseStatusType.normal;
+                }
+            }
+
+            // BloodGlucose 생성 및 저장
+            Vital vital = Vital.builder()
+                    .child(user)
+                    .measurementTime(dto.getMeasurementTime())
+                    .bloodSugarLevel(dto.getBloodSugarLevel())
+                    .content(null) // content는 필요하면 추가로 처리
+                    .isNotification(false)
+                    .status(bloodStatus) // Enum 변환 로
+                    .packageName(dto.getPackageName())
+                    .build();
+
+            Vital newBg = vitalRepository.save(vital);
+
+            // Response DTO 생성
+            BloodGlucoseResponse responsedto = BloodGlucoseResponse.builder()
+                    .id(newBg.getId())
+                    .bloodSugarLevel(newBg.getBloodSugarLevel())
+                    .status(newBg.getStatus())// 이미 Entity 상태와 DTO 상태가 동일한 Enum 타입
+                    .content(null)
+                    .measurementTime(newBg.getMeasurementTime())
+                    .notification(newBg.getIsNotification())
+                    .packageName(newBg.getPackageName())
+                    .build();
+
+            // 최종 Response 반환
+            return ResponseDto.builder()
+                    .message("삼성헬스 등록 성공")
+                    .data(responsedto)
+                    .build();
+        } catch (RestApiException e) {
+            log.error("Error during Samsung health registration: {}", e.getMessage());
+            throw e;
+        }
+    }
+
+    private Vital.GlucoseStatusType mapStatus(ResponseDailyGlucoseDto.Status status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Status cannot be null");
+        }
+
+        // Status Enum에서 GlucoseStatusType Enum으로 변환
+        switch (status) {
+            case low:
+                return Vital.GlucoseStatusType.low;
+            case normal:
+                return Vital.GlucoseStatusType.normal;
+            case high:
+                return Vital.GlucoseStatusType.high;
+            default:
+                throw new IllegalArgumentException("Unknown status: " + status);
         }
     }
 
