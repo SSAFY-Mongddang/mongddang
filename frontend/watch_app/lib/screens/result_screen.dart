@@ -22,7 +22,7 @@ class _ResultScreenState extends State<ResultScreen> {
     super.initState();
     _updateBloodSugar();
 
-    Future.delayed(const Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         Navigator.of(context).popUntil((route) => route.isFirst);
       }

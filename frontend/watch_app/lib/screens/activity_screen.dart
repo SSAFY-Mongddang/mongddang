@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/activity.dart';
 import 'result_screen.dart';
 
@@ -20,11 +22,61 @@ class _ActivityScreenState extends State<ActivityScreen> {
   int _minutes = 0;
   int _seconds = 0;
   bool _showQuestion = false;
+  final dio = Dio();
 
   @override
   void initState() {
     super.initState();
+    _initializeScreen();
+  }
+
+  void _initializeScreen() async {
+    if (widget.type == ActivityType.sleep) {
+      await _startSleep();
+    }
     _startTimer();
+  }
+
+  Future<void> _startSleep() async {
+    try {
+      dio.options.headers = {
+        'Authorization': 'Bearer ${dotenv.env['ACCESS_TOKEN']}',
+        'Content-Type': 'application/json',
+      };
+
+      final response = await dio.post(
+        '${dotenv.env['BASE_URL']}/api/record/sleep/start',
+      );
+
+      if (response.statusCode == 200) {
+        print('수면 시작 API 호출 성공');
+      } else {
+        print('수면 시작 API 호출 실패: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('수면 시작 API 호출 오류: $e');
+    }
+  }
+
+  Future<void> _endSleep() async {
+    try {
+      dio.options.headers = {
+        'Authorization': 'Bearer ${dotenv.env['ACCESS_TOKEN']}',
+        'Content-Type': 'application/json',
+      };
+
+      final response = await dio.patch(
+        '${dotenv.env['BASE_URL']}/api/record/sleep/end',
+      );
+
+      if (response.statusCode == 200) {
+        print('수면 종료 API 호출 성공');
+      } else {
+        print('수면 종료 API 호출 실패: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('수면 종료 API 호출 오류: $e');
+    }
   }
 
   void _startTimer() {
@@ -184,8 +236,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   _buildAnswerButton(
                     text: '응',
                     color: Colors.blue,
-                    onTap: () {
+                    onTap: () async {
                       _timer?.cancel();
+                      if (widget.type == ActivityType.sleep) {
+                        await _endSleep();
+                      }
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(

@@ -246,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 4),
           const Text(
-            '어린이 서원',
+            '어린이 세희',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,
