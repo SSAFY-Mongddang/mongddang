@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Optional;
 
 import static com.onetwo.mongddang.domain.record.model.Record.RecordCategoryType.exercise;
@@ -85,11 +86,13 @@ public class RecordExerciseService {
         ResponseDto currentBloodSugarDto = vitalService.getCurrentBloodSugar(child.getId(), child.getNickname());
         ResponseDailyGlucoseDto responseDailyGlucoseDto = (ResponseDailyGlucoseDto) currentBloodSugarDto.getData();
         Integer bloodSugarLevel = responseDailyGlucoseDto.getBloodSugarLevel();
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("bloodSugarLevel", bloodSugarLevel);
 
         log.info("운동 시작 완료");
         return ResponseDto.builder()
                 .message("운동을 시작합니다.")
-                .data(bloodSugarLevel)
+                .data(data)
                 .build();
 
     }
@@ -129,10 +132,13 @@ public class RecordExerciseService {
         // 현재 혈당 조회
         ResponseDto currentBloodSugarDto = vitalService.getCurrentBloodSugar(child.getId(), child.getNickname());
         ResponseDailyGlucoseDto responseDailyGlucoseDto = (ResponseDailyGlucoseDto) currentBloodSugarDto.getData();
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("bloodSugarLevel", responseDailyGlucoseDto.getBloodSugarLevel());
+
 
         return ResponseDto.builder()
                 .message("운동을 종료합니다.")
-                .data(responseDailyGlucoseDto.getBloodSugarLevel())
+                .data(data)
                 .build();
     }
 

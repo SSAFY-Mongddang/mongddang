@@ -34,6 +34,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.onetwo.mongddang.domain.record.model.Record.RecordCategoryType.medication;
@@ -161,11 +162,12 @@ public class RecordMedicationService {
 
         // 게임 로그 업데이트
         gameLogUtils.addGameLog(child, GameLog.GameLogCategory.medication_count);
-
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("bloodSugarLevel", bloodSugarLevel);
 
         return ResponseDto.builder()
                 .message("복약을 확인합니다.")
-                .data(bloodSugarLevel)
+                .data(data)
                 .build();
     }
 }

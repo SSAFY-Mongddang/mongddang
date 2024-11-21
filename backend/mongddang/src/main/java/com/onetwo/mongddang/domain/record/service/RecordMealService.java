@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -130,7 +131,8 @@ public class RecordMealService {
         ResponseDto currentBloodSugarDto = vitalService.getCurrentBloodSugar(child.getId(), child.getNickname());
         ResponseDailyGlucoseDto responseDailyGlucoseDto = (ResponseDailyGlucoseDto) currentBloodSugarDto.getData();
         Integer bloodSugarLevel = responseDailyGlucoseDto.getBloodSugarLevel();
-
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("bloodSugarLevel", bloodSugarLevel);
 
         return ResponseDto.builder()
                 .message("식사를 시작합니다.")
@@ -172,10 +174,12 @@ public class RecordMealService {
         ResponseDto currentBloodSugarDto = vitalService.getCurrentBloodSugar(child.getId(), child.getNickname());
         ResponseDailyGlucoseDto responseDailyGlucoseDto = (ResponseDailyGlucoseDto) currentBloodSugarDto.getData();
         Integer bloodSugarLevel = responseDailyGlucoseDto.getBloodSugarLevel();
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("bloodSugarLevel", bloodSugarLevel);
 
         return ResponseDto.builder()
                 .message("식사를 종료합니다.")
-                .data(bloodSugarLevel)
+                .data(data)
                 .build();
     }
 

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Optional;
 
 import static com.onetwo.mongddang.domain.record.model.Record.RecordCategoryType.sleeping;
@@ -77,6 +78,8 @@ public class RecordSleepingService {
         ResponseDto currentBloodSugarDto = vitalService.getCurrentBloodSugar(child.getId(), child.getNickname());
         ResponseDailyGlucoseDto responseDailyGlucoseDto = (ResponseDailyGlucoseDto) currentBloodSugarDto.getData();
         Integer bloodSugarLevel = responseDailyGlucoseDto.getBloodSugarLevel();
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("bloodSugarLevel", bloodSugarLevel);
 
         return ResponseDto.builder()
                 .message("수면을 시작합니다.")
@@ -115,6 +118,8 @@ public class RecordSleepingService {
         ResponseDto currentBloodSugarDto = vitalService.getCurrentBloodSugar(child.getId(), child.getNickname());
         ResponseDailyGlucoseDto responseDailyGlucoseDto = (ResponseDailyGlucoseDto) currentBloodSugarDto.getData();
         Integer bloodSugarLevel = responseDailyGlucoseDto.getBloodSugarLevel();
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("bloodSugarLevel", bloodSugarLevel);
 
         return ResponseDto.builder()
                 .message("수면을 종료합니다.")
