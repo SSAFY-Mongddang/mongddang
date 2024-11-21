@@ -8,6 +8,7 @@ export type PushNotificationInfo = {
   title: string | null;
   message: string | null;
   category: PushNotificationCategory | null;
+  medicationId?: number | null;
   setPushNotification: (notification: PushNotificationSchema) => void;
   removePushNotification: () => void;
 };
@@ -18,16 +19,25 @@ export const usePushNotificationStore = create<PushNotificationInfo>((set) => ({
   title: null,
   message: null,
   category: null,
+  medicationId: null,
 
   setPushNotification: (notification) => {
-    const { receiverNickname, childNickname, title, message, category } =
-      notification.data;
+    console.log('notification: ', notification);
+    const {
+      receiverNickname,
+      childNickname,
+      title,
+      message,
+      category,
+      medicationId,
+    } = notification.data;
     set({
       receiverNickname,
       childNickname,
       title,
       message,
       category,
+      medicationId,
     });
   },
 
@@ -38,6 +48,7 @@ export const usePushNotificationStore = create<PushNotificationInfo>((set) => ({
       title: null,
       message: null,
       category: null,
+      medicationId: null,
     });
   },
 }));

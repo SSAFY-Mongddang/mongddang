@@ -87,7 +87,7 @@ const MedicationAdd = () => {
     });
   };
   return (
-    <div css={container} className='medication-add'>
+    <div css={container} className="medication-add">
       <TopBar
         type="iconpage"
         css={topbarCss}
@@ -98,7 +98,7 @@ const MedicationAdd = () => {
         약 등록
       </TopBar>
       <div css={content}>
-        <div css={medicationTypeGroupCss} className='medication-type'>
+        <div css={medicationTypeGroupCss} className="medication-type">
           <div css={titieCss}>
             <Typography color="dark" size="1" weight={600}>
               약 종류
@@ -117,8 +117,8 @@ const MedicationAdd = () => {
             </Typography>
           </div>
         </div>
-        <div css={inputContentCss} className='medication-input'>
-          <div css={inputContentItemCss} className='medication-input-items'>
+        <div css={inputContentCss} className="medication-input">
+          <div css={inputContentItemCss} className="medication-input-items">
             <Typography color="dark" size="1" weight={600}>
               약 이름
             </Typography>

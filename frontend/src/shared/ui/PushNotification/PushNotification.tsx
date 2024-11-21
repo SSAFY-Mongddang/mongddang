@@ -8,11 +8,11 @@ import { usePushNotificationStore } from '@/shared/model/usePushNotificationStor
 import { takeMedicine } from '@/shared/api/push-notification/takeMedicineApi';
 
 export const PushNotification = () => {
-  const { title, message, removePushNotification, category } =
+  const { title, message, removePushNotification, category, medicationId } =
     usePushNotificationStore();
 
-  const checkTakeMedicine = () => {
-    takeMedicine();
+  const checkTakeMedicine = (medicationId: number) => {
+    takeMedicine(medicationId);
     removePushNotification();
   };
 
@@ -63,7 +63,8 @@ export const PushNotification = () => {
         ) : category === 'medication' ? (
           <Notification
             bluehandler={() => {
-              checkTakeMedicine();
+              console.log('checkTakeMedicine medicationId:', medicationId);
+              checkTakeMedicine(medicationId!);
             }}
             ment={
               <div css={textCss}>

@@ -65,14 +65,16 @@ const Medication = () => {
           </Button>
         </div>
         <div css={medicineListCss}>
-          {medicationList?.map((medication: MedicationItemType) => {
-            return (
-              <MedicationItem
-                medication={medication}
-                key={`${medication.nickname}-medication-${medication.repeatStartTime}`}
-              />
-            );
-          })}
+          {medicationList?.map(
+            (medication: MedicationItemType, index: number) => {
+              return (
+                <MedicationItem
+                  medication={medication}
+                  key={`${medication.nickname}-medication-${medication.repeatStartTime}-${index}`}
+                />
+              );
+            }
+          )}
         </div>
       </div>
     </div>

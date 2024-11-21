@@ -68,14 +68,8 @@ function App() {
             path="/foregroundsetting"
             element={<ForegoundServiceSetting />}
           />
-          <Route
-            path="/medication"
-            element={<Medication />}
-          />
-          <Route
-            path="/medication/add"
-            element={<MedicationAdd />}
-          />
+          <Route path="/medication" element={<Medication />} />
+          <Route path="/medication/add" element={<MedicationAdd />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>
