@@ -3,7 +3,8 @@ package com.onetwo.mongddang.domain.mealplan.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.mealplan.dto.RequestSaveMealplanDto;
-import com.onetwo.mongddang.domain.record.model.Record;
+import com.onetwo.mongddang.domain.mealplan.model.Mealplan;
+import com.onetwo.mongddang.domain.mealplan.repository.MealplanRepository;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
 import com.onetwo.mongddang.domain.user.error.CustomCtoPErrorCode;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
@@ -29,6 +30,7 @@ public class  SaveMealService {
     private final UserRepository userRepository;
     private final CtoPRepository ctoPRepository;
     private final RecordRepository recordRepository;
+    private final MealplanRepository mealplanRepository;
 
     public ResponseDto saveMealplan(RequestSaveMealplanDto requestSaveMealplanDto, Long userId) {
 
@@ -51,7 +53,7 @@ public class  SaveMealService {
             }
         }
 
-        List<Record> records = new ArrayList<>();
+        List<Mealplan> mealplans = new ArrayList<>();
 
         for (int i = 0; i < requestSaveMealplanDto.getMealList().size(); i++) {
             JsonNode meal = requestSaveMealplanDto.getMealList().get(i);
@@ -63,21 +65,21 @@ public class  SaveMealService {
             LocalDateTime date = dateDate.atStartOfDay();
 
             // 조중석식 여부
-            Record.MealTimeType mealTimeType = null;
+            Mealplan.MealTimeType mealTimeType = null;
             switch (meal.get("mealTime").asText()) {
                 case "조식":
-                    mealTimeType = Record.MealTimeType.breakfast;
+                    mealTimeType = Mealplan.MealTimeType.breakfast;
                     break;
                 case "중식":
-                    mealTimeType = Record.MealTimeType.lunch;
+                    mealTimeType = Mealplan.MealTimeType.lunch;
                     break;
                 case "석식":
-                    mealTimeType = Record.MealTimeType.dinner;
+                    mealTimeType = Mealplan.MealTimeType.dinner;
                     break;
             }
 
-            Record record = Record.builder()
-                    .category(Record.RecordCategoryType.meal)
+            Mealplan mealplan = Mealplan.builder()
+                    .category(Mealplan.RecordCategoryType.meal)
                     .child(child)
                     .content(meal.get("meal"))
                     .imageUrl(null)
@@ -87,9 +89,9 @@ public class  SaveMealService {
                     .mealTime(mealTimeType)
                     .build();
 
-            records.add(record);
+            mealplans.add(mealplan);
         }
-        recordRepository.saveAll(records);
+        mealplanRepository.saveAll(mealplans);
 
         // 반환
         ResponseDto response = ResponseDto.builder()
