@@ -59,7 +59,7 @@ class StatRepository {
       };
 
       final response = await dio.post(
-        '${dotenv.env['BASE_URL']}/api/vital/bloodsugar/current?nickname=어린이 서원',
+        '${dotenv.env['BASE_URL']}/api/vital/bloodsugar/current?nickname=세희',
       );
 
       if (response.data != null && response.data['data'] != null) {
