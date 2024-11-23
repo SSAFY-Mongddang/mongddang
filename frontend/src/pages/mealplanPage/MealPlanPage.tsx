@@ -5,6 +5,9 @@ import { topbarCss } from '../medication/Medication.styles';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/entities/user/model';
 import {
+  container,
+  imgContainerCss,
+  imgCss,
   inputTypo,
   mealPlanFormBox,
   mealPlanFormContainer,
@@ -15,6 +18,7 @@ import { Button } from '@/shared/ui/Button';
 import { useState } from 'react';
 import { Notification } from '@/shared/ui/Notification';
 import { DailyMeal, getMealPlan, saveMealPlan } from './api/mealPlanApi';
+import MenuMongddang from '@/assets/img/main_mongddang/meal_mongddang-resized.png';
 
 const MealPlanPage = () => {
   const navigate = useNavigate();
@@ -81,22 +85,50 @@ const MealPlanPage = () => {
         급식표 등록
       </TopBar>
       <div style={{ padding: '0.5rem' }}>
+        <div
+          css={container}
+          style={{ display: 'flex', flexDirection: 'column' }}
+        >
+          <Typography
+            color="dark"
+            size="1"
+            weight={600}
+            style={{ lineHeight: '0.75rem' }}
+          >
+            <p>
+              최근에 <span style={{ color: '#00b0ff' }}>인동초등학교</span>
+            </p>
+            <p>
+              <span style={{ color: '#00b0ff' }}>2024년 10월</span>
+            </p>
+            <p>급식표를 등록했어요!</p>
+          </Typography>
+        </div>
+        <div css={imgContainerCss}>
+          <img src={MenuMongddang} alt="information mongddang" css={imgCss} />
+        </div>
+
         <div css={mealPlanFormContainer}>
-          <Typography color="dark" size="1.25" weight={600}>
+          <Typography
+            color="dark"
+            size="1.25"
+            weight={600}
+            style={{ marginBottom: '0.5rem' }}
+          >
             급식표 등록
           </Typography>
           <Typography
             color="dark"
             size="1"
-            weight={500}
-            style={{ marginBottom: '3rem' }}
+            weight={400}
+            style={{ marginBottom: '1rem' }}
           >
             학교와 몇 월인지 알려주면 급식표가 등록됩니다
           </Typography>
           <div css={mealPlanFormBox}>
             <Typography
               color="dark"
-              size="1.25"
+              size="1"
               weight={600}
               style={{ marginBottom: '0.5rem' }}
             >
@@ -106,14 +138,14 @@ const MealPlanPage = () => {
               label=""
               variant="standard"
               placeholder="어느 학교의 급식표인가요?"
-              style={{ marginBottom: '2rem' }}
+              style={{ marginBottom: '1rem' }}
               css={inputTypo}
               onChange={(e) => setSchoolNameInput(e.target.value)}
               value={schoolNameInput}
             />
             <Typography
               color="dark"
-              size="1.25"
+              size="1"
               weight={600}
               style={{ marginBottom: '0.5rem' }}
             >
