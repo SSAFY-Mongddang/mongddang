@@ -93,17 +93,5 @@ class ForegroundService : Service() {
         serviceScope.cancel() // 서비스가 종료될 때 모든 코루틴 작업 취소
     }
 
-//    private fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
-//        Log.i(TAG, "isServiceRunning: ")
-//        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-//        @Suppress("DEPRECATION") // ForegroundService 확인을 위해 사용
-//        for (service in activityManager.getRunningServices(Int.MAX_VALUE)) {
-//            if (serviceClass.name == service.service.className) {
-//                return true // 서비스가 실행 중임
-//            }
-//        }
-//        return false // 서비스가 실행 중이 아님
-//    }
-
     override fun onBind(intent: Intent): IBinder? = null
 }

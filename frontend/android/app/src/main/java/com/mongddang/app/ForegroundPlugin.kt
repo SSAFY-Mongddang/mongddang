@@ -14,6 +14,7 @@ import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.annotation.Permission
+import com.mongddang.app.utils.ServiceUtils
 
 
 private const val TAG = "ForegroundPlugin"
@@ -87,6 +88,16 @@ class ForegroundPlugin : Plugin() {
         } else{
             Log.d(TAG, "stopForeground: 현재 모니터링 하는 중이 아님.")
             call.resolve(JSObject().put("message", "Foreground service is not working now"))
+        }
+    }
+
+    @PluginMethod
+    fun isCheckStatusMonitoring(call: PluginCall){
+        val isActive = ServiceUtils.isServiceRunning(context, ForegroundService::class.java)
+        if(isActive){
+            call.resolve(JSObject().put("isActive", isActive))
+        } else {
+            call.resolve(JSObject().put("isActive", isActive))
         }
     }
 }
