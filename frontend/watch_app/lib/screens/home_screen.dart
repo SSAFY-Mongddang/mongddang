@@ -183,6 +183,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildScoreDisplay() {
+    // 혈당 수치에 따른 색상 결정
+    Color getBorderColor() {
+      if (bloodSugar == null) return Colors.grey[300]!;
+      if (bloodSugar! <= 70) return Colors.blue;
+      if (bloodSugar! < 180) return Colors.green;
+      return Colors.red;
+    }
+
     return Positioned(
       top: 70,
       right: 20,
@@ -196,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
             shape: BoxShape.circle,
             color: Colors.white,
             border: Border.all(
-              color: Colors.grey[300]!,
+              color: getBorderColor(),  // 혈당 수치에 따른 동적 색상
               width: 2,
             ),
           ),
