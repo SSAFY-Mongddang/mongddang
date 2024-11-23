@@ -71,7 +71,7 @@ const SettingPage = () => {
           <div css={formBox}>
             <TextField
               color="primary"
-              defaultValue="60"
+              defaultValue="90"
               label=""
               type="text"
               variant="standard"
