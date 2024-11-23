@@ -1,4 +1,4 @@
-package com.mongddang.app
+package com.mongddang.app.plugin
 
 import android.Manifest
 import android.app.ForegroundServiceStartNotAllowedException
@@ -15,7 +15,7 @@ import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.annotation.Permission
 import com.mongddang.app.utils.ServiceUtils
-
+import com.mongddang.app.ForegroundService
 
 private const val TAG = "ForegroundPlugin"
 
@@ -28,7 +28,7 @@ private const val TAG = "ForegroundPlugin"
         )
     ]
 )
-class ForegroundPlugin : Plugin() {
+class ForegroundPlugin: Plugin() {
 
     companion object {
         private const val FOREGROUND_SERVICE_PERMISSION_REQUEST_CODE = 1001

@@ -8,6 +8,8 @@ import { Typography } from '@/shared/ui/Typography';
 import { useAudioStore } from '@/shared/model/useAudioStore';
 import { useState, useEffect } from 'react';
 import { Foreground } from './plugins/ForegroundPlugin';
+import { UserInfo, useUserStore } from '@/entities/user/model';
+import { UserInfoPlugin } from './plugins/UserInfoPlugin';
 
 const SettingPage = () => {
   const navigate = useNavigate();
@@ -15,10 +17,24 @@ const SettingPage = () => {
   const { bgm, bubble } = useAudioStore();
 
   console.log('bgm', bgm.audioRef?.volume);
-
+  const getUserInfo = useUserStore((state) => state.getUserInfo);
+  const [token, setToken] = useState<UserInfo["userAccessToken"]>(null); // 사용자 정보를 저장
   const [bgmState, setBgmState] = useState<boolean>(!bgm.isMuted);
   const [bubbleState, setBubbleState] = useState<boolean>(!bubble.isMuted);
   const [isActive, setIsActive] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  console.log(isLoading)
+
+  console.log("토큰!!!!!!!!!!!!!!!!!!!!!",token)
+  const getUserInfoToAndroid = async() => {
+    try{
+      await UserInfoPlugin.getAccessToken({"token": token})
+    }catch (error){
+      console.log(error)
+    }
+  }
+
+  getUserInfoToAndroid()
 
   const checkStatus = async () => {
     try {
@@ -62,6 +78,17 @@ const SettingPage = () => {
       console.error("Error toggling monitoring status:", error);
     }
   };
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      setIsLoading(true); // 로딩 시작
+      const userInfo = await getUserInfo(); // 비동기 호출
+      setToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InJpbWh5ZW5hQGdtYWlsLmNvbSIsInJvbGUiOiJjaGlsZCIsImlkIjoyMiwiaWF0IjoxNzMyMzY2MzgwLCJleHAiOjQ4ODU5NjYzODB9.hiq8qCgMiaVhLeggoqXb0HTxOYksfTVKRBWjTgP26Rw")
+      setIsLoading(false); // 로딩 종료
+    };
+
+    fetchUserInfo();
+  }, [getUserInfo]);
 
 
   useEffect(() => {

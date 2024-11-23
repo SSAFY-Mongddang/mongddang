@@ -12,14 +12,15 @@ import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 
+private const val TAG = "UserInfoPlugin"
 
 @CapacitorPlugin(name = "UserInfoPlugin")
-class UserInfoPlugin @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository
-) : Plugin() {
+class UserInfoPlugin: Plugin() {
+
+    private lateinit var dataStoreRepository: DataStoreRepository
 
     @PluginMethod
-    fun getAccessTokenPlugin(call: PluginCall){
+    fun getAccessToken(call: PluginCall){
         CoroutineScope(Dispatchers.IO).launch {
             val token = call.getString("token")
             val nickname = call.getString("nickname")
@@ -30,14 +31,17 @@ class UserInfoPlugin @Inject constructor(
                     put("message", "Token saved: $token, NickName saved: $nickname")
                 }
                 dataStoreRepository.getAccessToken().collect { token ->
-                    Log.d("DataStore", "Token: $token, Nickname: $nickname")
+                    Log.d(TAG,"DataStore: Token: $token")
                 }
                 dataStoreRepository.getUserNickname().collect {  nickname ->
-                    Log.d("DataStore",  "Nickname: $nickname")
+                    Log.d(TAG,"DataStore: Nickname: $nickname")
                 }
                 call.resolve(response)
             } else {
-                call.reject("Token or NickName is invalid.")
+                val response = JSObject().apply {
+                    put("errorCode", "Token or NickName is invalid.")
+                }
+                call.resolve(response)
             }
         }
 
