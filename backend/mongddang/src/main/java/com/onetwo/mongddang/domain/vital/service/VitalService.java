@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -91,13 +92,19 @@ public class VitalService {
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         User child = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("child: {}", child.getEmail());
 
         // 조회 권한 확인
         // ctoPUtils.validateProtectorAccessChildData(user, child);
 
-
-        log.info("child: {}", child.getEmail());
         Vital vital = vitalRepository.findTopByChildOrderByIdDesc(child).orElse(null);
+
+        if (vital != null) {
+            log.info("before vital measurementTime: {}", vital.getMeasurementTime());
+            log.info("vital glucose level: {}", vital.getBloodSugarLevel());
+        } else {
+            log.info("before vital is null");
+        }
 
         // 측정 시간과 현재 시간의 차이를 계산, 1분 이내에 조회한 경우라면 동일한 결과 반환
         Duration duration = null;
@@ -128,105 +135,154 @@ public class VitalService {
                     .message("현재 혈당 조회 성공")
                     .data(responseDailyGlucoseDto)
                     .build();
+        }
 
-        } else {
-            // 1분 이내의 기록이 없는 경우
+        // =========================== CareSense Data =======================================
+        // 1. 오늘의 요일과 현재 시간을 구한다
+        LocalDateTime now = LocalDateTime.now();
+        DayOfWeek currentDayOfWeek = now.getDayOfWeek();
 
-            // 최근 30분 이내의 기록 조회
-            Record recentRecord = recordRepository.findTopByChildAndEndTimeIsBetweenOrderByIdDesc(child, LocalDateTime.now().minusMinutes(30), LocalDateTime.now()).orElse(null);
+        // 2. 2024년 2월 26일 ~ 2024년 3월 3일 각각의 요일을 구한다.
+        LocalDate startDate = LocalDate.of(2024, 2, 26);
+        LocalDate endDate = LocalDate.of(2024, 3, 3);
+        List<LocalDate> dateRange = startDate.datesUntil(endDate.plusDays(1)).toList();
 
-            // 가중치 계산
-            int weight = 0;
-            if (recentRecord != null) {
-                if (recentRecord.getCategory().equals(Record.RecordCategoryType.exercise)) {
-                    weight = -5;
-                    log.info("운동 가중치 exercise weight: {}", weight);
-                } else if (recentRecord.getCategory().equals(Record.RecordCategoryType.meal
-                )) {
-                    weight = 5;
-                    log.info("식사 가중치 meal weight: {}", weight);
-                } else if (recentRecord.getCategory().equals(Record.RecordCategoryType.medication)) {
-                    weight = -10;
-                    log.info("복약 가중치 medication weight : {}", weight);
+        boolean isCareSenseDataFound = false;
+
+        // 3. 오늘의 요일과 일치하는 날에 대해서 혈당 기록을 조회한다.
+        for (LocalDate date : dateRange) {
+            DayOfWeek measurementDayOfWeek = date.getDayOfWeek();
+
+            // 요일이 일치하는 경우
+            if (measurementDayOfWeek == currentDayOfWeek) {
+                log.info("currentDayOfWeek: {}", currentDayOfWeek);
+
+                List<Vital> vitals = vitalRepository.findByChildIdAndMeasurementTimeBetween(
+                        1L, date.atStartOfDay(), date.atTime(23, 59, 59)
+                );
+
+                // 4. 조회한 혈당 기록 목록 중에서 현재 시간과 측정 시간의 차의 절댓값이 5분보다 작은 데이터를 조회한다.
+                for (Vital vi : vitals) {
+                    LocalDateTime measurementTime = vi.getMeasurementTime();
+                    int measurementHour = measurementTime.getHour();
+                    int measurementMinute = measurementTime.getMinute();
+                    int currentHour = now.getHour();
+                    int currentMinute = now.getMinute();
+
+                    // 절댓값의 차이가 5분 이내인지 확인
+                    if (measurementHour == currentHour && Math.abs(measurementMinute - currentMinute) <= 5) {
+                        log.info("CareSense Data Found");
+                        vital = vi;
+                        isCareSenseDataFound = true;
+                        break;
+                    }
                 }
-            }
-
-            if (vital == null) {
-                // 현재 혈당이 없는 경우 랜덤으로 생성
-                log.info("새로운 결과 생성 (Created new vital data.");
-                Random random = new Random();
-                int bloodSugarLevel = random.nextInt(31) + 90; // 90부터 120까지의 랜덤 수치 생성
-
-                vital = Vital.builder()
-                        .child(child)
-                        .bloodSugarLevel(bloodSugarLevel + weight)
-                        .measurementTime(LocalDateTime.now()) // 필요한 경우 현재 시간으로 설정 가능
-                        .content(null)
-                        .status(Vital.GlucoseStatusType.normal)
-                        .isNotification(false)
-                        .build();
-            } else {
-                // 혈당이 있는 경우 보정치 반영
-                log.info("보정치 반영 (reflect a vital with correctionValue.");
-                int curBloodSugarLevel = vital.getBloodSugarLevel();
-
-                Random random = new Random();
-
-                int correctionValue;
-                if (curBloodSugarLevel > 300) {
-                    // 수치가 매우 높은 경우 -15~5
-                    log.info("over 300");
-                    int randomValue = random.nextInt(21) - 15;
-                    correctionValue = curBloodSugarLevel + randomValue;
-                    log.info("randomValue: {}", randomValue);
-                } else if (curBloodSugarLevel > 300 && curBloodSugarLevel > 200) {
-                    // 수치가 높은 경우 -10~5
-                    log.info("over 200");
-                    int randomValue = random.nextInt(16) - 10;
-                    correctionValue = curBloodSugarLevel + random.nextInt(16) - 10;
-                    log.info("randomValue: {}", randomValue);
-                } else if (curBloodSugarLevel > 200 && curBloodSugarLevel < 90) {
-                    // 수치가 낮은 경우 -5~15
-                    log.info("under 90");
-                    int randomValue = random.nextInt(21) - 5;
-                    correctionValue = curBloodSugarLevel + random.nextInt(21) - 5;
-                    log.info("randomValue: {}", randomValue);
-                } else if (curBloodSugarLevel < 60) {
-                    // 수치가 극도로 낮은 경우 5~20
-                    log.info("under 60");
-                    int randomValue = random.nextInt(16) + 5;
-                    correctionValue = curBloodSugarLevel + random.nextInt(16) + 5;
-                    log.info("randomValue: {}", randomValue);
-                } else {
-                    // 일반적인 상황에서는 +-10 범위의 랜덤 수치 생성
-                    log.info("normal");
-                    int randomValue = random.nextInt(21) - 10;
-                    correctionValue = curBloodSugarLevel + random.nextInt(21) - 10;
-                    log.info("randomValue: {}", randomValue);
-                }
-
-                // 반환할 상태값 설정
-                Vital.GlucoseStatusType status;
-                if (correctionValue < 70) {
-                    status = Vital.GlucoseStatusType.low;
-                } else if (correctionValue > 200) {
-                    status = Vital.GlucoseStatusType.high;
-                } else {
-                    status = Vital.GlucoseStatusType.normal;
-                }
-
-                log.info("bloodSugarLevel: {}", vital.getBloodSugarLevel());
-                log.info("correctionValue: {}, weight: {}", correctionValue, weight);
-                vital = Vital.builder()
-                        .child(child)
-                        .bloodSugarLevel(correctionValue + weight)
-                        .measurementTime(LocalDateTime.now()) // 필요한 경우 현재 시간으로 설정 가능
-                        .content(null)
-                        .status(status)
-                        .isNotification(false)
-                        .build();
             }
         }
+        // =========================== CareSense Data =======================================
+
+        // 측정 시간 현재로 업데이트
+        if (isCareSenseDataFound) {
+            log.info("CareSense Data Update");
+            log.info("after checking CareSense vital measurementTime: {}", vital.getMeasurementTime());
+
+            vital.setMeasurementTime(LocalDateTime.now());
+            log.info("vital glucose level: {}", vital.getBloodSugarLevel());
+            log.info("after checking CareSense vital measurementTime: {}", vital.getMeasurementTime());
+        }
+
+        // 최근 10분 이내의 활동 기록 조회
+        Record recentRecord = recordRepository.findTopByChildAndEndTimeIsBetweenOrderByIdDesc(child, LocalDateTime.now().minusMinutes(10), LocalDateTime.now()).orElse(null);
+
+        // 가중치 계산
+        int weight = 0;
+        if (recentRecord != null) {
+            if (recentRecord.getCategory().equals(Record.RecordCategoryType.exercise)) {
+                weight = -2;
+                log.info("운동 가중치 exercise weight: {}", weight);
+            } else if (recentRecord.getCategory().equals(Record.RecordCategoryType.meal
+            )) {
+                weight = 2;
+                log.info("식사 가중치 meal weight: {}", weight);
+            } else if (recentRecord.getCategory().equals(Record.RecordCategoryType.medication)) {
+                weight = -4;
+                log.info("복약 가중치 medication weight : {}", weight);
+            }
+        }
+
+        if (vital == null) {
+            // 현재 혈당이 없는 경우 랜덤으로 생성
+            log.info("새로운 결과 생성 (Created new vital data.");
+            Random random = new Random();
+            int bloodSugarLevel = random.nextInt(31) + 90; // 90부터 120까지의 랜덤 수치 생성
+
+            vital = Vital.builder()
+                    .child(child)
+                    .bloodSugarLevel(bloodSugarLevel + weight)
+                    .measurementTime(LocalDateTime.now()) // 필요한 경우 현재 시간으로 설정 가능
+                    .content(null)
+                    .status(Vital.GlucoseStatusType.normal)
+                    .isNotification(false)
+                    .build();
+        } else {
+            // 혈당이 있는 경우 보정치 반영
+            log.info("보정치 반영 (reflect a vital with correctionValue.");
+            int curBloodSugarLevel = vital.getBloodSugarLevel();
+
+            Random random = new Random();
+
+            int correctionValue;
+            int randomValue;
+            if (curBloodSugarLevel > 300) {
+                // 수치가 매우 높은 경우 -5~2
+                log.info("over 300");
+                randomValue = random.nextInt(7) - 5;
+                correctionValue = curBloodSugarLevel + randomValue;
+            } else if (curBloodSugarLevel > 300 && curBloodSugarLevel > 200) {
+                // 수치가 높은 경우 -3~2
+                log.info("over 200");
+                randomValue = random.nextInt(5) - 3;
+                correctionValue = curBloodSugarLevel + randomValue;
+            } else if (curBloodSugarLevel > 200 && curBloodSugarLevel < 90) {
+                // 수치가 낮은 경우 -1~6
+                log.info("under 90");
+                randomValue = random.nextInt(7) - 1;
+                correctionValue = curBloodSugarLevel + randomValue;
+            } else if (curBloodSugarLevel < 60) {
+                // 수치가 극도로 낮은 경우 1~6
+                log.info("under 60");
+                randomValue = random.nextInt(5) + 1;
+                correctionValue = curBloodSugarLevel + randomValue;
+            } else {
+                // 일반적인 상황에서는 -3~4 범위의 랜덤 수치 생성
+                log.info("normal");
+                randomValue = random.nextInt(7) - 3;
+                correctionValue = curBloodSugarLevel + randomValue;
+            }
+            log.info("randomValue: {}", randomValue);
+
+            // 반환할 상태값 설정
+            Vital.GlucoseStatusType status;
+            if (correctionValue < 70) {
+                status = Vital.GlucoseStatusType.low;
+            } else if (correctionValue > 200) {
+                status = Vital.GlucoseStatusType.high;
+            } else {
+                status = Vital.GlucoseStatusType.normal;
+            }
+
+            log.info("bloodSugarLevel: {}", vital.getBloodSugarLevel());
+            log.info("correctionValue: {}, weight: {}", correctionValue, weight);
+            vital = Vital.builder()
+                    .child(child)
+                    .bloodSugarLevel(correctionValue + weight)
+                    .measurementTime(LocalDateTime.now()) // 필요한 경우 현재 시간으로 설정 가능
+                    .content(null)
+                    .status(status)
+                    .isNotification(false)
+                    .build();
+        }
+
 
         // 저장
         vitalRepository.save(vital);

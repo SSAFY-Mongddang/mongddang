@@ -50,7 +50,7 @@ public class VitalController {
             @NotBlank(message = "닉네임은 필수입니다.") @RequestParam String nickname,
             HttpServletRequest request
     ) {
-        log.info("GET /api/bloodsugar/current?nickname={}\", nickname");
+        log.info("GET /api/vital/bloodsugar/current?nickname={}\", nickname");
 
         Long userId = jwtExtratService.jwtFindId(request);
 
