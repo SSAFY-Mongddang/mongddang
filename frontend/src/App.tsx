@@ -27,6 +27,7 @@ import { SamsungSetting } from './pages/samsung-setting/index';
 import { ForegoundServiceSetting } from './pages/foreground-setting/index';
 import Medication from './pages/medication/Medication';
 import MedicationAdd from './pages/medicationAdd/MedicationAdd';
+import MealPlanPage from './pages/mealplanPage/MealPlanPage';
 
 function App() {
   useLoadState();
@@ -70,6 +71,7 @@ function App() {
           />
           <Route path="/medication" element={<Medication />} />
           <Route path="/medication/add" element={<MedicationAdd />} />
+          <Route path="/mealplan" element={<MealPlanPage />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>

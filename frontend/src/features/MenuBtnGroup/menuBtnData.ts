@@ -27,8 +27,8 @@ export const menuBtnData: MenuBtnItem[] = [
       protector: '급식표 등록',
     },
     urlTo: {
-      child: '',
-      protector: '',
+      child: '/mealplan',
+      protector: '/mealplan',
     },
   },
   {
