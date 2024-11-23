@@ -26,7 +26,7 @@ const SettingPage = () => {
       setIsActive(result.isActive); // Native API 결과를 상태로 설정
     } catch (error) {
       console.error("Error checking monitoring status:", error);
-      setIsActive(false); // 기본값으로 처리
+      setIsActive(false); 
     }
   };
 
