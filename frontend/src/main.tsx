@@ -11,6 +11,7 @@ import '@mantine/dates/styles.layer.css';
 import '@mantine/charts/styles.css';
 import AudioCollection from './shared/ui/AudioCollection/AudioCollection.tsx';
 import { queryClient } from './shared/lib/queryClient.ts';
+import TouchEffect from './shared/ui/TouchEffect/TouchEffect.tsx';
 
 const theme = createTheme({
   primaryColor: 'cyan',
@@ -23,7 +24,9 @@ createRoot(document.getElementById('root')!).render(
         <DatesProvider
           settings={{ locale: 'ko', firstDayOfWeek: 0, weekendDays: [0] }}
         >
-          <App />
+          <TouchEffect>
+            <App />
+          </TouchEffect>
           <AudioCollection />
         </DatesProvider>
       </MantineProvider>
