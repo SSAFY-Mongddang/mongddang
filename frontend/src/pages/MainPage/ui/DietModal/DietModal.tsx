@@ -26,8 +26,10 @@ type DietModalProps = {
 };
 
 const DietModal = (props: DietModalProps) => {
+  console.log(props, 'props');
   const [selectedMealTime, setSelectedMealTime] = useState('breakfast');
   const [isDisabled, setIsDisabled] = useState(true);
+  const [initialDiet, setInitialDiet] = useState('');
   const [diet, setDiet] = useState('');
   const [dietImgFile, setDietImgFile] = useState<File | null>(null);
 
@@ -38,11 +40,37 @@ const DietModal = (props: DietModalProps) => {
   // 식사 타임 선택
   const handleBtnClick = async (info: string) => {
     setSelectedMealTime(info);
-    const todayMeal = await getTodayMeal(info, nickname);
-    if (todayMeal) {
-      setDiet(todayMeal.content.join(', '));
+
+    if (selectedMealTime !== 'lunch') {
+      return;
+    }
+
+    const response = await getTodayMeal(info, nickname);
+    console.log(response.data, 'response.data');
+    console.log(response.data.join(', '), 'response.data.join');
+    if (response) {
+      console.log('res check', response);
+      console.log(diet, 'diet');
+      const mealData = response.data.join(', ');
+      setDiet(mealData);
+
+      // 저장 버튼 활성화 상태 업데이트
+      if (mealData !== '' || dietImgFile) {
+        setIsDisabled(false);
+      } else {
+        setIsDisabled(true);
+      }
     }
   };
+
+  useEffect(() => {
+    const initializeDiet = async () => {
+      const response = await getTodayMeal('lunch', nickname);
+      setInitialDiet(response.data.join(', '));
+    };
+
+    initializeDiet();
+  }, []);
 
   // 식단 텍스트 등록
   const debounceSaveDiet = useCallback(
@@ -53,7 +81,15 @@ const DietModal = (props: DietModalProps) => {
   );
 
   const handleInputDiet = (e: React.ChangeEvent<HTMLInputElement>) => {
-    debounceSaveDiet(e.target.value);
+    const inputValue = e.target.value;
+    debounceSaveDiet(inputValue);
+
+    // 저장 버튼 활성화 상태 업데이트
+    if (inputValue !== '' || dietImgFile) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
   };
 
   // 식단 이미지 등록
@@ -66,14 +102,18 @@ const DietModal = (props: DietModalProps) => {
   // 식단 저장 버튼 활성화
   useEffect(() => {
     const handleDisabledBtn = () => {
-      if (diet !== '' || dietImgFile) {
+      if (
+        diet !== '' ||
+        dietImgFile ||
+        (selectedMealTime === 'lunch' && initialDiet)
+      ) {
         setIsDisabled(false);
       } else if (diet === '' && !dietImgFile) {
         setIsDisabled(true);
       }
     };
-    return handleDisabledBtn();
-  }, [diet, dietImgFile]);
+    handleDisabledBtn();
+  }, [initialDiet, selectedMealTime, diet, dietImgFile]);
 
   // 식단 저장
   const handleSaveDiet = async (
@@ -94,6 +134,16 @@ const DietModal = (props: DietModalProps) => {
       console.log('에러');
     }
   };
+
+  useEffect(() => {
+    const initializeDiet = async () => {
+      const response = await getTodayMeal('lunch', nickname);
+      const initial = response.data.join(', ');
+      setInitialDiet(initial);
+    };
+
+    initializeDiet();
+  }, []);
 
   return (
     <div>
@@ -122,7 +172,7 @@ const DietModal = (props: DietModalProps) => {
           {/* 식단 텍스트 입력 */}
           <TextField
             color="dark"
-            defaultValue=""
+            defaultValue={selectedMealTime === 'lunch' ? initialDiet : ''}
             label=""
             maxRows={10}
             multiLine
