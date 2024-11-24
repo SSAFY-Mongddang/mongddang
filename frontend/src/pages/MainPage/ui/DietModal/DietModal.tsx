@@ -14,8 +14,9 @@ import { TextField } from '@/shared/ui/TextField';
 import { Button } from '@/shared/ui/Button';
 import { useCallback, useEffect, useState } from 'react';
 import { debounce } from 'lodash';
-import { saveDiet } from '../../api/dietApi';
+import { getTodayMeal, saveDiet } from '../../api/dietApi';
 import { useStopwatchStore } from '../../model/useStopwatchStore';
+import { useUserStore } from '@/entities/user/model';
 
 type DietModalProps = {
   closeDietModal: () => void;
@@ -30,11 +31,17 @@ const DietModal = (props: DietModalProps) => {
   const [diet, setDiet] = useState('');
   const [dietImgFile, setDietImgFile] = useState<File | null>(null);
 
+  const nickname = useUserStore((state) => state.user?.nickname);
+
   const { startStopwatch } = useStopwatchStore();
 
   // 식사 타임 선택
-  const handleBtnClick = (info: string) => {
+  const handleBtnClick = async (info: string) => {
     setSelectedMealTime(info);
+    const todayMeal = await getTodayMeal(info, nickname);
+    if (todayMeal) {
+      setDiet(todayMeal.content.join(', '));
+    }
   };
 
   // 식단 텍스트 등록
@@ -75,11 +82,7 @@ const DietModal = (props: DietModalProps) => {
     diet: string
   ) => {
     try {
-      const response = await saveDiet(
-        selectedMealTime,
-        dietImgFile,
-        diet
-      );
+      const response = await saveDiet(selectedMealTime, dietImgFile, diet);
       if (response.code === 200) {
         props.closeDietModal();
         props.changeRoutine('먹는 중');
@@ -139,11 +142,7 @@ const DietModal = (props: DietModalProps) => {
             scale="A200"
             variant="contained"
             handler={() => {
-              handleSaveDiet(
-                selectedMealTime,
-                dietImgFile,
-                diet
-              );
+              handleSaveDiet(selectedMealTime, dietImgFile, diet);
             }}
             disabled={isDisabled}
           >

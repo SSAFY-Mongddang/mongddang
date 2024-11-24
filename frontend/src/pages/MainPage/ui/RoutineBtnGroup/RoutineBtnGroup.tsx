@@ -22,8 +22,9 @@ type RoutineBtnGroupProps = {
 
 const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
   const { time, finalTime } = useStopwatchStore();
-  console.log('타임', time)
-  console.log('finalTime', finalTime)
+
+  console.log('타임', time);
+  console.log('finalTime', finalTime);
   return (
     <div css={container}>
       {props.currentRoutine === '먹는 중' ||
@@ -55,7 +56,7 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
         <div css={routineGroupCss}>
           <Icon
             size={2.5}
-            onClick={() => {
+            onClick={async () => {
               props.handleDietModal();
             }}
           >

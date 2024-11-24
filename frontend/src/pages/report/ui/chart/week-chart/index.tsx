@@ -11,8 +11,8 @@ interface WeekChartProps {
 }
 
 export const WeekChart = ({ data }: WeekChartProps) => {
-  const HIGH_THRESHOLD = 180;
-  const LOW_THRESHOLD = 70;
+  const HIGH_THRESHOLD = 250;
+  const LOW_THRESHOLD = 90;
 
   const calculatePercentages = () => {
     const total = data.length;
@@ -75,7 +75,7 @@ export const WeekChart = ({ data }: WeekChartProps) => {
         {/* 고혈당 영역 레이블 */}
         <div
           style={{
-            marginTop: '15vh', // 고혈당 위치를 조금 더 위로
+            marginTop: '6vh', // 고혈당 위치를 조금 더 위로
           }}
         >
           <Text fw={500} size="0.9rem" style={{ color: '#ff9800' }}>
@@ -89,7 +89,7 @@ export const WeekChart = ({ data }: WeekChartProps) => {
         {/* 범위 내 영역 레이블 */}
         <div
           style={{
-            marginTop: '9vh',
+            marginTop: '13vh',
           }}
         >
           <Text fw={500} size="0.9rem" style={{ color: '#2196f3' }}>
@@ -107,7 +107,7 @@ export const WeekChart = ({ data }: WeekChartProps) => {
         {/* 저혈당 영역 레이블 */}
         <div
           style={{
-            marginTop: '5vh', // 저혈당 위치를 조금 더 아래로
+            marginTop: '10vh', // 저혈당 위치를 조금 더 아래로
           }}
         >
           <Text fw={500} size="0.9rem" style={{ color: '#f44336' }}>
