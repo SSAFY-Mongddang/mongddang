@@ -87,6 +87,7 @@ public class  SaveMealService {
                     .endTime(null)
                     .isDone(false)
                     .mealTime(mealTimeType)
+                    .schoolName(meal.get("school").asText())
                     .build();
 
             mealplans.add(mealplan);

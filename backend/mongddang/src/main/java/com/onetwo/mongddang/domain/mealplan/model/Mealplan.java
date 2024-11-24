@@ -51,6 +51,10 @@ public class Mealplan {
     private MealTimeType mealTime;
 
     @NotNull
+    @Column(name = "school_name")
+    private String schoolName;
+
+    @NotNull
     public enum RecordCategoryType {
         meal, sleeping, exercise, medication
     }
