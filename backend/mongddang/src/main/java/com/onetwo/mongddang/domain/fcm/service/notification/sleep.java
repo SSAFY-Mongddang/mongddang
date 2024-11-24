@@ -35,6 +35,7 @@ public class sleep {
                     .message(message)
                     .receiver(child)
                     .child(child)
+                    .medicationId("이상혈당")
                     .build();
             pushNotificationService.sendPushNotification(child, notification, PushLog.Category.game);
         }

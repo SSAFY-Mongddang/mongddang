@@ -27,6 +27,7 @@ public class GlycemiaProtectorService {
                 .message("'" + child.getNickname() + "'" + "의 저혈당 증상 15분 이상 지속 중.")
                 .receiver(protector)
                 .child(child)
+                .medicationId("이상혈당")
                 .build();
         pushNotificationService.sendPushNotification(protector, notification, PushLog.Category.blood_sugar);
 
@@ -42,6 +43,7 @@ public class GlycemiaProtectorService {
                 .message("'" + child.getNickname() + "'" + "의 고혈당 증상 15분 이상 지속 중.")
                 .receiver(protector)
                 .child(child)
+                .medicationId("이상혈당")
                 .build();
         pushNotificationService.sendPushNotification(protector, notification, PushLog.Category.blood_sugar);
 
