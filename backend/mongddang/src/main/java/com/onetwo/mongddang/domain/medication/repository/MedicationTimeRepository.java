@@ -33,7 +33,7 @@ public interface MedicationTimeRepository extends JpaRepository<MedicationTime, 
 
     @Query("SELECT mt FROM MedicationTime mt " +
             "JOIN mt.medicationManagement mm " +
-            "WHERE DATE(mm.repeatStartTime) = DATE(:now) " +
+            "WHERE DATE(:now) BETWEEN DATE(mm.repeatStartTime) AND DATE(mm.repeatEndTime) " +
             "AND FUNCTION('TIME_FORMAT', mt.medicationTime, '%H:%i') = FUNCTION('TIME_FORMAT', :now, '%H:%i')")
     List<MedicationTime> findMedicationTimesByCurrentTime(@Param("now") LocalDateTime now);
 }
