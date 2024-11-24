@@ -28,21 +28,19 @@ const TouchEffect = ({ children }: PropsWithChildren) => {
 
   return (
     <div onTouchStart={handleTouch} css={effectArea}>
-      <div css={effectCssInitialize}>
-        {touches.map((touch) => (
-          <div
-            key={touch.id} // id를 key로 사용하여 각 터치 효과의 고유성을 유지
-            css={circleEffect}
-            style={{
-              top: touch.y,
-              left: touch.x,
-            }}
-          >
-            <img src={touchEffectGif} alt="touch effect" css={imageSize} />
-          </div>
-        ))}
-        {children}
-      </div>
+      {touches.map((touch) => (
+        <div
+          key={touch.id} // id를 key로 사용하여 각 터치 효과의 고유성을 유지
+          css={circleEffect}
+          style={{
+            top: touch.y,
+            left: touch.x,
+          }}
+        >
+          <img src={touchEffectGif} alt="touch effect" css={imageSize} />
+        </div>
+      ))}
+      <div css={effectCssInitialize}>{children}</div>
     </div>
   );
 };

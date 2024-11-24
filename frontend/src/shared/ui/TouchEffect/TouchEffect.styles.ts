@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 export const effectCssInitialize = () => css`
-  overflow-y: auto;
+  overflow: auto;
   height: 100vh;
   position: relative;
 `;
