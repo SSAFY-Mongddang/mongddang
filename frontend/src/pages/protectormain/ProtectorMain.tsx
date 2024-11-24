@@ -15,12 +15,13 @@ import {
 import { Dropdown } from '@/shared/ui/Dropdown';
 import { useEffect, useState } from 'react';
 import { Typography } from '@/shared/ui/Typography';
-import { useUserStore } from '@/entities/user/model';
+import { ConnectedUser, useUserStore } from '@/entities/user/model';
 import { useSelectedChildStore } from '@/entities/selected-child/model/store';
 import { useShallow } from 'zustand/shallow';
 import { Toggle } from '@/shared/ui/Toggle';
 import MenuMongddang from '@/assets/img/page/menu.png';
 import { useAudioStore } from '@/shared/model/useAudioStore';
+import { useMedicationAddStore } from '../medicationAdd/model/useMedicationAddStore';
 
 const ProtectorMain = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,17 +37,31 @@ const ProtectorMain = () => {
       selectedChild: state.selectedChild,
     }))
   );
+  const setUserInfo = useMedicationAddStore((state) => state.setUserInfo);
   const audio = useAudioStore();
 
   useEffect(() => {
     if (!selectedChild && connectedChild) {
       setSelected(connectedChild[0].name);
       setSelectedChild(connectedChild[0]);
+      setUserInfo(connectedChild[0].nickname);
     }
     if (selectedChild) {
       setSelected(selectedChild.name);
+      setUserInfo(selectedChild.nickname);
     }
-  }, [connectedChild, selectedChild, setSelected, setSelectedChild]);
+  }, [
+    connectedChild,
+    selectedChild,
+    setSelected,
+    setSelectedChild,
+    setUserInfo,
+  ]);
+
+  const handleSelectedChild = (value: ConnectedUser) => {
+    setSelectedChild(value);
+    setUserInfo(value.nickname);
+  };
 
   return (
     <div css={container}>
@@ -58,7 +73,7 @@ const ProtectorMain = () => {
               options={connectedChild ?? []}
               onSelect={(value) => {
                 setSelected(value.name);
-                setSelectedChild(value);
+                handleSelectedChild(value);
               }}
               isOpen={isOpen}
               onClose={() => setIsOpen(false)}
