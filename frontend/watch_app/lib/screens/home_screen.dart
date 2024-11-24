@@ -1,5 +1,3 @@
-// home_screen.dart
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/activity.dart';
@@ -16,25 +14,60 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int? bloodSugar;
   bool isLoading = false;
-  StreamSubscription? _bloodSugarSubscription;
+  bool showWarning = false;
+  String warningMessage = '';
+  Color warningColor = Colors.transparent;
+  Timer? _warningTimer;
+  Timer? _periodicFetchTimer;
 
   @override
   void initState() {
     super.initState();
-    _bloodSugarSubscription = StatRepository.bloodSugarStream.listen((newValue) {
-      setState(() {
-        bloodSugar = newValue;
-        print('새로운 혈당 수치 업데이트: $bloodSugar');
-      });
+
+    // 1분마다 혈당값 가져오기
+    _periodicFetchTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      fetchBloodSugar();
     });
 
+    // 초기 데이터 가져오기
+    fetchBloodSugar();
+
     StatRepository.startSync();
+  }
+
+  void _checkBloodSugarLevel(int value) {
+    if (value >= 180) {
+      _showWarning('고혈당 주의!', Colors.red.withOpacity(0.6));
+    } else if (value <= 70) {
+      _showWarning('저혈당 주의!', Colors.blue.withOpacity(0.6));
+    }
+  }
+
+  void _showWarning(String message, Color color) {
+    setState(() {
+      showWarning = true;
+      warningMessage = message;
+      warningColor = color;
+    });
+
+    // 기존 타이머가 있다면 취소
+    _warningTimer?.cancel();
+
+    // 5초 후에 경고를 숨김
+    _warningTimer = Timer(const Duration(seconds: 5), () {
+      if (mounted) {
+        setState(() {
+          showWarning = false;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
     StatRepository.stopSync();
-    _bloodSugarSubscription?.cancel();
+    _warningTimer?.cancel();
+    _periodicFetchTimer?.cancel();
     super.dispose();
   }
 
@@ -46,9 +79,13 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final response = await StatRepository.fetchData();
       if (response != null) {
+        final newBloodSugar = response['bloodSugarLevel'] as int?;
         setState(() {
-          bloodSugar = response['bloodSugarLevel'] as int?;
+          bloodSugar = newBloodSugar;
         });
+        if (newBloodSugar != null) {
+          _checkBloodSugarLevel(newBloodSugar);
+        }
       }
     } catch (e) {
       print('혈당 데이터 가져오기 실패: $e');
@@ -63,45 +100,68 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Center(
-        child: Container(
-          width: 192,
-          height: 192,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.lightBlue[200]!,
-                Colors.lightBlue[100]!,
-              ],
+      body: Stack(
+        children: [
+          Center(
+            child: Container(
+              width: 192,
+              height: 192,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.lightBlue[200]!,
+                    Colors.lightBlue[100]!,
+                  ],
+                ),
+              ),
+              child: Stack(
+                children: [
+                  _buildBackground(),
+                  _buildActivityIcon(
+                    position: const Offset(50, 18),
+                    imagePath: 'assets/img/sleep_icon.png',
+                    onTap: () => _navigateToActivity(context, ActivityType.sleep),
+                  ),
+                  _buildActivityIcon(
+                    position: const Offset(43, 18),
+                    imagePath: 'assets/img/exercise_icon.png',
+                    onTap: () => _navigateToActivity(context, ActivityType.exercise),
+                    alignment: Alignment.topRight,
+                  ),
+                  _buildActivityIcon(
+                    position: const Offset(18, 68),
+                    imagePath: 'assets/img/meal_icon.png',
+                    onTap: () => _navigateToActivity(context, ActivityType.eating),
+                  ),
+                  _buildScoreDisplay(),
+                  _buildBottomContent(),
+                ],
+              ),
             ),
           ),
-          child: Stack(
-            children: [
-              _buildBackground(),
-              _buildActivityIcon(
-                position: const Offset(50, 18),
-                imagePath: 'assets/img/sleep_icon.png',
-                onTap: () => _navigateToActivity(context, ActivityType.sleep),
+          // 경고 오버레이
+          if (showWarning)
+            AnimatedOpacity(
+              opacity: showWarning ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 300),
+              child: Container(
+                color: warningColor,
+                child: Center(
+                  child: Text(
+                    warningMessage,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
-              _buildActivityIcon(
-                position: const Offset(43, 18),
-                imagePath: 'assets/img/exercise_icon.png',
-                onTap: () => _navigateToActivity(context, ActivityType.exercise),
-                alignment: Alignment.topRight,
-              ),
-              _buildActivityIcon(
-                position: const Offset(18, 68),
-                imagePath: 'assets/img/meal_icon.png',
-                onTap: () => _navigateToActivity(context, ActivityType.eating),
-              ),
-              _buildScoreDisplay(),
-              _buildBottomContent(),
-            ],
-          ),
-        ),
+            ),
+        ],
       ),
     );
   }
@@ -183,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildScoreDisplay() {
-    // 혈당 수치에 따른 색상 결정
+    // 혈당 데이터 테두리 (null/저혈당/고혈당)
     Color getBorderColor() {
       if (bloodSugar == null) return Colors.grey[300]!;
       if (bloodSugar! <= 70) return Colors.blue;
@@ -204,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
             shape: BoxShape.circle,
             color: Colors.white,
             border: Border.all(
-              color: getBorderColor(),  // 혈당 수치에 따른 동적 색상
+              color: getBorderColor(),
               width: 2,
             ),
           ),
