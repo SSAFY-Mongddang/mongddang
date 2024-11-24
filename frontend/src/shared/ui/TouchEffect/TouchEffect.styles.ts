@@ -2,7 +2,8 @@ import { css } from '@emotion/react';
 
 export const effectCssInitialize = () => css`
   overflow: auto;
-  height: 100vh;
+  height: 100%;
+  width: 100%;
   position: relative;
 `;
 

@@ -7,7 +7,7 @@ import {
   effectCssInitialize,
   imageSize,
 } from './TouchEffect.styles';
-import touchEffectGif from '@/assets/img/icon/main_star-sm.png';
+import touchEffectImage from '@/assets/img/icon/main_star-sm.png';
 
 interface TouchEffect {
   x: number;
@@ -37,7 +37,7 @@ const TouchEffect = ({ children }: PropsWithChildren) => {
             left: touch.x,
           }}
         >
-          <img src={touchEffectGif} alt="touch effect" css={imageSize} />
+          <img src={touchEffectImage} alt="touch effect" css={imageSize} />
         </div>
       ))}
       <div css={effectCssInitialize}>{children}</div>
