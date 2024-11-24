@@ -26,7 +26,7 @@ type DietModalProps = {
 };
 
 const DietModal = (props: DietModalProps) => {
-  const [selectedMealTime, setSelectedMealTime] = useState('lunch');
+  const [selectedMealTime, setSelectedMealTime] = useState('breakfast');
   const [isDisabled, setIsDisabled] = useState(true);
   const [diet, setDiet] = useState('');
   const [dietImgFile, setDietImgFile] = useState<File | null>(null);
@@ -37,11 +37,10 @@ const DietModal = (props: DietModalProps) => {
 
   // 식사 타임 선택
   const handleBtnClick = async (info: string) => {
-    console.log(info, nickname, 'info,nickname');
     setSelectedMealTime(info);
     const todayMeal = await getTodayMeal(info, nickname);
     if (todayMeal) {
-      setDiet(todayMeal.content);
+      setDiet(todayMeal.content.join(', '));
     }
   };
 

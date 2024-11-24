@@ -83,3 +83,21 @@ export const getTodayMeal = async (
       console.log(err);
     });
 };
+
+// 가장 최근의 식사 데이터 가져오기
+export const getLastMealData = async (nickname: string | undefined) => {
+  return await api({
+    method: 'GET',
+    url: '/api/meal-data/check',
+    params: {
+      nickname,
+    },
+  })
+    .then((res) => {
+      console.log(res.data);
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

@@ -15,10 +15,11 @@ import {
 import { Typography } from '@/shared/ui/Typography';
 import { TextField } from '@/shared/ui/TextField';
 import { Button } from '@/shared/ui/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Notification } from '@/shared/ui/Notification';
 import { DailyMeal, getMealPlan, saveMealPlan } from './api/mealPlanApi';
 import MenuMongddang from '@/assets/img/main_mongddang/meal_mongddang-resized.png';
+import { getLastMealData } from '../MainPage/api/dietApi';
 
 const MealPlanPage = () => {
   const navigate = useNavigate();
@@ -29,9 +30,11 @@ const MealPlanPage = () => {
 
   const [mealList, setMealList] = useState<DailyMeal[]>([]);
 
-  console.log(schoolNameInput);
-  console.log(monthInput);
-  console.log(mealList);
+  const [lastSchoolName, setLastSchoolName] = useState('');
+  const [lastMonth, setLastMonth] = useState('');
+  const [lastYear, setLastYear] = useState('');
+
+  const nickname = useUserStore((state) => state.user?.nickname);
 
   const userRole = useUserStore((state) => state.user?.role);
 
@@ -66,6 +69,20 @@ const MealPlanPage = () => {
     setModalState(0);
   };
 
+  useEffect(() => {
+    const setLastMealData = async (nickname: string) => {
+      const response = await getLastMealData(nickname);
+      console.log('response', response);
+      if (response) {
+        setLastSchoolName(response.data.schoolName);
+        setLastYear(response.data.year);
+        setLastMonth(response.data.month);
+      }
+    };
+
+    setLastMealData(nickname || '');
+  }, []);
+
   return (
     <div>
       <TopBar
@@ -95,13 +112,26 @@ const MealPlanPage = () => {
             weight={600}
             style={{ lineHeight: '0.75rem' }}
           >
-            <p>
-              최근에 <span style={{ color: '#00b0ff' }}>인동초등학교</span>
-            </p>
-            <p>
-              <span style={{ color: '#00b0ff' }}>2024년 10월</span>
-            </p>
-            <p>급식표를 등록했어요!</p>
+            {lastSchoolName ? (
+              <>
+                <p>
+                  최근에{' '}
+                  <span style={{ color: '#00b0ff' }}>{lastSchoolName}</span>
+                </p>
+                <p>
+                  <span style={{ color: '#00b0ff' }}>
+                    {lastYear}년 {lastMonth}월
+                  </span>
+                </p>
+                <p>급식표를 등록했어요!</p>
+              </>
+            ) : (
+              <>
+                <p> </p>
+                <p>아직 등록된 급식표가 없어요.</p>
+                <p> </p>
+              </>
+            )}
           </Typography>
         </div>
         <div css={imgContainerCss}>
