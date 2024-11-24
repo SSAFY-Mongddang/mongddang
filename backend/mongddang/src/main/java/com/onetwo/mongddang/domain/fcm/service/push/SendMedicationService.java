@@ -25,6 +25,7 @@ public class SendMedicationService {
                 .message("인슐린을 맞을 시간이에요.")
                 .receiver(child)
                 .child(child)
+                .medicationId("에시 복약 알림")
                 .build();
         pushNotificationService.sendPushNotification(child, notification, PushLog.Category.medication);
 

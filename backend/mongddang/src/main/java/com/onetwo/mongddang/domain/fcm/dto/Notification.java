@@ -15,6 +15,6 @@ public class Notification {
     private User child; // 알림 대상자의 닉네임(이상혈당 지속시)
     private String message;    // 알림 내용
     private String title;      // 알림 제목
-    private Long medicationId;  // 복약 알림 전송 시 전달할 약 id값
+    private String medicationId;  // 복약 알림 전송 시 전달할 약 id값
 
 }

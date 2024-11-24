@@ -56,6 +56,7 @@ public class GlycemiaChildService {
                 .message("고혈당 증상이 나타나고 있어요.")
                 .receiver(child)
                 .child(child)
+                .medicationId("이상혈당")
                 .build();
         pushNotificationService.sendPushNotification(child, notification, PushLog.Category.blood_sugar);
 
@@ -67,6 +68,7 @@ public class GlycemiaChildService {
                     .message("'" + child.getNickname() + "'" + "의 고혈당 발생!")
                     .receiver(protector)
                     .child(child)
+                    .medicationId("이상혈당")
                     .build();
             pushNotificationService.sendPushNotification(protector, notification_protector, PushLog.Category.blood_sugar);
         }

@@ -45,7 +45,7 @@ public class Medication {
                     .message(message)
                     .receiver(child)
                     .child(child)
-                    .medicationId(medicationId)
+                    .medicationId(medicationId.toString())
                     .build();
             pushNotificationService.sendPushNotification(child, notification, PushLog.Category.medication);
         }

@@ -7,9 +7,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import javax.annotation.Nullable;
+
 @Getter
 @Builder
 @RequiredArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FcmMessage {
 
     @JsonProperty("validate_only")

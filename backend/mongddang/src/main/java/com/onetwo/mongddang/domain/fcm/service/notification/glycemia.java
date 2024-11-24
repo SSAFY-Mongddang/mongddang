@@ -41,6 +41,7 @@
 //                        .message(message)
 //                        .receiver(child)
 //                        .child(child)
+//                        .medicationId("이상혈당")
 //                        .build();
 //                pushNotificationService.sendPushNotification(child, notification, PushLog.Category.blood_sugar);
 //
@@ -52,6 +53,7 @@
 //                            .message("'" + child.getNickname() + "'" + "의" + (vital.getStatus() == Vital.GlucoseStatusType.low ? "저혈당" : "고혈당")+" 발생!")
 //                            .receiver(protector)
 //                            .child(child)
+//                            .medicationId("이상혈당")
 //                            .build();
 //                    pushNotificationService.sendPushNotification(protector, notification_protector, PushLog.Category.blood_sugar);
 //                }
@@ -81,6 +83,7 @@
 //                        .message(message)
 //                        .receiver(protector)
 //                        .child(child)
+//                        .medicationId("이상혈당")
 //                        .build();
 //                pushNotificationService.sendPushNotification(child, notification, PushLog.Category.blood_sugar);;
 //            }

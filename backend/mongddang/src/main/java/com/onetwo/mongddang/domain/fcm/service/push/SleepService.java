@@ -25,6 +25,7 @@ public class SleepService {
                 .message("오후 10시입니다.\n몽땅친구들과 함께 잠자리에 들 준비를 하는 건 어떨까요?")
                 .receiver(child)
                 .child(child)
+                .medicationId("수면알림")
                 .build();
         pushNotificationService.sendPushNotification(child, notification, PushLog.Category.game);
 
