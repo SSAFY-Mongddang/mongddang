@@ -12,6 +12,8 @@ import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
 import { useStopwatchStore } from '../../model/useStopwatchStore';
 import { mainIcons } from '../../constants/iconsData';
+import { getTodayMeal } from '../../api/dietApi';
+import { useUserStore } from '@/entities/user/model';
 
 type RoutineBtnGroupProps = {
   changeRoutine: (currentRoutine: string) => void;
@@ -22,8 +24,10 @@ type RoutineBtnGroupProps = {
 
 const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
   const { time, finalTime } = useStopwatchStore();
-  console.log('타임', time)
-  console.log('finalTime', finalTime)
+  const nickname = useUserStore((state) => state.user?.nickname);
+
+  console.log('타임', time);
+  console.log('finalTime', finalTime);
   return (
     <div css={container}>
       {props.currentRoutine === '먹는 중' ||
@@ -55,8 +59,9 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
         <div css={routineGroupCss}>
           <Icon
             size={2.5}
-            onClick={() => {
+            onClick={async () => {
               props.handleDietModal();
+              await getTodayMeal('lunch', nickname);
             }}
           >
             <img alt="icon-0" src={mainIcons.meal} />

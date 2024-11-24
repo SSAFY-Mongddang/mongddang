@@ -61,3 +61,25 @@ export const saveDiet = async (
       console.log('식사 실패함', err);
     });
 };
+
+// 오늘의 식사 데이터 가져오기
+export const getTodayMeal = async (
+  mealTime: string,
+  nickname: string | undefined
+) => {
+  return await api({
+    method: 'GET',
+    url: '/api/meal-data/today',
+    params: {
+      mealTime,
+      nickname,
+    },
+  })
+    .then((res) => {
+      console.log(res.data);
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
