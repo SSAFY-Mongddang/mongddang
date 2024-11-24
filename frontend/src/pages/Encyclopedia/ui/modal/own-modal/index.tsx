@@ -50,16 +50,10 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
             ...oldData,
             data: {
               ...oldData.data,
-              data: oldData.data.data.map((character) => {
-                if (character.id === characterId) {
-                  return {
-                    ...character,
-                    isMain: character.id === characterId,
-                  };
-                }
-
-                return character;
-              }),
+              data: oldData.data.data.map((character) => ({
+                ...character,
+                isMain: character.id === characterId,
+              })),
             },
           };
         }

@@ -47,7 +47,7 @@ const CurrentBloodSugar = (props: CurrentBloodSugarProps) => {
         }}
       >
         <Typography color="dark" size="1.5" weight={600}>
-          {currentLevel}
+          {currentLevel || '-'}
         </Typography>
       </div>
       <Typography color="dark" size="0.75" weight={500}>

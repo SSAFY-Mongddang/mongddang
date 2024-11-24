@@ -14,7 +14,7 @@ api.interceptors.request.use(async (config) => {
   // const accessToken = localStorage.getItem('accessToken');
   //const accessToken = import.meta.env.VITE_TEST_USER_ACCESS_TOKEN;
   const accessToken = (await PreferencesUser.getUser()).userAccessToken;
-  // console.log('axios interceptor request accessToken: ', accessToken);
+  console.log('axios interceptor request accessToken: ', accessToken);
 
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;

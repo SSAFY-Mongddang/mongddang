@@ -125,7 +125,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
               fontSize="1"
               variant="contained"
               handler={handleAchievementClick}
-              disabled={title.count >= title.executionCount}
+              disabled={title.count > title.executionCount}
             >
               획득
             </Button>
