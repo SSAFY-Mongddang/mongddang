@@ -59,7 +59,7 @@ public class MealplanController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/is-exist")
+    @GetMapping("/check")
     @Operation(summary = "급식 여부 판별 API", description = "사용자가 저장한 식단이 있는지 조회합니다.")
     public ResponseEntity<ResponseDto> getMealplanIsExist(HttpServletRequest request,
                                                    @RequestParam String nickname) {

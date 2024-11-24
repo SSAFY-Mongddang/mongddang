@@ -26,7 +26,6 @@ public class MedicationController {
 
     // 복약 등록하기
     @PostMapping("register")
-    @ChildRequired
     @Tag(name = "Medication API", description = "약 api")
     @Operation(summary = "복약 등록하기", description = "약을 등록합니다.")
     public ResponseEntity<ResponseDto> registerMedication(
