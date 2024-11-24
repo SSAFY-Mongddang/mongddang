@@ -34,7 +34,11 @@ import {
 import { setRoutine } from './hooks/useRoutineStatus';
 import { getInitialRoutine } from './api/routineApi';
 import { useStopwatchStore } from './model/useStopwatchStore';
-import { setExitTime, setStopwatch } from './hooks/useStopwatchStatus';
+import {
+  getStopwatch,
+  setExitTime,
+  setStopwatch,
+} from './hooks/useStopwatchStatus';
 import { mainIcons } from './constants/iconsData';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
@@ -91,10 +95,12 @@ const KidsMainPage = () => {
     };
 
     const handleAppStateChange = () => {
-      const latestTime = useStopwatchStore.getState().time;
-      setStopwatch(latestTime);
-      const exitTime = Date.now();
-      setExitTime(exitTime);
+      if (currentRoutine === '운동 중') {
+        const latestTime = useStopwatchStore.getState().time;
+        setStopwatch(latestTime);
+        const exitTime = Date.now();
+        setExitTime(exitTime);
+      }
     };
 
     App.addListener('appStateChange', async ({ isActive }) => {
@@ -102,7 +108,10 @@ const KidsMainPage = () => {
         handleAppStateChange();
         useStopwatchStore.getState().endStopwatch();
       } else {
-        useStopwatchStore.getState().updateStopwatch();
+        const latestPrevTime = await getStopwatch();
+        if (latestPrevTime !== '0') {
+          useStopwatchStore.getState().updateStopwatch();
+        }
       }
     });
 
