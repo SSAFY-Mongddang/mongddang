@@ -7,6 +7,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.mongddang.app.data.api.UserInfoApiService
 import com.mongddang.app.data.repository.local.DataStoreRepository
 import com.mongddang.app.data.repository.remote.UserRepository
+import com.mongddang.app.utils.PermissionStateManager
 
 
 import dagger.Module
@@ -33,6 +34,14 @@ object DataStoreModule {
         dataStoreRepository: DataStoreRepository
     ): UserRepository {
         return UserRepository(userInfoApiService, dataStoreRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providePermissionStateManager(
+        dataStore: DataStore<Preferences>
+    ): PermissionStateManager {
+        return PermissionStateManager(dataStore)
     }
 
 }

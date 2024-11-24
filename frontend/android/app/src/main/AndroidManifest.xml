@@ -26,11 +26,6 @@
     <!-- for microphone -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
-
-
-
-
-
     <!-- Features -->
     <uses-feature
         android:name="android.hardware.camera"

@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-
 import { TopBar } from '@/shared/ui/TopBar';
 import { container, li, settingContent } from './SettingPage.styles';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +8,8 @@ import { useAudioStore } from '@/shared/model/useAudioStore';
 import { useState, useEffect } from 'react';
 import { Foreground } from './plugins/ForegroundPlugin';
 import { UserInfo, useUserStore } from '@/entities/user/model';
-import { getUserInfoResponse, UserInfoPlugin } from './plugins/UserInfoPlugin';
+import { UserInfoPlugin } from './plugins/UserInfoPlugin';
+import SamsungHealth from './plugins/SamsungHealthPlugin';
 
 const SettingPage = () => {
   const navigate = useNavigate();
@@ -23,6 +23,10 @@ const SettingPage = () => {
   const [bubbleState, setBubbleState] = useState<boolean>(!bubble.isMuted);
   const [isActive, setIsActive] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [permissionResult, setPermissionResult] = useState<null | boolean>(null);
+  console.log(permissionResult)
+
   console.log(isLoading)
 
   console.log("토큰!!!!!!!!!!!!!!!!!!!!!",token)
@@ -51,8 +55,13 @@ const SettingPage = () => {
 
   const startForegroundPermission = async () => {
     try {
+      checkHealthPermission
+      if(!permissionResult){
+        requestPermission("bloodGlucose")
+      }else {
       const response = await Foreground.startForeground();
       console.log(`startForeground: ${response}`);
+      }
     } catch (error) {
       console.error("Error starting foreground permission:", error);
     }
@@ -70,17 +79,30 @@ const SettingPage = () => {
   const handleClickMonitoringToggle = async () => {
     if (isActive === null) return; // 로딩 중에는 작동하지 않음
     try {
-      if (isActive) {
-        setIsActive(false)
+      if (isActive && permissionResult) {
+        // 활성 상태인데 권한도 있는 경우 -> 비활성화
+        setIsActive(false);
         await stopForegroundPermission();
-      } else {
-        setIsActive(true)
+      } else if (!isActive && permissionResult) {
+        // 비활성 상태인데 권한이 있는 경우 -> 활성화
+        setIsActive(true);
         await startForegroundPermission();
+      } else if (!permissionResult) {
+        // 권한이 없는 경우 -> 권한 요청
+        await requestPermission("bloodGlucose");
+        if (permissionResult) {
+          // 권한이 성공적으로 부여된 경우 활성화
+          setIsActive(true);
+          await startForegroundPermission();
+        } else {
+          console.error("Permission denied");
+        }
       }
     } catch (error) {
       console.error("Error toggling monitoring status:", error);
     }
   };
+  
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -120,6 +142,26 @@ const SettingPage = () => {
       setBubbleState(false);
     } else {
       setBubbleState(true);
+    }
+  };
+
+  const checkHealthPermission = async (healthDataType: string) => {
+    try {
+      const result = await SamsungHealth.checkHealthPermission({healthDataType});
+      setPermissionResult(result.granted);
+    } catch (error) {
+      console.error("Error requesting health data permission:", error);
+    }
+  };
+  
+  const requestPermission = async (healthDataType: string) => {
+    try {
+      const result = await SamsungHealth.requestHealthPermission({
+        healthDataType,
+      });
+      setPermissionResult(result.granted);
+    } catch (error) {
+      console.error("Error requesting health data permission:", error);
     }
   };
 
@@ -171,7 +213,18 @@ const SettingPage = () => {
               isOn={isActive}
             />
         </li>
-      </ul></div>)}
+      </ul>
+      {/* <SamsungModal isOpen={isModalOpen} onClose={closePermModel}>
+            <h2>삼성헬스 권한</h2>
+            <p>삼성 헬스 권한을 가져옵니다.</p> 
+            <Button 
+            handler={()=>{requestPermission("bloodGlucose")}}
+            color="primary" 
+            fontSize="1.25"
+            variant="contained"
+            fullwidth>혈당 권한</Button>
+      </SamsungModal> */}
+      </div>)}
     </div>
   );
 };

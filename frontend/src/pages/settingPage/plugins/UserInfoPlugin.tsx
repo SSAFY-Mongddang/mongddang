@@ -21,10 +21,6 @@ export interface UserInfo {
   role: string;
 }
 
-export interface getUserInfoResponse {
-  userInfo: UserInfo;
-}
-
 // 플러그인 인터페이스 정의
 export interface UserInfoPlugin {
   /**
@@ -33,7 +29,6 @@ export interface UserInfoPlugin {
    * @returns 네이티브 처리 결과 (UserInfoResponse  형식)
    */
   getAccessToken(options: TokenPayload): Promise<UserInfoResponse>;
-  getUserInfo(): Promise<getUserInfoResponse>;
 }
 
 // 플러그인 등록
