@@ -45,47 +45,45 @@ public class PushNotificationService {
     // 푸시 알림을 보내는 서비스
     public void sendPushNotification(User user, Notification notification, PushLog.Category category){
         // fcm토큰 찾기
-        List<FcmToken> tokenList = fcmTokenRepository.findByUser(user);
+        Optional<FcmToken> token = fcmTokenRepository.findByUser(user);
 
         // FCM 토큰이 없는 경우 메서드를 종료하여 알림을 건너뜀
-        if (tokenList.isEmpty()) {
+        if (token.isEmpty()) {
             log.warn("User {}에 대한 FCM 토큰이 존재하지 않아 알림을 건너뜁니다.", user.getId());
             return;
         }
 
-        for (FcmToken token : tokenList) {
-            String fcmToken = token.getToken();
+        String fcmToken = token.get().getToken();
 
-            // 메시지 만들기
-            String message = makeMessage(fcmToken,notification,category);
+        // 메시지 만들기
+        String message = makeMessage(fcmToken,notification,category);
 
-            // HTTP 요청 엔티티 생성 : 본문과 헤더 함께 담아 요청에 사용
-            HttpHeaders httpHeaders = new HttpHeaders();
+        // HTTP 요청 엔티티 생성 : 본문과 헤더 함께 담아 요청에 사용
+        HttpHeaders httpHeaders = new HttpHeaders();
 
-            httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE); // 컨텐츠 타입
-            //OAuth 2.0 사용
-            httpHeaders.add(HttpHeaders.AUTHORIZATION,"Bearer " + getAccessToken.getAccessToken()); // 토큰
+        httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE); // 컨텐츠 타입
+        //OAuth 2.0 사용
+        httpHeaders.add(HttpHeaders.AUTHORIZATION,"Bearer " + getAccessToken.getAccessToken()); // 토큰
 
-            HttpEntity<String> httpEntity = new HttpEntity<>(message, httpHeaders);
-            String fcmRequestUrl = urlPrefix + projectId + urlPostfix; // 요청 보낼 url
+        HttpEntity<String> httpEntity = new HttpEntity<>(message, httpHeaders);
+        String fcmRequestUrl = urlPrefix + projectId + urlPostfix; // 요청 보낼 url
 
-            // WebClient를 통한 동기 HTTP 요청
-            String response = webClient.post()
-                    .uri(fcmRequestUrl) // 요청 URL 설정
-                    .headers(headers -> headers.addAll(httpHeaders)) // 헤더 추가
-                    .bodyValue(message) // 요청 본문 추가
-                    .retrieve() // 응답 받기
-                    .bodyToMono(String.class) // 응답을 Mono<String>으로 변환
-                    .block(); // 동기 방식으로 응답 대기
+        // WebClient를 통한 동기 HTTP 요청
+        String response = webClient.post()
+                .uri(fcmRequestUrl) // 요청 URL 설정
+                .headers(headers -> headers.addAll(httpHeaders)) // 헤더 추가
+                .bodyValue(message) // 요청 본문 추가
+                .retrieve() // 응답 받기
+                .bodyToMono(String.class) // 응답을 Mono<String>으로 변환
+                .block(); // 동기 방식으로 응답 대기
 
-            // 응답 처리
-            if (response == null || response.isEmpty()) {
-                log.error("FCM 서버에서 빈 응답이 돌아왔습니다.");
-            } else {
-                // 성공 시 저장
-                log.info("FCM 서버 응답: {}", response);
+        // 응답 처리
+        if (response == null || response.isEmpty()) {
+            log.error("FCM 서버에서 빈 응답이 돌아왔습니다.");
+        } else {
+            // 성공 시 저장
+            log.info("FCM 서버 응답: {}", response);
 //            savePushNotification(user, notification.getMessage(), category);
-            }
         }
 
 
