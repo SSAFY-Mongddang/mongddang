@@ -9,7 +9,7 @@ import { useAudioStore } from '@/shared/model/useAudioStore';
 import { useState, useEffect } from 'react';
 import { Foreground } from './plugins/ForegroundPlugin';
 import { UserInfo, useUserStore } from '@/entities/user/model';
-import { UserInfoPlugin } from './plugins/UserInfoPlugin';
+import { getUserInfoResponse, UserInfoPlugin } from './plugins/UserInfoPlugin';
 
 const SettingPage = () => {
   const navigate = useNavigate();
@@ -28,13 +28,16 @@ const SettingPage = () => {
   console.log("토큰!!!!!!!!!!!!!!!!!!!!!",token)
   const getUserInfoToAndroid = async() => {
     try{
-      await UserInfoPlugin.getAccessToken({"token": token})
+      await UserInfoPlugin.getAccessToken({
+        "token": token, 
+        "email": getUserInfo().user?.email??"rimhyena@gmail.com",  
+        "nickname": getUserInfo().user?.nickname?? "어린이 동동",
+        "role": getUserInfo().user?.role??"child"
+      })
     }catch (error){
       console.log(error)
     }
   }
-
-  getUserInfoToAndroid()
 
   const checkStatus = async () => {
     try {
@@ -83,12 +86,19 @@ const SettingPage = () => {
     const fetchUserInfo = async () => {
       setIsLoading(true); // 로딩 시작
       const userInfo = await getUserInfo(); // 비동기 호출
+      console.log(userInfo)
       setToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InJpbWh5ZW5hQGdtYWlsLmNvbSIsInJvbGUiOiJjaGlsZCIsImlkIjoyMiwiaWF0IjoxNzMyMzY2MzgwLCJleHAiOjQ4ODU5NjYzODB9.hiq8qCgMiaVhLeggoqXb0HTxOYksfTVKRBWjTgP26Rw")
       setIsLoading(false); // 로딩 종료
     };
 
     fetchUserInfo();
   }, [getUserInfo]);
+
+  useEffect(() => {
+    if (!token) {
+      getUserInfoToAndroid();
+    }
+  }, [token]);
 
 
   useEffect(() => {

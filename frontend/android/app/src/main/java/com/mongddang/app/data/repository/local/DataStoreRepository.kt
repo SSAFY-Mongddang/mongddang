@@ -31,6 +31,13 @@ class DataStoreRepository @Inject constructor(
         }
     }
 
+    suspend fun validateAndSaveUserInfo(data: UserInfoResponse?): UserInfoResponse? {
+        return data?.takeIf {
+            !it.email.isNullOrBlank() && !it.nickname.isNullOrBlank() && !it.role.isNullOrBlank()
+        }?.also { validData ->
+            saveUser(validData)
+        }
+    }
 
     suspend fun saveAccessToken(token: String) {
         dataStore.edit { prefs -> prefs[ACCESS_TOKEN_KEY] = token }

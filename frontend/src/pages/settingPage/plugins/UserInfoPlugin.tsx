@@ -3,7 +3,9 @@ import { registerPlugin } from '@capacitor/core';
 // 요청 데이터 형식 정의
 export interface TokenPayload {
   token: string| null; // 필수로 포함되어야 하는 토큰 값
-//   nickname: String| null;
+  email: String| null;
+  nickname: String| null;
+  role:  String| null;
 }
 
 // 플러그인 결과 데이터 형식 정의
@@ -11,6 +13,17 @@ export interface UserInfoResponse {
   message: string; // 처리 결과 메시지
   errorCode?: string; // 선택적으로 반환되는 에러 코드
 } 
+
+
+export interface UserInfo {
+  email: string;
+  nickname: string;
+  role: string;
+}
+
+export interface getUserInfoResponse {
+  userInfo: UserInfo;
+}
 
 // 플러그인 인터페이스 정의
 export interface UserInfoPlugin {
@@ -20,6 +33,7 @@ export interface UserInfoPlugin {
    * @returns 네이티브 처리 결과 (UserInfoResponse  형식)
    */
   getAccessToken(options: TokenPayload): Promise<UserInfoResponse>;
+  getUserInfo(): Promise<getUserInfoResponse>;
 }
 
 // 플러그인 등록

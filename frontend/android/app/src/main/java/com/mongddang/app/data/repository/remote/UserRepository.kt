@@ -13,19 +13,12 @@ class UserRepository @Inject constructor(
     private val userInfoApiService: UserInfoApiService,
     private val dataStoreRepository: DataStoreRepository
 ){
-    private suspend fun validateAndSaveUserInfo(data: UserInfoResponse?): UserInfoResponse? {
-        return data?.takeIf {
-            !it.email.isNullOrBlank() && !it.nickname.isNullOrBlank() && !it.role.isNullOrBlank()
-        }?.also { validData ->
-            dataStoreRepository.saveUser(validData)
-        }
-    }
 
     suspend fun getUserInfo(): Flow<ApiResponse<UserInfoResponse>> = flow {
         val response = ApiHandler { userInfoApiService.getUserInfo() }
         when (response) {
             is ApiResponse.Success -> {
-                val userInfoResponse = validateAndSaveUserInfo(response.body?.data)
+                val userInfoResponse = dataStoreRepository.validateAndSaveUserInfo(response.body?.data)
                 if (userInfoResponse != null) {
                     emit(ApiResponse.Success(userInfoResponse))
                 } else {
