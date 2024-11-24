@@ -136,7 +136,7 @@ public class RecordMealService {
 
         return ResponseDto.builder()
                 .message("식사를 시작합니다.")
-                .data(bloodSugarLevel)
+                .data(data)
                 .build();
     }
 

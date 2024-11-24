@@ -83,7 +83,7 @@ public class RecordSleepingService {
 
         return ResponseDto.builder()
                 .message("수면을 시작합니다.")
-                .data(bloodSugarLevel)
+                .data(data)
                 .build();
     }
 
@@ -123,7 +123,7 @@ public class RecordSleepingService {
 
         return ResponseDto.builder()
                 .message("수면을 종료합니다.")
-                .data(bloodSugarLevel)
+                .data(data)
                 .build();
 
 
