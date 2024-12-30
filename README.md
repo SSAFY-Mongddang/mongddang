@@ -43,11 +43,17 @@
 
 ✨ **스마트폰**
 
+<img src="https://github.com/user-attachments/assets/5022d35e-ede6-43d4-b114-cf2d3fa0761a" width=200 heigth=400/> <img src="https://github.com/user-attachments/assets/dd8182f1-dd00-40a0-810d-40bc33a36a3a" width=200 heigth=400/> <img src="https://github.com/user-attachments/assets/9e2b0d17-a988-4b67-b3ed-511d111893f5" width=200 heigth=400/>
+
 - 혈당관리와 관련한 퀘스트 제공
 
 - 코인과 캐릭터로 보상 지급, 동기 부여
 
+<img src="https://github.com/user-attachments/assets/f0beabd9-cff6-4bde-9405-23c3e0183ba2" width=200 heigth=400/> <img src="https://github.com/user-attachments/assets/7dc55864-5f5c-401b-8ac6-032c873ed335" width=200 heigth=400/>
+
 - 피보호자의 습관형성 상태 확인
+
+<img src="https://github.com/user-attachments/assets/e8aa0efc-252d-40aa-b126-57b7eb55557c" width=200 heigth=400/>
 
 - 피보호자의 혈당 리포트 제공
 
